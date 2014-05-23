@@ -1,0 +1,15 @@
+
+## Commands to set up AWS server instance for running jobs against FxOS ping data.
+
+## Download Telemetry job runner code. 
+git clone https://github.com/mozilla/telemetry-server.git
+
+## Download FxOS data scripts. 
+git clone https://github.com/dzeber/fxos-metrics.git
+
+
+output=ftu_$(date +%Y-%m-%d).out
+job=dump_all.py
+
+fxos-metrics/runjob.sh job output
+
