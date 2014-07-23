@@ -62,7 +62,7 @@ python -m mapreduce.job "$JOB_FILE" \
    --data-dir "$BASE/data" \
    --work-dir "$BASE/work" \
    --output "$OUTPUT_FILE" \
-   --bucket "telemetry-published-v1"
+   --bucket "telemetry-published-v2"
    --verbose
 
 echo "Mapreduce job exited with code: $?"
