@@ -57,7 +57,7 @@ echo "Starting fxosping export"
 
 python -m mapreduce.job "$JOB_FILE" \
    --input-filter "$FILTER" \
-   --num-mappers 16 \
+   --num-mappers 32 \
    --num-reducers 4 \
    --data-dir "$BASE/data" \
    --work-dir "$BASE/work" \
