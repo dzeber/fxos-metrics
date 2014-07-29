@@ -6,7 +6,9 @@ git clone https://github.com/dzeber/fxos-metrics.git
 
 
 output=ftu_$(date +%Y-%m-%d).out
+
 job=dump_all.py
+# job=count_records.py
 
 chmod u+x fxos-metrics/runjob.sh
 fxos-metrics/runjob.sh "$job" "$output"
