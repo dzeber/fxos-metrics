@@ -39,13 +39,14 @@ def write_fieldvals(context, d):
     
 # Increment a counter identified by a name optionally contained
 # in a group by the specified value. 
-# Key is of the form  [('counter', name), ('group', group)], 
+# Key is of the form  {'counter': name, 'group': group}, 
 # with group omitted if not specified. 
 def increment_counter(context, name, group='', n=1):
-    k = [('counter', name)]
+    k = {'counter': name}
     if len(group) > 0: 
-        k.append(('group', group))
-    context.write(k, n)
+        # k.append(('group', group))
+        k['group'] = group
+    context.write(dict_to_key(k), n)
     
 # Count occurrences of end conditions. 
 # Key is of the form ('condition', condition). 
