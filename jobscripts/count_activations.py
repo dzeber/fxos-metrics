@@ -164,8 +164,10 @@ def map(key, dims, value, context):
     # Add condition and counter writers to context
     if not hasattr(context, "writecond"):
         context.writecond = write_condition
-    if not hasattr(context, "count"):
-        context.count = increment_counter
+    if not hasattr(context, "increment"):
+        context.increment = increment_counter
+    
+    context.increment('nrecords')
     
     try:
         data = json.loads(value)
