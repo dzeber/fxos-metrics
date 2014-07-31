@@ -162,12 +162,12 @@ def expand_all(d):
     
 def map(key, dims, value, context):
     # Add condition and counter writers to context
-    if not hasattr(context, "writecond"):
-        context.writecond = write_condition
-    if not hasattr(context, "increment"):
-        context.increment = increment_counter
+    # if not hasattr(context, "writecond"):
+        # context.writecond = write_condition
+    # if not hasattr(context, "increment"):
+        # context.increment = increment_counter
     
-    context.increment('nrecords')
+    increment_counter(context, 'nrecords')
     
     try:
         data = json.loads(value)
@@ -177,7 +177,7 @@ def map(key, dims, value, context):
         try: 
             ping_date = get_ping_date(data.get('pingTime'))
         except ValueError as e:
-            context.writecond(str(e))
+            write_condition(context, str(e))
             return
         
         # Create dataset row. 
@@ -188,7 +188,7 @@ def map(key, dims, value, context):
         try:
             os = get_os_version(data.get('deviceinfo.os'))
         except ValueError as e:
-            context.writecond(str(e))
+            write_condition(context, str(e))
             return
         vals['os'] = os
         
@@ -206,7 +206,7 @@ def map(key, dims, value, context):
             context.write(DataRow(**v), 1)
     
     except Exception as e:
-        context.writecond(str(e))
+        write_condition(context, str(e))
         return
 
 
