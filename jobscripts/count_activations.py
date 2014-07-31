@@ -18,11 +18,18 @@ latest_valid_date = date.today() - timedelta(3)
 colvars = 'pingdate, os, country, device'
 DataRow = namedtuple('DataRow', colvars)
 
+# Mapreduce counter.
+Counter = namedtuple('Counter', 'counter_group, counter_name')
+
+def increment_counter(context, name, group='', n=1):
+    context.write(Counter._make([group, name]), n)
+
 # Facility for counting end conditions.
 Condition = namedtuple('Condition', 'condition')
 
 def write_condition(context, condition):
     context.write(Condition._make([condition]), 1)
+
 
 # Add suffix to name separated by a space, if suffix is non-empty.
 def add_suffix(name, suffix):
@@ -154,9 +161,11 @@ def expand_all(d):
 
     
 def map(key, dims, value, context):
-    # Add condition writer to context
+    # Add condition and counter writers to context
     if not hasattr(context, "writecond"):
         context.writecond = write_condition
+    if not hasattr(context, "count"):
+        context.count = increment_counter
     
     try:
         data = json.loads(value)
