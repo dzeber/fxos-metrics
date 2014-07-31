@@ -24,13 +24,13 @@ latest_valid_date = date.today() - timedelta(3)
 
 # Convert a dict to a format that can be used as map-reduce keys, 
 # preserving the structure of keys mapping to objects. 
-# Convert to a list of tuples of the form ("field_name", field_value).
-# Sort lists alphabetically by field_name to ensure that dicts
-# containing the same keys are recorded as the same. 
+# Convert to a tuple of tuples of the form ("field_name", field_value).
+# The elements will be sorted  alphabetically by field_name 
+# to ensure that dicts containing the same keys are recorded as the same. 
 def dict_to_key(d):
     d = d.items()
     d.sort(key=lambda e: e[0])
-    return d
+    return tuple(d)
     
 # Write a dict of field names mapping to values as a key
 # mapping to 1, in order to count occurrences. 
