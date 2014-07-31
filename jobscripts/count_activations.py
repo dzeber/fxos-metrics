@@ -7,6 +7,10 @@ import re
 import copy
 
 
+#-------------------
+
+# Valid date range for ping dates.
+
 # The earliest ping date to consider. 
 earliest_valid_date = date(2014, 4, 1)
 
@@ -14,22 +18,60 @@ earliest_valid_date = date(2014, 4, 1)
 # A few days before today's date. 
 latest_valid_date = date.today() - timedelta(3)
 
-# Format for a dataset row. 
-colvars = 'pingdate, os, country, device'
-DataRow = namedtuple('DataRow', colvars)
+#--------------------
 
-# Mapreduce counter.
-Counter = namedtuple('Counter', 'counter_group, counter_name')
+# Custom context writing functionality. 
 
+# Convert a dict to a format that can be used as map-reduce keys, 
+# preserving the structure of keys mapping to objects. 
+# Convert to a list of tuples of the form ("field_name", field_value).
+# Sort lists alphabetically by field_name to ensure that dicts
+# containing the same keys are recorded as the same. 
+def dict_to_key(d):
+    d = d.items()
+    d.sort(key=lambda e: e[0])
+    return d
+    
+# Write a dict of field names mapping to values as a key
+# mapping to 1, in order to count occurrences. 
+def write_fieldvals(context, d): 
+    context.write(dict_to_key(d), 1)
+    
+# Increment a counter identified by a name optionally contained
+# in a group by the specified value. 
+# Key is of the form  [('counter', name), ('group', group)], 
+# with group omitted if not specified. 
 def increment_counter(context, name, group='', n=1):
-    context.write(Counter._make([group, name]), n)
-
-# Facility for counting end conditions.
-Condition = namedtuple('Condition', 'condition')
-
+    k = [('counter', name)]
+    if len(group) > 0: 
+        k.append(('group', group))
+    context.write(k, n)
+    
+# Count occurrences of end conditions. 
+# Key is of the form ('condition', condition). 
 def write_condition(context, condition):
-    context.write(Condition._make([condition]), 1)
+    context.write(('condition', condition), 1)
 
+# Format for a dataset row. 
+# colvars = 'pingdate, os, country, device'
+# DataRow = namedtuple('DataRow', colvars)
+
+# # Mapreduce counter.
+# Counter = namedtuple('Counter', 'counter_group, counter_name')
+
+# def increment_counter(context, name, group='', n=1):
+    # context.write(Counter._make([group, name]), n)
+
+# # Facility for counting end conditions.
+# Condition = namedtuple('Condition', 'condition')
+
+# def write_condition(context, condition):
+    # context.write(Condition._make([condition]), 1)
+
+
+#--------------------
+
+# Regular expressions.     
 
 # Add suffix to name separated by a space, if suffix is non-empty.
 def add_suffix(name, suffix):
@@ -79,6 +121,10 @@ subs = dict(
     }]
 )
 
+
+#--------------------
+
+# Processing for each individual field. 
 
 # Convert the pingTime timestamp to a date.
 # If an invalid condition occurs, throws ValueError with a custom message.
@@ -136,7 +182,10 @@ def get_device_name(val):
     # Otherwise return the device name unchanged.
     return device
 
+#--------------------
 
+# Map-reduce job.
+    
 # Expand a dict to a list of dicts
 # containing a copy of the original dict for each subset of its keys
 # with keys in the subset mapping to 'All'.
@@ -153,13 +202,8 @@ def expand_all(d):
         expanded[i][k] = v
         expanded2[i][k] = 'All'
     return expanded + expanded2
-
     
-#-------------------------------------
-
-# Map-reduce job.
-
-    
+# Mapper looks up and processes fields. 
 def map(key, dims, value, context):
     # Add condition and counter writers to context
     # if not hasattr(context, "writecond"):
@@ -203,7 +247,7 @@ def map(key, dims, value, context):
         
         # Output data row.
         for v in vals: 
-            context.write(DataRow(**v), 1)
+            write_fieldvals(v, 1)
     
     except Exception as e:
         write_condition(context, str(e))
