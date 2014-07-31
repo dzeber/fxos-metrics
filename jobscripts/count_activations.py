@@ -226,7 +226,7 @@ def map(key, dims, value, context):
             return
         
         # Create dataset row. 
-        vals = {'pingdate': ping_date}
+        vals = {'pingdate': str(ping_date)}
         
         # Parse OS version string.
         # If missing or invalid, ignore record. 
