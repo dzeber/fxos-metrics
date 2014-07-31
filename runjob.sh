@@ -75,7 +75,7 @@ python -m mapreduce.job "$JOB_FILE" \
    --num-reducers 4 \
    --work-dir "$WORK_DIR" \
    --data-dir "$DATA_CACHE" \
-   $LOCAL
+   $LOCAL \
    --output "$OUTPUT_FILE" \
    --bucket "telemetry-published-v2" \
    --verbose
