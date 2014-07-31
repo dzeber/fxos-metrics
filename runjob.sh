@@ -1,6 +1,13 @@
 #!/bin/bash
 
 # Pass as arguments jobscript filename, output filename, and optionally filter filename (default is no filter). 
+# Initial command-line option -l/--local will use local data if any.
+
+LOCAL=""
+if [ "$1" == "-l" -o "$1" == "--local" ]; then
+    LOCAL="--local-only"
+    shift
+fi
 
 BASE=$(pwd)
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
@@ -17,13 +24,20 @@ TELEMETRY_SERVER_DIR=$HOME/telemetry-server
     # mkdir -p "job"
 # fi
 
-if [ ! -d "work" ]; then
-    mkdir -p "work"
+WORK_DIR=$BASE/work
+DATA_CACHE=$WORK_DIR/cache
+
+if [ ! -d "$WORK_DIR" ]; then
+    mkdir "$WORK_DIR"
 fi
 
-if [ ! -d "data" ]; then
-    mkdir -p "data"
+if [ ! -d "$DATA_CACHE" ]; then
+    mkdir "$DATA_CACHE"
 fi
+
+# if [ ! -d "data" ]; then
+    # mkdir -p "data"
+# fi
 
 JOB_FILE=$THIS_DIR/jobscripts/$1
 # OUTPUT_FILE=$BASE/$OUTPUT/$2
@@ -57,10 +71,11 @@ echo "Starting fxosping export"
 
 python -m mapreduce.job "$JOB_FILE" \
    --input-filter "$FILTER" \
-   --num-mappers 32 \
+   --num-mappers 16 \
    --num-reducers 4 \
-   --data-dir "$BASE/data" \
-   --work-dir "$BASE/work" \
+   --work-dir "$WORK_DIR" \
+   --data-dir "$DATA_CACHE" \
+   $LOCAL
    --output "$OUTPUT_FILE" \
    --bucket "telemetry-published-v2" \
    --verbose
