@@ -13,3 +13,5 @@ job=dump_all.py
 chmod u+x fxos-metrics/runjob.sh
 fxos-metrics/runjob.sh "$job" "$output"
 
+
+fxos-metrics/runjob.sh -l count_activations.py test_act.out

@@ -248,7 +248,7 @@ def map(key, dims, value, context):
         
         # Output data row.
         for v in vals: 
-            write_fieldvals(v, 1)
+            write_fieldvals(context, v)
     
     except Exception as e:
         write_condition(context, str(e))
