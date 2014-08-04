@@ -4,6 +4,8 @@
 ## Download FxOS data scripts. 
 git clone https://github.com/dzeber/fxos-metrics.git
 
+## Fix for BOTO.
+sudo pip install -Iv boto==2.25.0
 
 output=ftu_$(date +%Y-%m-%d).out
 
@@ -13,5 +15,4 @@ job=dump_all.py
 chmod u+x fxos-metrics/runjob.sh
 fxos-metrics/runjob.sh "$job" "$output"
 
-
-fxos-metrics/runjob.sh -l count_activations.py test_act.out
+fxos-metrics/runjob.sh count_activations.py test_act.out

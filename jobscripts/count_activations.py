@@ -11,6 +11,7 @@ import copy
 # Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
+    print(__file__)
     with open('../lookup/ftu-fields.json') as table_file:
         tables = json.load(table_file)
     # Country table will be straight lookup - use set.
@@ -248,9 +249,11 @@ def expand_all(d):
 
 # Mapper looks up and processes fields. 
 def map(key, dims, value, context):
-    # Load lookup tables and join to context. 
-    context.whitelist = load_whitelist()
-    context.country_table = load_country_table()
+    # Load lookup tables and join to context.
+    if not hasattr(context, 'whitelist'):
+        context.whitelist = load_whitelist()
+    if not hasattr(context, 'country_table'):
+        context.country_table = load_country_table()
     
     increment_counter(context, 'nrecords')
     

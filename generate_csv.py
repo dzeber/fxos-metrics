@@ -3,7 +3,8 @@
 
 import json
 
-outfile = 'test_act.out'
+job_output = 'test_act.out'
+csv_file = 'ftu-dashboard.csv'
 
 records = []
 conditions = {}
@@ -32,4 +33,7 @@ for row in open(outfile):
     else:
         key['count'] = n
         records.append(key)
+
+# Ouput CSV. 
+
 
