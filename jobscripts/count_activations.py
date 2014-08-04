@@ -5,14 +5,16 @@ from datetime import date, timedelta
 from collections import namedtuple
 import re   
 import copy
+from os import path
 
 
+# The directory containing the lookup tables. 
+lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
 
 # Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
-    print(__file__)
-    with open('../lookup/ftu-fields.json') as table_file:
+    with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
         tables = json.load(table_file)
     # Country table will be straight lookup - use set.
     tables['country'] = set(tables['country'])
@@ -23,7 +25,7 @@ def load_whitelist():
     
 # Loading for country codes. 
 def load_country_table():
-    with open('../lookup/countrycodes.json') as table_file:
+    with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
         table = json.load(table_file)
     return table
 
