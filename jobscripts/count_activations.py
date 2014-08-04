@@ -7,6 +7,10 @@ import re
 import copy
 
 
+# Path to lookup tables to use in processing data. 
+whitelist_path = '../lookup/ftu-fields.json'
+country_table_path = '../lookup/countrycodes.json'
+
 #-------------------
 
 # Valid date range for ping dates.
@@ -166,23 +170,49 @@ def get_os_version(val):
     return os
 
     
-# Format device name.
-def get_device_name(val):
+# Format device name. 
+# Only record distinct counts for certain recognized device names. 
+def get_device_name(val, recognized_list):
     if val is None:
-        return 'unknown'
+        return 'Unknown'
     
     device = str(val)
     
     # Make formatting consistent to avoid duplication.
     for s in subs['format_device']:
         # Device name patterns should be mutually exclusive.
-        # If any regex matches, make the replacement and exit. 
+        # If any regex matches, make the replacement and exit loop. 
         formatted, n = s['regex'].subn(s['repl'], device, count = 1)
         if n > 0:
-            return formatted
+            device = formatted
+            break
     
-    # Otherwise return the device name unchanged.
+    # Don't keep distinct name if not in recognized list. 
+    if(device not in recognized_list): 
+        return 'Other'
+    
     return device
+    
+
+# Look up country name from 2-letter code. 
+# Only record counts for recognized countries. 
+def get_country(val, recognized_list, country_codes):
+    if val is None:
+        return 'Unknown'
+    
+    geo = str(val)
+    
+    # Look up country name. 
+    if(geo not in country_codes): 
+        return 'Unknown'
+    geo = country_codes[geo]['name']
+    
+    # Don't keep distinct name if not in recognized list. 
+    if(geo not in recognized_list): 
+        return 'Other'
+        
+    return geo
+    
 
 #--------------------
 
@@ -207,18 +237,16 @@ def expand_all(d):
     
 # Mapper looks up and processes fields. 
 def map(key, dims, value, context):
-    # Add condition and counter writers to context
-    # if not hasattr(context, "writecond"):
-        # context.writecond = write_condition
-    # if not hasattr(context, "increment"):
-        # context.increment = increment_counter
+    # Load lookup tables and join to context. 
+    context.whitelist = json.load(whitelist_path)
+    context.country_table = json.load(countries_table_path)
     
     increment_counter(context, 'nrecords')
     
     try:
         data = json.loads(value)
         
-        # Convert ping time to date. 
+        # Convert ping time to date.    
         # If missing or invalid, ignore record. 
         try: 
             ping_date = get_ping_date(data.get('pingTime'))
@@ -239,10 +267,12 @@ def map(key, dims, value, context):
         vals['os'] = os
         
         # Look up geo-country.
-        vals['country'] = data.get('info').get('geoCountry', 'unknown')
+        vals['country'] = get_country(data.get('info').get('geoCountry'),
+            context.whitelist['country'], context.country_table)
         
         # Look up device name and reformat.
-        vals['device'] = get_device_name(data.get('deviceinfo.product_model'))
+        vals['device'] = get_device_name(data.get('deviceinfo.product_model'),
+            context.whitelist['device'])
         
         # Add entries for "All" by expanding combinations of fields. 
         vals = expand_all(vals)
