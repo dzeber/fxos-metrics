@@ -23,7 +23,9 @@
     },
     {
       "field_name": "submission_date",
-      "allowed_values": "*"
+      "allowed_values": {
+        "min": "20140401"
+      }
     }
   ]
 }
