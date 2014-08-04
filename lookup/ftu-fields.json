@@ -1,0 +1,31 @@
+{
+    "device": [
+        "One Touch Fire",
+        "ZTE Open", 
+        "Flame",
+        "Geeksphone",
+        "Emulator",
+        "Tarako"
+    ],
+    "country": [
+        "Spain",
+        "Poland",
+        "Colombia",
+        "Venezuela",
+        "Germany",
+        "Brazil",
+        "Peru",
+        "Uruguay",
+        "Mexico",
+        "Hungary",
+        "Greece",
+        "Serbia",
+        "Montenegro",
+        "Italy",
+        "Chile",
+        "France",
+        "India",
+        "China",
+        "Japan"
+    ]
+}
