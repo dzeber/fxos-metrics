@@ -7,9 +7,21 @@ import re
 import copy
 
 
-# Path to lookup tables to use in processing data. 
-whitelist_path = '../lookup/ftu-fields.json'
-country_table_path = '../lookup/countrycodes.json'
+
+# Loading for whitelists. 
+# Convert each list to convenient format for querying. 
+def load_whitelist():
+    tables = json.load('../lookup/ftu-fields.json')
+    # Country table will be straight lookup - use set.
+    tables['country'] = set(tables['country'])
+    # Device table contains string prefixes. Convert to tuple. 
+    tables['device'] = tuple(tables['device'])
+    return tables
+    
+    
+# Loading for country codes. 
+def load_country_table():
+    return json.load('../lookup/countrycodes.json')
 
 #-------------------
 
@@ -83,8 +95,7 @@ def write_condition(context, condition):
 def add_suffix(name, suffix):
     if len(suffix) > 0:
         return name + ' ' + suffix
-    else:
-        return name
+    return name
     
 # Regular expressions for checking validity and formatting values. 
 matches = dict(
@@ -156,7 +167,6 @@ def get_ping_date(val):
 def get_os_version(val):    
     if val is None:
         raise ValueError('no os version')
-    
     os = str(val)
   
     # Check OS against expected format. 
@@ -175,7 +185,6 @@ def get_os_version(val):
 def get_device_name(val, recognized_list):
     if val is None:
         return 'Unknown'
-    
     device = str(val)
     
     # Make formatting consistent to avoid duplication.
@@ -187,8 +196,8 @@ def get_device_name(val, recognized_list):
             device = formatted
             break
     
-    # Don't keep distinct name if not in recognized list. 
-    if(device not in recognized_list): 
+    # Don't keep distinct name if does not start with recognized prefix.
+    if not device.startswith(recognized_list): 
         return 'Other'
     
     return device
@@ -199,16 +208,15 @@ def get_device_name(val, recognized_list):
 def get_country(val, recognized_list, country_codes):
     if val is None:
         return 'Unknown'
-    
     geo = str(val)
     
     # Look up country name. 
-    if(geo not in country_codes): 
+    if geo not in country_codes: 
         return 'Unknown'
-    geo = country_codes[geo]['name']
     
+    geo = country_codes[geo]['name']
     # Don't keep distinct name if not in recognized list. 
-    if(geo not in recognized_list): 
+    if geo not in recognized_list: 
         return 'Other'
         
     return geo
@@ -238,8 +246,8 @@ def expand_all(d):
 # Mapper looks up and processes fields. 
 def map(key, dims, value, context):
     # Load lookup tables and join to context. 
-    context.whitelist = json.load(whitelist_path)
-    context.country_table = json.load(countries_table_path)
+    context.whitelist = load_whitelist()
+    context.country_table = load_country_table()
     
     increment_counter(context, 'nrecords')
     
