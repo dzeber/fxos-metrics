@@ -51,12 +51,12 @@ def dict_to_key(d):
     # d.sort(key=lambda e: e[0])
     # return tuple(d)
     return json.dumps(d, sort_keys=True)
-    
+
 # Write a dict of field names mapping to values as a key
 # mapping to 1, in order to count occurrences. 
 def write_fieldvals(context, d): 
     context.write(dict_to_key(d), 1)
-    
+
 # Increment a counter identified by a name optionally contained
 # in a group by the specified value. 
 # Key is of the form  {'counter': name, 'group': group}, 
@@ -67,7 +67,7 @@ def increment_counter(context, name, group='', n=1):
         # k.append(('group', group))
         k['group'] = group
     context.write(dict_to_key(k), n)
-    
+
 # Count occurrences of end conditions. 
 # Key is of the form {'condition': condition}. 
 def write_condition(context, condition):
@@ -99,12 +99,12 @@ def add_suffix(name, suffix):
     if len(suffix) > 0:
         return name + ' ' + suffix
     return name
-    
+
 # Regular expressions for checking validity and formatting values. 
 matches = dict(
     valid_os = re.compile('^(\d\.){3}\d([.\-]prerelease)?$', re.I)    
 )
- 
+
 # Substitution patterns for formatting field values.
 subs = dict(
     format_os = [{
@@ -182,7 +182,7 @@ def get_os_version(val):
         
     return os
 
-    
+
 # Format device name. 
 # Only record distinct counts for certain recognized device names. 
 def get_device_name(val, recognized_list):
@@ -204,7 +204,7 @@ def get_device_name(val, recognized_list):
         return 'Other'
     
     return device
-    
+
 
 # Look up country name from 2-letter code. 
 # Only record counts for recognized countries. 
@@ -223,12 +223,12 @@ def get_country(val, recognized_list, country_codes):
         return 'Other'
         
     return geo
-    
+
 
 #--------------------
 
 # Map-reduce job.
-    
+
 # Expand a dict to a list of dicts
 # containing a copy of the original dict for each subset of its keys
 # with keys in the subset mapping to 'All'.
@@ -245,7 +245,7 @@ def expand_all(d):
         expanded[i][k] = v
         expanded2[i][k] = 'All'
     return expanded + expanded2
-    
+
 # Mapper looks up and processes fields. 
 def map(key, dims, value, context):
     # Load lookup tables and join to context. 
