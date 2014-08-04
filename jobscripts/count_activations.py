@@ -5,7 +5,7 @@ from datetime import date, timedelta
 from collections import namedtuple
 import re   
 import copy
-from os import path
+import os.path
 
 
 # The directory containing the lookup tables. 
