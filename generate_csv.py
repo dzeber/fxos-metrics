@@ -2,16 +2,19 @@
 # suitable for loading into dashboard. 
 
 import json
+import csv
 
 job_output = 'test_act.out'
 csv_file = 'ftu-dashboard.csv'
+headers = ['pingdate', 'os', 'country', 'device', 'count']
+
 
 records = []
 conditions = {}
 counters = {}
 
 # Parse output file.
-for row in open(outfile):
+for row in open(job_output):
     parsed_row = row.rstrip().rsplit('\t', 1)
     key = json.loads(parsed_row[0])
     n = int(parsed_row[1])
@@ -35,5 +38,8 @@ for row in open(outfile):
         records.append(key)
 
 # Ouput CSV. 
-
+with open(csv_file, 'w') as outfile:
+    writer = csv.DictWriter(outfile, headers, extrasaction='ignore')
+    writer.writeheader()
+    writer.writerows(records)
 
