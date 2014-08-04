@@ -11,7 +11,8 @@ import copy
 # Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
-    tables = json.load('../lookup/ftu-fields.json')
+    with open('../lookup/ftu-fields.json') as table_file:
+        tables = json.load(table_file)
     # Country table will be straight lookup - use set.
     tables['country'] = set(tables['country'])
     # Device table contains string prefixes. Convert to tuple. 
@@ -21,7 +22,9 @@ def load_whitelist():
     
 # Loading for country codes. 
 def load_country_table():
-    return json.load('../lookup/countrycodes.json')
+    with open('../lookup/countrycodes.json') as table_file:
+        table = json.load(table_file)
+    return table
 
 #-------------------
 
