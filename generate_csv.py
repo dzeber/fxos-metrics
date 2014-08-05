@@ -7,6 +7,7 @@ import csv
 job_output = 'test_act.out'
 csv_file = 'ftu-dashboard.csv'
 headers = ['pingdate', 'os', 'country', 'device', 'count']
+final_headers = ['date', 'os', 'country', 'device', 'activations']
 
 
 records = []
@@ -34,12 +35,15 @@ for row in open(job_output):
         else:
             counters[key['counter']] = n    
     else:
-        key['count'] = n
-        records.append(key)
+        if key['pingdate'] != 'All':
+            key['count'] = n
+            records.append(key)
 
 # Ouput CSV. 
 with open(csv_file, 'w') as outfile:
+    outfile.write(','.join(final_headers))
+    outfile.write('\n')
     writer = csv.DictWriter(outfile, headers, extrasaction='ignore')
-    writer.writeheader()
+    # writer.writeheader()
     writer.writerows(records)
 
