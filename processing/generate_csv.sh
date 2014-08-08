@@ -39,8 +39,8 @@ fi
 
 # At this point we should have the latest data. 
 echo "Processing data..."
-python generate_csv.py $DATA_FILE $CSV_FILE
-
+python $SCRIPT_DIR/generate_csv.py $DATA_FILE $CSV_FILE
+    
 if [ ! -e "$CSV_FILE" ]; then
     echo "Something went wrong - no CSV file generated!"
     echo "" | mail -s "FAILED: FxOS FTU data - no csv" "$ADDR@mozilla.com" 
