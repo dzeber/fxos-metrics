@@ -1,11 +1,14 @@
 # Convert the ouptput of the count_activations job to a CSV 
 # suitable for loading into dashboard. 
 
+# Arguments supplied should be the input data file and the output CSV file. 
+
 import json
 import csv
+import sys
 
-job_output = 'test_act.out'
-csv_file = 'ftu-dashboard.csv'
+job_output = sys.argv[1]
+csv_file = sys.argv[2]
 headers = ['pingdate', 'os', 'country', 'device', 'count']
 final_headers = ['date', 'os', 'country', 'device', 'activations']
 
