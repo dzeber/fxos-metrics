@@ -31,22 +31,20 @@ if [ ! -d "$DATA_DIR" ]; then
     mkdir "$DATA_DIR"
 fi
 
-JOB_FILE=$BASE/count_activations.py
-FILTER=$BASE/all_fxos.json
-
-
-cd "$TELEMETRY_SERVER_DIR"
+JOB_FILE=$BASE/jobscripts/count_activations.py
+FILTER=$BASE/filters/all_fxos.json
 
 echo "Job setup complete."
-
 echo "Updating boto."
-exec 1>&-
+# exec 1>&-
 ## Fix for BOTO.
-sudo pip install -Iv boto==2.25.0
-exec > $LOG_FILE
+sudo pip install -Iv boto==2.25.0 >&-
+# exec >> $LOG_FILE
 echo "boto install complete."
 
 echo "Running job." 
+
+cd "$TELEMETRY_SERVER_DIR"
 
 python -m mapreduce.job "$JOB_FILE" \
    --input-filter "$FILTER" \
