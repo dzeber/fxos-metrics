@@ -10,6 +10,7 @@ OUTPUT_DIR=$BASE/output
 OUTPUT_FILE=$OUTPUT_DIR/ftu_data.out
 LOG_FILE=$OUTPUT_DIR/ftu_job.log
 BOTO_LOG=$OUTPUT_DIR/boto.log
+JOB_LOG=$OUTPUT_DIR/job.log
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -32,8 +33,8 @@ if [ ! -d "$DATA_DIR" ]; then
     mkdir "$DATA_DIR"
 fi
 
-JOB_FILE=$BASE/jobscripts/count_activations.py
-FILTER=$BASE/filters/all_fxos.json
+JOB_FILE=$THIS_DIR/jobscripts/count_activations.py
+FILTER=$THIS_DIR/filters/all_fxos.json
 
 echo "Job setup complete."
 echo "Updating boto."
@@ -55,7 +56,9 @@ python -m mapreduce.job "$JOB_FILE" \
    --data-dir "$DATA_DIR" \
    --output "$OUTPUT_FILE" \
    --bucket "telemetry-published-v2" \
-   --verbose
+   --verbose > $JOB_LOG
 
 echo "Mapreduce job exited with code: $?"
 echo "It is now `date`"
+
+exit 0
