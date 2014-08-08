@@ -9,6 +9,7 @@ TELEMETRY_SERVER_DIR=$HOME/telemetry-server
 OUTPUT_DIR=$BASE/output
 OUTPUT_FILE=$OUTPUT_DIR/ftu_data.out
 LOG_FILE=$OUTPUT_DIR/ftu_job.log
+BOTO_LOG=$OUTPUT_DIR/boto.log
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -38,7 +39,7 @@ echo "Job setup complete."
 echo "Updating boto."
 # exec 1>&-
 ## Fix for BOTO.
-sudo pip install -Iv boto==2.25.0 >&-
+sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
 # exec >> $LOG_FILE
 echo "boto install complete."
 
