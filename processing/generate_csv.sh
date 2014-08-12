@@ -20,7 +20,7 @@ exec > $LOG_FILE 2>&1
 # Update output files from latest run. 
 echo "Downloading latest output from AWS."
 
-rm $DATA_DIR/*
+rm -f $DATA_DIR/*
 aws s3 cp s3://telemetry-private-analysis/fxosping/data/ $DATA_DIR --recursive
 
 if [ ! -e "$DATA_FILE" ]; then
@@ -49,7 +49,7 @@ fi
 
 # Look up the time the data was updated. 
 echo "Recorded data update time."
-date -r $DATA_FILE +"%Y-%m-%d %H:%M:%S" > UPDATED_TIME_FILE
+date -r $DATA_FILE +"%Y-%m-%d %H:%M:%S" > $UPDATED_TIME_FILE
 
 # Copy files to web server. 
 echo "Copying data to app1."
