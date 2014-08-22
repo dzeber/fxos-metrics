@@ -11,7 +11,7 @@ OUTPUT_FILE=$OUTPUT_DIR/ftu_data.out
 LOG_FILE=$OUTPUT_DIR/ftu_job.log
 BOTO_LOG=$OUTPUT_DIR/boto.log
 JOB_LOG=$OUTPUT_DIR/job.log
-TARBALL=$BASE/ftu_data.tar.gz
+TARBALL=ftu_data.tar.gz
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
@@ -63,9 +63,10 @@ echo "Mapreduce job exited with code: $?"
 echo "It is now `date`"
 echo "Packaging output..."
 
-tar cvzf "$TARBALL" $OUTPUT_DIR/*
+cd "$BASE"
+tar cvzf "$TARBALL" "`basename $OUTPUT_DIR`"
 rm -f $OUTPUT_DIR/*
-cp $TARBALL $OUTPUT_DIR
+mv $TARBALL $OUTPUT_DIR
 
 echo "Done. Exiting..."
 

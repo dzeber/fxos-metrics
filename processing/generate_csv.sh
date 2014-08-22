@@ -2,6 +2,7 @@
 
 ## Download FTU records, sanitize and output as CSV.
 
+TARBALL=ftu_data.tar.gz
 DATA_DIR=$HOME/fxos-ftu-data
 SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
 LOG_FILE=$DATA_DIR/processing.log
