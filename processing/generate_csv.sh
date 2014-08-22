@@ -15,7 +15,7 @@ UPDATED_TIME_PATH=$DATA_DIR/$UPDATED_TIME_FILENAME
 
 ADDR=dzeber
 
-rm -f $DATA_DIR/*
+#rm -f $DATA_DIR/*
 
 exec > $LOG_FILE 2>&1
 
@@ -29,7 +29,7 @@ if [ ! -e "$DATA_FILE" ]; then
     # Check for log file. 
     if [ ! -e "$JOB_LOG" ]; then
         echo "No log file either!!"
-        cat "-- No log file --" > $JOB_LOG
+        echo "-- No log file --" > $JOB_LOG
     fi
     # Send email notice with log file as text. 
     mail -s "FAILED: FxOS FTU data - no data" "$ADDR@mozilla.com" < $JOB_LOG
