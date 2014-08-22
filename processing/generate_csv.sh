@@ -3,7 +3,7 @@
 ## Download FTU records, sanitize and output as CSV.
 
 DATA_DIR=$HOME/fxos-ftu-data
-SCRIPT_DIR=$HOME/software/fxos-metrics/processing
+SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
 LOG_FILE=$DATA_DIR/processing.log
 DATA_FILE=$DATA_DIR/ftu_data.out
 JOB_LOG=$DATA_DIR/ftu_job.log
