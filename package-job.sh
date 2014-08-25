@@ -2,8 +2,7 @@
 # Requires filename for tarball as parameter.
 
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
-PACKAGE_DIR="~/tmp/package"
-TARBALL_NAME=
+PACKAGE_DIR="$HOME/tmp/package"
 
 mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
