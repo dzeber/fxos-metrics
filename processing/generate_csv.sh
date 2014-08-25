@@ -2,6 +2,9 @@
 
 ## Download FTU records, sanitize and output as CSV.
 
+. ~/.bash_profile
+. /etc/profile.d/mozilla.sh
+
 TARBALL=ftu_data.tar.gz
 DATA_DIR=$HOME/fxos-ftu-data
 SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
@@ -27,7 +30,7 @@ rm -f $TARBALL
 
 # Update output files from latest run. 
 echo "Downloading latest output from AWS."
-aws s3 cp "s3://telemetry-private-analysis/fxosping/data/$TARBALL" $DATA_DIR
+aws s3 cp "$S3_FXOS/$TARBALL" $DATA_DIR
 
 ## Extract tarball into DATA_DIR. 
 ## Creates a subdir called "output" containing files. 
