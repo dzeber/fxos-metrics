@@ -18,7 +18,7 @@ chmod -R 755 .
 
 # Package. 
 cd ..
-tar czvf "${1:-fxosping-0.2}.tar.gz" $PACKAGE_DIR/*
+tar czvf "${1:-fxosping-0.2}.tar.gz" -C $PACKAGE_DIR .
 rm -r $PACKAGE_DIR
 
 exit 0
