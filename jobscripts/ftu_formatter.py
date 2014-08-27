@@ -146,8 +146,8 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
     if icc_fields is not None:
         # SIM is present. 
         if 'mcc' in icc_fields and 'mnc' in icc_fields:
-            mcc = icc_fields.['mcc']
-            mnc = icc_fields.['mnc']
+            mcc = icc_fields['mcc']
+            mnc = icc_fields['mnc']
             if mcc in mobile_codes:
                 operator = mobile_codes[mcc]['operators'].get(mnc)
                 if operator is not None:
