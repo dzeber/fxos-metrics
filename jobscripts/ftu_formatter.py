@@ -18,7 +18,7 @@ matches = dict(
 
 # Substitution patterns for formatting field values.
 subs = dict(
-    format_os = [{
+    os = [{
         'regex': re.compile('[.\-]prerelease$', re.I),
         'repl': ' (pre-release)'
     },{
@@ -26,7 +26,7 @@ subs = dict(
             '^(?P<num>[1-9]\.[0-9](\.[1-9]){0,2})(\.0){0,2}', re.I),
         'repl': '\g<num>'
     }],
-    format_device = [{
+    device = [{
         # One Touch Fire. 
         'regex': re.compile(
             '^.*one\s*touch.*fire\s*(?P<suffix>[ce]?)(?:\s+\S*)?$', re.I),
@@ -96,7 +96,7 @@ def get_os_version(val):
         raise ValueError('invalid os version')
     
     # Reformat to be more readable. 
-    for s in subs['format_os']:
+    for s in subs['os']:
         os = s['regex'].sub(s['repl'], os, count = 1)
         
     return os
@@ -110,7 +110,7 @@ def get_device_name(val, recognized_list):
     device = str(val)
     
     # Make formatting consistent to avoid duplication.
-    for s in subs['format_device']:
+    for s in subs['device']:
         # Device name patterns should be mutually exclusive.
         # If any regex matches, make the replacement and exit loop. 
         formatted, n = s['regex'].subn(s['repl'], device, count = 1)
