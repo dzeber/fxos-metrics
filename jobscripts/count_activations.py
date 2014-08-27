@@ -131,7 +131,7 @@ def map(key, dims, value, context):
         # Convert ping time to date.    
         # If missing or invalid, ignore record. 
         try: 
-            ping_date = ftu_formmatter.get_ping_date(data.get('pingTime'))
+            ping_date = ftu_formatter.get_ping_date(data.get('pingTime'))
         except ValueError as e:
             write_condition(context, str(e))
             return
@@ -142,20 +142,20 @@ def map(key, dims, value, context):
         # Parse OS version string.
         # If missing or invalid, ignore record. 
         try:
-            os = ftu_formmatter.get_os_version(data.get('deviceinfo.os'))
+            os = ftu_formatter.get_os_version(data.get('deviceinfo.os'))
         except ValueError as e:
             write_condition(context, str(e))
             return
         vals['os'] = os
         
         # Look up geo-country.
-        vals['country'] = ftu_formmatter.get_country(
+        vals['country'] = ftu_formatter.get_country(
             data.get('info').get('geoCountry'),
             context.whitelist['country'], 
             context.country_table)
         
         # Look up device name and reformat.
-        vals['device'] = ftu_formmatter.get_device_name(
+        vals['device'] = ftu_formatter.get_device_name(
             data.get('deviceinfo.product_model'),
             context.whitelist['device'])
         
