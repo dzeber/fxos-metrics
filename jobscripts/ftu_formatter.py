@@ -144,28 +144,70 @@ def get_country(val, recognized_list, country_codes):
     return geo
 
 
+# Look up mobile operator using mobile codes.
+def lookup_operator_from_codes(fields, mobile_codes):
+    if 'mcc' not in fields or 'mnc' not in fields:
+        # Missing codes. 
+        return None
+    
+    if fields['mcc'] not in mobile_codes:
+        # Country code is not recognized in lookup table.
+        return None
+    
+    return mobile_codes[fields['mcc']]['operators'].get(fields['mnc'])
+
+    
 # Logic to look up operator name from payload.
 # Try looking up operator from SIM/ICC codes, if available. 
 # If that fails, try using SIM SPN. 
 # If no SIM is present, look up operator from network codes.
 # If that fails, try reading network operator name field. 
 # If none of these are present, operator is 'Unknown'.
-def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
+def lookup_operator(icc_fields, network_fields, mobile_codes):
     if icc_fields is not None:
         # SIM is present. 
-        if 'mcc' in icc_fields and 'mnc' in icc_fields:
-            mcc = icc_fields['mcc']
-            mnc = icc_fields['mnc']
-            if mcc in mobile_codes:
-                operator = mobile_codes[mcc]['operators'].get(mnc)
-                if operator is not None:
-                    return operator
+        operator = lookup_operator_from_codes(icc_fields, mobile_codes)
+        if operator is not None:
+            return operator
         
-        # At this point, something didnt
-
+        # At this point, we were not able to resolve the operator 
+        # from the codes.
+        # Try the name string instead.
+        operator = icc_fields.get('spn')
+        if operator is not None:
+            return operator
+    
+    # Lookup using SIM card info failed.
+    # Try using network info instead. 
+    if network_fields is not None:
+        operator = lookup_operator_from_codes(network_fields, mobile_codes)
+        if operator is not None:
+            return operator
+        
+        # Otherwise, try the name string instead.
+        operator = network_fields.get('operator')
+        if operator is not None:
+            return operator
+    
+    # Lookup failed - no operator information in payload.
+    return None
 
 
 # Format operator name. 
 # Only record counts for recognized operators. 
+def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
+    operator = lookup_operator(icc_fields, network_fields, mobile_codes)
+    if operator is None:
+        return 'Unknown'
+        
+    operator = str(operator)
+    
+    return operator
+
+
+
+
+
+
 
 
