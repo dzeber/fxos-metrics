@@ -135,4 +135,29 @@ def get_country(val, recognized_list, country_codes):
         
     return geo
 
-    
+
+# Logic to look up operator name from payload.
+# Try looking up operator from SIM/ICC codes, if available. 
+# If that fails, try using SIM SPN. 
+# If no SIM is present, look up operator from network codes.
+# If that fails, try reading network operator name field. 
+# If none of these are present, operator is 'Unknown'.
+def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
+    if icc_fields is not None:
+        # SIM is present. 
+        if 'mcc' in icc_fields and 'mnc' in icc_fields:
+            mcc = icc_fields.['mcc']
+            mnc = icc_fields.['mnc']
+            if mcc in mobile_codes:
+                operator = mobile_codes[mcc]['operators'].get(mnc)
+                if operator is not None:
+                    return operator
+        
+        # At this point, something didnt
+
+
+
+# Format operator name. 
+# Only record counts for recognized operators. 
+
+
