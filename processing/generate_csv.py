@@ -9,8 +9,8 @@ import sys
 
 job_output = sys.argv[1]
 csv_file = sys.argv[2]
-headers = ['pingdate', 'os', 'country', 'device', 'count']
-final_headers = ['date', 'os', 'country', 'device', 'activations']
+headers = ['pingdate', 'os', 'country', 'device', 'operator', 'count']
+final_headers = ['date', 'os', 'country', 'device', 'operator', 'activations']
 
 
 records = []
