@@ -6,7 +6,7 @@ from datetime import date, timedelta
 import copy
 import os.path
 
-import ftu_formmatter
+import ftu_formatter
 
 
 # The directory containing the lookup tables. 
