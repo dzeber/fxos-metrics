@@ -54,7 +54,7 @@ subs = dict(
 
 # Date range for ping dates to be considered valid.
 valid_dates = {
-    'earliest': earliest_valid_date = date(2014, 4, 1),
+    'earliest': date(2014, 4, 1),
     # Latest: a few days before today's date. 
     'latest': date.today() - timedelta(3)
 }
