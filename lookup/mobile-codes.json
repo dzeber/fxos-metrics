@@ -1,0 +1,2876 @@
+{
+	"216" : {
+		"country" : "Hungary",
+		"operators" : {
+			"1" : "Telenor",
+			"30" : "T-Mobile",
+			"70" : "Vodafone"
+		}
+	},
+	"214" : {
+		"country" : "Spain",
+		"operators" : {
+			"24" : "Eroski",
+			"25" : "LycaMobile",
+			"23" : "Barablu",
+			"15" : "BT",
+			"21" : "Jazztel",
+			"17" : "M\u00f3bil R",
+			"16" : "TeleCable",
+			"19" : "Simyo",
+			"18" : "ONO",
+			"22" : "DigiMobil",
+			"20" : "Fonyou",
+			"1" : "Vodafone",
+			"33" : "Orange",
+			"3" : "Orange",
+			"5" : "TME",
+			"4" : "Yoigo",
+			"7" : "movistar",
+			"6" : "Vodafone",
+			"9" : "Orange",
+			"8" : "Euskaltel"
+		}
+	},
+	"212" : {
+		"country" : "Monaco",
+		"operators" : {
+			"1" : "Office des Telephones",
+			"0" : "Media Telecom",
+			"2" : "Morocco Wana"
+		}
+	},
+	"213" : {
+		"country" : "Andorra",
+		"operators" : {
+			"3" : "Mobiland"
+		}
+	},
+	"452" : {
+		"country" : "Vietnam",
+		"operators" : {
+			"1" : "MobilFone",
+			"3" : "S-Fone",
+			"2" : "Vinaphone",
+			"5" : "Vietnamobile",
+			"4" : "Viettel",
+			"7" : "Beeline VN",
+			"6" : "E-Mobile"
+		}
+	},
+	"218" : {
+		"country" : "Bosnia and Herzegovina",
+		"operators" : {
+			"90" : "BH Mobile",
+			"3" : "HT-Eronet",
+			"5" : "m:tel"
+		}
+	},
+	"219" : {
+		"country" : "Croatia",
+		"operators" : {
+			"1" : "T-Mobile",
+			"10" : "VIPnet",
+			"2" : "Tele2"
+		}
+	},
+	"626" : {
+		"country" : "Sao Tome and Principe",
+		"operators" : {
+			"1" : "CSTmovel"
+		}
+	},
+	"438" : {
+		"country" : "Turkmenistan",
+		"operators" : {
+			"1" : "MTS",
+			"2" : "TM-Cell"
+		}
+	},
+	"734" : {
+		"country" : "Venezuela",
+		"operators" : {
+			"1" : "Digitel",
+			"3" : "Digitel",
+			"2" : "Digitel",
+			"4" : "Movistar",
+			"6" : "Movilnet"
+		}
+	},
+	"525" : {
+		"country" : "Singapore",
+		"operators" : {
+			"1" : "SingTel",
+			"12" : "Digital Trunked Radio Network",
+			"3" : "M1",
+			"2" : "SingTel-G18",
+			"5" : "StarHub"
+		}
+	},
+	"540" : {
+		"country" : "Solomon Islands",
+		"operators" : {
+			"1" : "BREEZE",
+			"10" : "Breeze"
+		}
+	},
+	"421" : {
+		"country" : "Yemen",
+		"operators" : {
+			"1" : "SabaFon",
+			"3" : "Yemen Mobile",
+			"2" : "Spacetel Yemen",
+			"4" : "HiTS-Unitel"
+		}
+	},
+	"222" : {
+		"country" : "Italy",
+		"operators" : {
+			"10" : "Vodafone",
+			"77" : "IPSE 2000",
+			"30" : "RFI",
+			"1" : "TIM",
+			"98" : "Blu",
+			"88" : "Wind",
+			"2" : "Elsacom",
+			"99" : "3 Italia",
+			"7" : "Noverca",
+			"8" : "Fastweb"
+		}
+	},
+	"289" : {
+		"country" : "Abkhazia",
+		"operators" : {
+			"68" : "A-Mobile",
+			"67" : "Aquafon"
+		}
+	},
+	"288" : {
+		"country" : "Faroe Islands",
+		"operators" : {
+			"1" : "Faroese Telecom - GSM",
+			"2" : "Vodafone"
+		}
+	},
+	"346" : {
+		"country" : "Cayman Islands",
+		"operators" : {
+			"50" : "Digicel",
+			"140" : "Cable & Wireless (Lime)"
+		}
+	},
+	"404" : {
+		"country" : "India",
+		"operators" : {
+			"24" : "Idea",
+			"25" : "Aircel",
+			"27" : "Vodafone",
+			"20" : "Vodafone",
+			"21" : "LOOP",
+			"22" : "Idea",
+			"28" : "Aircel",
+			"29" : "Aircel",
+			"0" : "Sistema Shyam",
+			"4" : "Idea",
+			"59" : "BSNL",
+			"58" : "BSNL",
+			"55" : "BSNL",
+			"54" : "BSNL",
+			"57" : "BSNL",
+			"56" : "Idea",
+			"51" : "BSNL",
+			"50" : "Reliance Telecom",
+			"53" : "BSNL",
+			"52" : "Reliance Telecom",
+			"88" : "Vodafone",
+			"89" : "Idea",
+			"82" : "Idea",
+			"83" : "Reliance Telecom",
+			"80" : "BSNL",
+			"81" : "BSNL",
+			"86" : "Vodafone",
+			"87" : "Idea",
+			"84" : "Vodafone",
+			"85" : "Reliance Telecom",
+			"3" : "Airtel",
+			"7" : "Idea",
+			"38" : "BSNL",
+			"33" : "Aircel",
+			"31" : "Airtel",
+			"30" : "Vodafone",
+			"37" : "Aircel",
+			"36" : "Reliance Telecom",
+			"35" : "Aircel",
+			"34" : "BSNL",
+			"60" : "Vodafone",
+			"62" : "BSNL",
+			"64" : "BSNL",
+			"66" : "BSNL",
+			"67" : "Reliance Telecom",
+			"68" : "Dolphin",
+			"69" : "Dolphin",
+			"2" : "Airtel",
+			"98" : "Airtel",
+			"91" : "Aircel",
+			"90" : "Airtel",
+			"93" : "Airtel",
+			"92" : "Airtel",
+			"95" : "Airtel",
+			"94" : "Airtel",
+			"97" : "Airtel",
+			"96" : "Airtel",
+			"11" : "Vodafone",
+			"10" : "Airtel",
+			"13" : "Vodafone",
+			"12" : "Idea",
+			"15" : "Vodafone",
+			"14" : "Idea",
+			"17" : "Aircel",
+			"16" : "Airtel",
+			"19" : "Idea",
+			"18" : "Reliance Telecom",
+			"49" : "Airtel",
+			"46" : "Vodafone",
+			"44" : "Idea",
+			"45" : "Airtel",
+			"42" : "Aircel",
+			"43" : "Vodafone",
+			"40" : "Airtel",
+			"41" : "Aircel",
+			"1" : "Vodafone",
+			"5" : "Vodafone",
+			"9" : "Reliance Telecom",
+			"77" : "BSNL",
+			"76" : "BSNL",
+			"75" : "BSNL",
+			"74" : "BSNL",
+			"73" : "BSNL",
+			"72" : "BSNL",
+			"71" : "BSNL",
+			"70" : "Airtel",
+			"79" : "BSNL",
+			"78" : "Idea"
+		}
+	},
+	"340" : {
+		"country" : "Martinique & Guadeloupe",
+		"operators" : {
+			"20" : "Digicel",
+			"993" : "Orange Martinique",
+			"1" : "Orange",
+			"3" : "Telcell",
+			"2" : "Outremer",
+			"8" : "MIO GSM"
+		}
+	},
+	"402" : {
+		"country" : "Bhutan",
+		"operators" : {
+			"11" : "B-Mobile",
+			"77" : "TashiCell",
+			"17" : "B-Mobile of Bhutan Telecom"
+		}
+	},
+	"342" : {
+		"country" : "Barbados",
+		"operators" : {
+			"810" : "Cingular Wireless",
+			"750" : "DigiCel",
+			"50" : "DigiCel",
+			"820" : "Sunbeach Communications",
+			"600" : "Lime (Cable & Wireless)"
+		}
+	},
+	"400" : {
+		"country" : "Azerbaijan",
+		"operators" : {
+			"1" : "Azercell",
+			"3" : "FONEX",
+			"2" : "Bakcell",
+			"4" : "Nar Mobile (Azerfon)"
+		}
+	},
+	"280" : {
+		"country" : "Cyprus",
+		"operators" : {
+			"1" : "Cytamobile-Vodafone",
+			"0" : "Areeba Ltd.",
+			"20" : "Primetel",
+			"10" : "MTN"
+		}
+	},
+	"548" : {
+		"country" : "Cook Islands",
+		"operators" : {
+			"1" : "Telecom Cook"
+		}
+	},
+	"282" : {
+		"country" : "Georgia",
+		"operators" : {
+			"88" : "A-Mobile",
+			"1" : "Geocell",
+			"3" : "Iberiatel",
+			"2" : "MagtiCom",
+			"5" : "SLINKNET",
+			"4" : "Beeline",
+			"67" : "Aquafon"
+		}
+	},
+	"348" : {
+		"country" : "British Virgin Islands",
+		"operators" : {
+			"570" : "CCT Boatphone",
+			"770" : "Digicel",
+			"170" : "Cabel & Wireless"
+		}
+	},
+	"284" : {
+		"country" : "Bulgaria",
+		"operators" : {
+			"1" : "M-Tel",
+			"3" : "Vivacom",
+			"5" : "GLOBUL",
+			"6" : "Vivacom"
+		}
+	},
+	"286" : {
+		"country" : "Turkey",
+		"operators" : {
+			"1" : "Turkcell",
+			"3" : "Avea",
+			"2" : "Vodafone",
+			"4" : "Aycell"
+		}
+	},
+	"716" : {
+		"country" : "Peru",
+		"operators" : {
+			"10" : "Claro",
+			"17" : "NEXTEL",
+			"7" : "Nextel",
+			"6" : "movistar"
+		}
+	},
+	"714" : {
+		"country" : "Panama",
+		"operators" : {
+			"1" : "Cable & Wireless",
+			"3" : "Claro",
+			"2" : "movistar",
+			"20" : "Movistar",
+			"4" : "Digicel"
+		}
+	},
+	"712" : {
+		"country" : "Costa Rica",
+		"operators" : {
+			"1" : "ICE",
+			"3" : "ICE",
+			"2" : "ICE"
+		}
+	},
+	"455" : {
+		"country" : "Macao China",
+		"operators" : {
+			"1" : "CTM",
+			"0" : "SmarTone",
+			"3" : "3",
+			"2" : "China Telecom",
+			"5" : "3",
+			"4" : "CTM"
+		}
+	},
+	"262" : {
+		"country" : "Germany",
+		"operators" : {
+			"60" : "DB Telematik (GSM-R)",
+			"20" : "OnePhone",
+			"43" : "Lyca",
+			"1" : "T-Mobile",
+			"3" : "E-plus",
+			"2" : "Vodafone",
+			"5" : "E-Plus (Reserved)",
+			"4" : "Vodafone (Reserved)",
+			"7" : "O2",
+			"6" : "T-Mobile (Reserved)",
+			"9" : "Vodafone",
+			"8" : "O2",
+			"77" : "E-Plus",
+			"76" : "Siemens AG,",
+			"901" : "Debitel",
+			"11" : "O2  (RESERVED)",
+			"10" : "Arcor AG & Co. (GSM-R)",
+			"13" : "Mobilcom Multimedia GmbH",
+			"12" : "Dolphin Telecom (Deutschland) GmbH",
+			"15" : "Airdata",
+			"14" : "Group 3G UMTS GmbH (Quam)",
+			"17" : "Ring Mobilfunk",
+			"16" : "Vistream"
+		}
+	},
+	"260" : {
+		"country" : "Poland",
+		"operators" : {
+			"10" : "Sferia (Using T-mobile)",
+			"12" : "Cyfrowy Polsat",
+			"15" : "CenterNet (UMTS Data only)",
+			"14" : "Sferia (Using T-mobile)",
+			"17" : "Aero2 (UMTS)",
+			"16" : "Mobyland (UMTS)",
+			"1" : "Plus (Polkomtel)",
+			"3" : "Orange",
+			"2" : "T-Mobile",
+			"5" : "Polska Telefonia Kom\u00f3rkowa Centertel Sp. z o.o.",
+			"4" : "Tele 2 (Netia)",
+			"7" : "Netia (Using P4 Nw)",
+			"6" : "Play (P4)",
+			"9" : "Telekomunikacja Kolejowa (GSM-R)",
+			"8" : "E-Telko Sp. z o.o."
+		}
+	},
+	"330" : {
+		"country" : "Puerto Rico (US)",
+		"operators" : {
+			"11" : "Claro",
+			"10" : "Cingular Wireless"
+		}
+	},
+	"266" : {
+		"country" : "Gibraltar",
+		"operators" : {
+			"1" : "GibTel",
+			"9" : "Cloud9 Mobile Communications",
+			"6" : "CTS Mobile"
+		}
+	},
+	"268" : {
+		"country" : "Portugal",
+		"operators" : {
+			"1" : "Vodafone",
+			"3" : "Optimus",
+			"5" : "Oniway - Inforcomunica\u00e7\u00f4es, S.A.",
+			"21" : "Zapp",
+			"6" : "TMN"
+		}
+	},
+	"422" : {
+		"country" : "Oman",
+		"operators" : {
+			"3" : "Nawras",
+			"2" : "Oman Mobile",
+			"4" : "Oman Telecommunications Company (Omantel)"
+		}
+	},
+	"425" : {
+		"country" : "Israel",
+		"operators" : {
+			"303" : "Rami Levy",
+			"1" : "Orange",
+			"3" : "Pelephone",
+			"2" : "Cellcom",
+			"5" : "Jawwal",
+			"7" : "Hot Mobile",
+			"6" : "Wataniya Palestine",
+			"8" : "Golan Telecom"
+		}
+	},
+	"424" : {
+		"country" : "United Arab Emirates",
+		"operators" : {
+			"3" : "du",
+			"2" : "Etisalat"
+		}
+	},
+	"414" : {
+		"country" : "Myanmar",
+		"operators" : {
+			"1" : "MPT"
+		}
+	},
+	"415" : {
+		"country" : "Lebanon",
+		"operators" : {
+			"1" : "Alfa",
+			"3" : "mtc touch",
+			"5" : "Ogero Mobile"
+		}
+	},
+	"535" : {
+		"country" : "Guam (US)",
+		"operators" : {
+			"47" : "Docomo Pacific Inc"
+		}
+	},
+	"417" : {
+		"country" : "Syrian Arab Republic",
+		"operators" : {
+			"1" : "Syriatel",
+			"2" : "MTN"
+		}
+	},
+	"410" : {
+		"country" : "Pakistan",
+		"operators" : {
+			"1" : "Mobilink",
+			"3" : "Ufone",
+			"4" : "Zong",
+			"7" : "Warid",
+			"6" : "Telenor",
+			"8" : "Instaphone (AMPS/CDMA)"
+		}
+	},
+	"360" : {
+		"country" : "Saint Vincent and the Grenadines",
+		"operators" : {
+			"10" : "Cingular Wireless",
+			"100" : "Cingular Wireless",
+			"110" : "Lime (Cable & Wireless)",
+			"70" : "Digicel"
+		}
+	},
+	"412" : {
+		"country" : "Afganistan",
+		"operators" : {
+			"1" : "AWCC",
+			"20" : "Roshan",
+			"50" : "Etisalat",
+			"40" : "MTN"
+		}
+	},
+	"530" : {
+		"country" : "New Zealand",
+		"operators" : {
+			"24" : "2degrees",
+			"55" : "Telecom",
+			"28" : "Econet Wireless New Zealand GSM Mobile Network",
+			"1" : "Vodafone",
+			"0" : "Telecom",
+			"3" : "Woosh",
+			"2" : "Telecom",
+			"5" : "XT Mobile (Telecom)",
+			"4" : "TelstraClear",
+			"6" : "Skinny"
+		}
+	},
+	"370" : {
+		"country" : "Dominican Republic",
+		"operators" : {
+			"1" : "Orange",
+			"3" : "Tricom",
+			"2" : "Claro",
+			"4" : "Viva"
+		}
+	},
+	"294" : {
+		"country" : "Macedonia",
+		"operators" : {
+			"1" : "T-Mobile",
+			"3" : "VIP Operator",
+			"2" : "Cosmofon"
+		}
+	},
+	"372" : {
+		"country" : "Haiti",
+		"operators" : {
+			"1" : "Voila",
+			"3" : "NATCOM",
+			"2" : "Digicel",
+			"50" : "Digicel"
+		}
+	},
+	"418" : {
+		"country" : "Iraq",
+		"operators" : {
+			"45" : "Mobiltel",
+			"20" : "Zain",
+			"30" : "Zain",
+			"40" : "Korek",
+			"5" : "Asia Cell",
+			"8" : "Korek",
+			"92" : "Omnnea"
+		}
+	},
+	"419" : {
+		"country" : "Kuwait",
+		"operators" : {
+			"3" : "Wataniya",
+			"2" : "Zain",
+			"4" : "Viva"
+		}
+	},
+	"290" : {
+		"country" : "Greenland",
+		"operators" : {
+			"1" : "Tele Greenland"
+		}
+	},
+	"376" : {
+		"country" : "Turks and Caicos Islands (UK)",
+		"operators" : {
+			"5" : "Digicel",
+			"352" : "Islandcom",
+			"350" : "Lime (Cable & Wireless)"
+		}
+	},
+	"605" : {
+		"country" : "Tunisia",
+		"operators" : {
+			"1" : "Orange",
+			"3" : "Tunisiana",
+			"2" : "Tunicell"
+		}
+	},
+	"708" : {
+		"country" : "Honduras",
+		"operators" : {
+			"1" : "Claro",
+			"2" : "Tigo",
+			"40" : "DIGICEL",
+			"30" : "Hondutel"
+		}
+	},
+	"704" : {
+		"country" : "Guatemala",
+		"operators" : {
+			"1" : "Claro",
+			"3" : "Movistar",
+			"2" : "Comcel / Tigo"
+		}
+	},
+	"706" : {
+		"country" : "El Salvador",
+		"operators" : {
+			"1" : "CTW Telecom Personal",
+			"10" : "Claro",
+			"3" : "Tigo",
+			"2" : "Digicel",
+			"4" : "movistar"
+		}
+	},
+	"310" : {
+		"country" : "United States",
+		"operators" : {
+			"210" : "T-Mobile",
+			"760" : "Panhandle",
+			"660" : "MetroPCS",
+			"130" : "Carolina West Wireless",
+			"870" : "PACE",
+			"490" : "T-Mobile",
+			"24" : "VoiceStream 24",
+			"25" : "VoiceStream 25",
+			"26" : "T-Mobile",
+			"20" : "Union Telephone Company",
+			"23" : "VoiceStream 23",
+			"0" : "Mid-Tex Cellular",
+			"540" : "Oklahoma Western",
+			"340" : "Westlink",
+			"4" : "Verizon",
+			"400" : "i CAN_GSM",
+			"810" : "Brazos Cellular Communications Ltd.",
+			"280" : "Verizon",
+			"930" : "Copper Valley Wireless",
+			"990" : "E.N.M.R. Telephone Cooperative",
+			"670" : "Northstar",
+			"710" : "Arctic Slopo Telephone Association Cooperative",
+			"120" : "Sprint",
+			"260" : "T-Mobile",
+			"960" : "Plateau Wireless",
+			"50" : "ACS Wireless Inc.",
+			"410" : "AT&T;",
+			"530" : "West Virginia Wireless",
+			"920" : "Get Mobile",
+			"370" : "Guamcell Cellular and Paging",
+			"820" : "South Canaan Cellular Communications Co. LP",
+			"290" : "Nep Cellcorp Inc.",
+			"590" : "Alltel",
+			"311" : "Farmers Wireless",
+			"310" : "T-Mobile",
+			"700" : "Cross Valiant Cellular Partnership",
+			"190" : "Dutch Harbor",
+			"270" : "T-Mobile",
+			"390" : "Verizon",
+			"110" : "Verizon",
+			"80" : "Corr",
+			"830" : "Caprock",
+			"790" : "PinPoint",
+			"3" : "Verizon",
+			"520" : "VeriSign",
+			"7" : "Highland",
+			"420" : "Cincinnati Bell",
+			"910" : "Verizon",
+			"360" : "Cellular Network Partnership dba Pioneer Cellular",
+			"580" : "Inland Cellular Telephone Company",
+			"300" : "iSmart Mobile",
+			"440" : "Numerex Corp.",
+			"690" : "Conestoga",
+			"380" : "New Cingular Wireless PCS, LLC",
+			"240" : "T-Mobile",
+			"100" : "Plateau Wireless",
+			"900" : "Mid-Rivers Wireless",
+			"38" : "USA 3650 AT&T;",
+			"780" : "Connect Net Inc",
+			"840" : "telna Mobile",
+			"32" : "IT&E; Overseas, Inc.",
+			"31" : "AERIAL",
+			"30" : "Centennial",
+			"34" : "Airpeak",
+			"640" : "Airadigm",
+			"510" : "Airtel",
+			"430" : "Alaska Digitel LLC",
+			"620" : "Coleman County Telecom",
+			"450" : "Viaero",
+			"570" : "Cellular One",
+			"330" : "AN Subsidiary LLC",
+			"60" : "Consolidated Telcom",
+			"250" : "T-Mobile",
+			"170" : "Cingular Wireless",
+			"850" : "Aeris",
+			"970" : "Globalstar",
+			"730" : "SeaMobile",
+			"180" : "West Central",
+			"2" : "Sprint",
+			"650" : "Jasper",
+			"6" : "Consolidated Telcom",
+			"980" : "New Cingular Wireless PCS LLC",
+			"500" : "Alltel",
+			"630" : "AmeriLink PCS",
+			"750" : "East Kentucky Network LLC dba Appalachian Wireless",
+			"560" : "AT&T;",
+			"460" : "Simmetry",
+			"8" : "Corr Wireless Communications",
+			"90" : "AT&T;",
+			"160" : "T-Mobile",
+			"220" : "T-Mobile",
+			"11" : "Southern Communications Services Inc.",
+			"10" : "Verizon",
+			"13" : "Alltel Wireless",
+			"12" : "Verizon",
+			"15" : "Southern Communications dba Southern LINC",
+			"14" : "Testing",
+			"17" : "North Sight Communications Inc.",
+			"16" : "Cricket Communications",
+			"860" : "TX RSA 15B2, LP dba Five Star Wireless",
+			"720" : "Wireless Solutions International Inc.",
+			"740" : "Convey",
+			"150" : "AT&T;",
+			"880" : "Advantage",
+			"600" : "New Cell Inc. dba Cellcom",
+			"550" : "AT&T;",
+			"230" : "T-Mobile",
+			"46" : "Simmetry",
+			"950" : "XIT Wireless",
+			"40" : "Concho",
+			"320" : "Cellular One",
+			"5" : "Verizon",
+			"9" : "Edge Wireless LLC",
+			"890" : "Verizon",
+			"200" : "T-Mobile",
+			"770" : "i wireless",
+			"140" : "GTA Wireless LLC",
+			"610" : "Epic Touch",
+			"70" : "Highland Cellular, Inc.",
+			"480" : "Verizon",
+			"940" : "Poka Lambro Telecommunications Ltd.",
+			"470" : "Omnipoint",
+			"350" : "Mohave Cellular L.P.",
+			"800" : "T-Mobile",
+			"680" : "AT&T;"
+		}
+	},
+	"316" : {
+		"country" : "United States",
+		"operators" : {
+			"11" : "Southern Communications Services"
+		}
+	},
+	"702" : {
+		"country" : "Belize",
+		"operators" : {
+			"68" : "IntelCo",
+			"99" : "Smart",
+			"67" : "DigiCell"
+		}
+	},
+	"270" : {
+		"country" : "Luxembourg",
+		"operators" : {
+			"1" : "LuxGSM",
+			"77" : "Tango",
+			"99" : "Orange"
+		}
+	},
+	"272" : {
+		"country" : "Ireland",
+		"operators" : {
+			"11" : "Tesco Mobile",
+			"13" : "Lyca Mobile",
+			"1" : "Vodafone",
+			"3" : "Meteor",
+			"2" : "O2",
+			"5" : "3",
+			"4" : "Access Telecom Ltd.",
+			"7" : "Eircom",
+			"9" : "Clever Communications Ltd."
+		}
+	},
+	"619" : {
+		"country" : "Sierra Leone",
+		"operators" : {
+			"25" : "Mobitel",
+			"999" : "LeoneCel",
+			"50" : "Dtatel (SL) Ltd CDMA",
+			"40" : "Datatel (SL) Ltd GSM",
+			"1" : "Airtel",
+			"3" : "Africell",
+			"2" : "Tigo",
+			"5" : "Africell",
+			"4" : "Comium"
+		}
+	},
+	"274" : {
+		"country" : "Iceland",
+		"operators" : {
+			"11" : "Nova",
+			"1" : "Siminn",
+			"3" : "Vodafone",
+			"2" : "Vodafone",
+			"4" : "Viking",
+			"7" : "IceCell",
+			"6" : "09 Mobile"
+		}
+	},
+	"276" : {
+		"country" : "Albania",
+		"operators" : {
+			"1" : "AMS",
+			"3" : "Eagle Mobile",
+			"2" : "Vodafone",
+			"4" : "Plus Communication"
+		}
+	},
+	"278" : {
+		"country" : "Malta",
+		"operators" : {
+			"1" : "Vodafone",
+			"77" : "Melita",
+			"21" : "GO"
+		}
+	},
+	"537" : {
+		"country" : "Papua New Guinea",
+		"operators" : {
+			"1" : "B-Mobile",
+			"3" : "Digicel",
+			"2" : "Greencom"
+		}
+	},
+	"520" : {
+		"country" : "Thailand",
+		"operators" : {
+			"10" : "WCS",
+			"15" : "TOT 3G",
+			"23" : "AIS GSM 1800",
+			"18" : "dtac",
+			"1" : "AIS",
+			"0" : "Hutch",
+			"88" : "True Move H",
+			"2" : "CAT CDMA",
+			"99" : "True Move"
+		}
+	},
+	"416" : {
+		"country" : "Jordan",
+		"operators" : {
+			"1" : "zain JO",
+			"77" : "Orange",
+			"3" : "Umniah",
+			"2" : "XPress Telecom"
+		}
+	},
+	"429" : {
+		"country" : "Nepal",
+		"operators" : {
+			"1" : "Namaste / Nt Mobile",
+			"3" : "Sky/C-Phone",
+			"2" : "Ncell",
+			"4" : "SmartCell"
+		}
+	},
+	"428" : {
+		"country" : "Mongolia",
+		"operators" : {
+			"91" : "Skytel",
+			"98" : "G.Mobile",
+			"88" : "Unitel",
+			"99" : "MobiCom"
+		}
+	},
+	"651" : {
+		"country" : "Lesotho",
+		"operators" : {
+			"1" : "Vodacom",
+			"2" : "Econet Ezin-cel"
+		}
+	},
+	"368" : {
+		"country" : "Cuba",
+		"operators" : {
+			"1" : "Cubacel"
+		}
+	},
+	"613" : {
+		"country" : "Burkina Faso",
+		"operators" : {
+			"1" : "Telmob",
+			"3" : "Telcel Faso",
+			"2" : "Zain"
+		}
+	},
+	"366" : {
+		"country" : "Dominica",
+		"operators" : {
+			"20" : "Digicel",
+			"110" : "Cable & Wireless Dominica Ltd."
+		}
+	},
+	"420" : {
+		"country" : "Saudi Arabia",
+		"operators" : {
+			"1" : "Al Jawal",
+			"3" : "Mobily",
+			"4" : "Zain SA",
+			"7" : "EAE"
+		}
+	},
+	"364" : {
+		"country" : "Bahamas",
+		"operators" : {
+			"39" : "BaTelCo",
+			"390" : "BaTelCo"
+		}
+	},
+	"365" : {
+		"country" : "Anguilla",
+		"operators" : {
+			"10" : "Weblinks Limited",
+			"5" : "Mossel Ltd (Digicel)",
+			"840" : "Cable & Wireless"
+		}
+	},
+	"528" : {
+		"country" : "Brunei Darussalam",
+		"operators" : {
+			"1" : "Jabatan Telekom Brunei",
+			"11" : "DSTCom",
+			"2" : "B-Mobile"
+		}
+	},
+	"363" : {
+		"country" : "Aruba",
+		"operators" : {
+			"1" : "SETAR",
+			"2" : "Digicel"
+		}
+	},
+	"427" : {
+		"country" : "Quatar",
+		"operators" : {
+			"1" : "Qtel",
+			"2" : "Vodafone"
+		}
+	},
+	"426" : {
+		"country" : "Bahrain",
+		"operators" : {
+			"1" : "Batelco",
+			"2" : "Zain BH",
+			"4" : "Viva"
+		}
+	},
+	"308" : {
+		"country" : "St. Pierre and Miquelon",
+		"operators" : {
+			"1" : "Ameris"
+		}
+	},
+	"542" : {
+		"country" : "Fiji",
+		"operators" : {
+			"1" : "Vodafone",
+			"2" : "Digicel"
+		}
+	},
+	"302" : {
+		"country" : "Canada",
+		"operators" : {
+			"620" : "ICE Wireless",
+			"701" : "MB Tel Mobility",
+			"702" : "MT&T; Mobility (Aliant)",
+			"703" : "New Tel Mobility (Aliant",
+			"880" : "Bell / Telus / SaskTel",
+			"490" : "WIND Mobile",
+			"320" : "Mobilicity",
+			"656" : "TBay",
+			"657" : "Telus",
+			"654" : "Sask Tel Mobility",
+			"655" : "MTS",
+			"652" : "BC Tel Mobility",
+			"653" : "Telus",
+			"651" : "Bell",
+			"500" : "Videotron",
+			"361" : "Telus",
+			"610" : "Bell",
+			"710" : "Globalstar",
+			"380" : "DMTS",
+			"370" : "Fido",
+			"221" : "Telus",
+			"220" : "Telus",
+			"780" : "SaskTel",
+			"640" : "Bell",
+			"360" : "MiKE",
+			"720" : "Rogers Wireless",
+			"350" : "FIRST",
+			"510" : "Videotron",
+			"680" : "SaskTel",
+			"290" : "Aurtek Wurekess"
+		}
+	},
+	"440" : {
+		"country" : "Japan",
+		"operators" : {
+			"24" : "DoCoMo",
+			"25" : "DoCoMo",
+			"26" : "DoCoMo",
+			"27" : "DoCoMo",
+			"20" : "SoftBank",
+			"21" : "DoCoMo",
+			"22" : "DoCoMo",
+			"23" : "DoCoMo",
+			"28" : "DoCoMo",
+			"29" : "DoCoMo",
+			"0" : "eMobile",
+			"4" : "Softbank",
+			"8" : "KDDI",
+			"58" : "DoCoMo",
+			"55" : "KDDI",
+			"54" : "KDDI",
+			"56" : "KDDI",
+			"51" : "KDDI",
+			"50" : "KDDI",
+			"53" : "KDDI",
+			"52" : "KDDI",
+			"88" : "KDDI",
+			"89" : "KDDI",
+			"82" : "TU-KA",
+			"83" : "TU-KA",
+			"80" : "TU-KA",
+			"81" : "TU-KA",
+			"86" : "TU-KA",
+			"87" : "DoCoMo",
+			"85" : "TU-KA",
+			"3" : "DoCoMo",
+			"7" : "KDDI",
+			"39" : "DoCoMo",
+			"38" : "DoCoMo",
+			"33" : "DoCoMo",
+			"32" : "DoCoMo",
+			"31" : "DoCoMo",
+			"30" : "DoCoMo",
+			"37" : "DoCoMo",
+			"36" : "DoCoMo",
+			"35" : "DoCoMo",
+			"34" : "DoCoMo",
+			"60" : "DoCoMo",
+			"61" : "DoCoMo",
+			"62" : "DoCoMo",
+			"63" : "DoCoMo",
+			"64" : "Softbank",
+			"65" : "DoCoMo",
+			"66" : "DoCoMo",
+			"67" : "DoCoMo",
+			"68" : "DoCoMo",
+			"69" : "DoCoMo",
+			"2" : "DoCoMo",
+			"6" : "Softbank",
+			"99" : "DoCoMo",
+			"98" : "Softbank",
+			"91" : "Softbank",
+			"90" : "Softbank",
+			"93" : "Softbank",
+			"92" : "Softbank",
+			"95" : "Softbank",
+			"94" : "Softbank",
+			"97" : "Softbank",
+			"96" : "Softbank",
+			"11" : "DoCoMo",
+			"10" : "DoCoMo",
+			"13" : "DoCoMo",
+			"12" : "DoCoMo",
+			"15" : "DoCoMo",
+			"14" : "DoCoMo",
+			"17" : "DoCoMo",
+			"16" : "DoCoMo",
+			"19" : "DoCoMo",
+			"18" : "DoCoMo",
+			"48" : "Softbank",
+			"49" : "KDDI",
+			"46" : "Softbank",
+			"47" : "Softbank",
+			"44" : "Softbank",
+			"45" : "Softbank",
+			"42" : "Softbank",
+			"43" : "Softbank",
+			"40" : "Softbank",
+			"41" : "Softbank",
+			"1" : "DoCoMo",
+			"9" : "DoCoMo",
+			"77" : "KDDI",
+			"76" : "KDDI",
+			"75" : "KDDI",
+			"74" : "KDDI",
+			"73" : "KDDI",
+			"72" : "KDDI",
+			"71" : "KDDI",
+			"70" : "Au",
+			"79" : "KDDI",
+			"78" : "Okinawa"
+		}
+	},
+	"244" : {
+		"country" : "Finland",
+		"operators" : {
+			"11" : "Virve",
+			"10" : "TDC",
+			"12" : "DNA",
+			"15" : "Samk",
+			"14" : "AMT",
+			"16" : "Oy Finland Tele2 AB",
+			"29" : "Scnl Truphone",
+			"41" : "Saunalahti",
+			"91" : "Sonera",
+			"3" : "DNA",
+			"5" : "Elisa",
+			"7" : "Nokia",
+			"9" : "Finnet",
+			"8" : "Uknown brand",
+			"21" : "Saunalahti"
+		}
+	},
+	"247" : {
+		"country" : "Latvia",
+		"operators" : {
+			"1" : "LMT",
+			"3" : "Triatel",
+			"2" : "Tele2",
+			"5" : "Bite",
+			"7" : "Master Telecom (MTS)",
+			"6" : "Rigatta",
+			"9" : "Camel Mobile",
+			"8" : "IZZI"
+		}
+	},
+	"246" : {
+		"country" : "Lithuania",
+		"operators" : {
+			"1" : "Omnitel",
+			"3" : "Tele2",
+			"2" : "Bite GSM"
+		}
+	},
+	"240" : {
+		"country" : "Sweden",
+		"operators" : {
+			"89" : "ACN Communications Sweden AB",
+			"25" : "Digitel Mobile Srl",
+			"26" : "Beepsend",
+			"27" : "MyIndian AB",
+			"20" : "Imez AB",
+			"22" : "EuTel",
+			"23" : "Infobip Ltd",
+			"28" : "CoolTEL Aps",
+			"29" : "Mercury International Carrier Services",
+			"41" : "Shyam Telecom UK Ltd",
+			"1" : "Telia",
+			"0" : "Direct2 Internet",
+			"3" : "Netett Sverige AB",
+			"2" : "3",
+			"5" : "Sweden 3G (Telia/Tele2)",
+			"7" : "Tele2",
+			"6" : "Telenor",
+			"9" : "Djuice Mobile Sweden",
+			"8" : "Telenor",
+			"503" : "Unknown",
+			"500" : "Unknown",
+			"11" : "Lindholmen Science Park",
+			"10" : "Spring",
+			"13" : "Ventelo",
+			"12" : "Lycamobile",
+			"15" : "Wireless Maingate",
+			"14" : "TDC",
+			"17" : "G\u00f6talandsn\u00e4tet AB",
+			"16" : "42 Telecom AB",
+			"19" : "Mudio Mobile",
+			"18" : "Generic Mobile Systems Sweden AB",
+			"30" : "NextGen Mobile Ltd",
+			"36" : "IDM",
+			"34" : "Tigo LTD",
+			"32" : "CompaTel Ltd."
+		}
+	},
+	"297" : {
+		"country" : "Montenegro",
+		"operators" : {
+			"1" : "Telenor",
+			"3" : "m:tel CG",
+			"2" : "T-Mobile",
+			"4" : "T-Mobile"
+		}
+	},
+	"248" : {
+		"country" : "Estonia",
+		"operators" : {
+			"71" : "Siseministeerium (Ministry of Interior)",
+			"1" : "EMT",
+			"3" : "Tele 2",
+			"2" : "Elisa",
+			"5" : "AS Bravocom Mobiil",
+			"4" : "OY Top Connect",
+			"7" : "Telev\u00f5rgu AS",
+			"6" : "OY ViaTel (UMTS)"
+		}
+	},
+	"901" : {
+		"country" : "International",
+		"operators" : {
+			"11" : "Inmarsat",
+			"10" : "ACeS",
+			"13" : "GSM.AQ",
+			"12" : "MCP",
+			"15" : "OnAir Switzerland Sarl",
+			"14" : "AeroMobile AS",
+			"17" : "Navitas",
+			"18" : "Cellular @Sea",
+			"1" : "ICO",
+			"3" : "Iridium",
+			"5" : "Thuraya RMSS Network",
+			"4" : "Globalstar",
+			"6" : "Thuraya Satellite Telecommunications Company",
+			"21" : "Seanet"
+		}
+	},
+	"293" : {
+		"country" : "Slovenia",
+		"operators" : {
+			"70" : "Tu\u009amobil",
+			"64" : "T-2",
+			"40" : "Si.mobil",
+			"41" : "Mobitel"
+		}
+	},
+	"641" : {
+		"country" : "Uganda",
+		"operators" : {
+			"1" : "Zain",
+			"10" : "MTN",
+			"14" : "Orange",
+			"22" : "Warid Telecom",
+			"11" : "Uganda Telecom"
+		}
+	},
+	"640" : {
+		"country" : "Tanzania",
+		"operators" : {
+			"11" : "SmileCom",
+			"1" : "Tri Telecommunication (T) Ltd.",
+			"3" : "Zantel",
+			"2" : "tiGO",
+			"5" : "Airtel",
+			"4" : "Vodacom",
+			"7" : "TTCL Mobile",
+			"6" : "SasaTel",
+			"9" : "Hits",
+			"8" : "Benson Online (BOL)"
+		}
+	},
+	"643" : {
+		"country" : "Mozambique",
+		"operators" : {
+			"1" : "mCel",
+			"3" : "Movitel",
+			"4" : "Vodacom"
+		}
+	},
+	"642" : {
+		"country" : "Burundi",
+		"operators" : {
+			"1" : "Spacetel",
+			"3" : "Onatel",
+			"2" : "Africell",
+			"7" : "Smart Mobile",
+			"82" : "U-COM Burundi",
+			"8" : "HiTs Telecom"
+		}
+	},
+	"645" : {
+		"country" : "Zambia",
+		"operators" : {
+			"1" : "Zain",
+			"3" : "Zamtel",
+			"2" : "MTN"
+		}
+	},
+	"539" : {
+		"country" : "Tonga",
+		"operators" : {
+			"1" : "Tonga Communications Corporation",
+			"88" : "Digicel",
+			"43" : "Shoreline Communication"
+		}
+	},
+	"647" : {
+		"country" : "Reunion",
+		"operators" : {
+			"995" : "SRR Mayotte",
+			"0" : "Orange",
+			"997" : "Orange",
+			"2" : "Outremer Telecom",
+			"10" : "SFR Reunion"
+		}
+	},
+	"646" : {
+		"country" : "Madagascar",
+		"operators" : {
+			"1" : "Zain",
+			"3" : "Madamobil",
+			"2" : "Orange",
+			"4" : "Telma"
+		}
+	},
+	"649" : {
+		"country" : "Namibia",
+		"operators" : {
+			"1" : "MTC",
+			"3" : "Leo",
+			"2" : "Switch"
+		}
+	},
+	"510" : {
+		"country" : "Indonesia",
+		"operators" : {
+			"11" : "XL",
+			"10" : "Telkomsel",
+			"27" : "Ceria",
+			"20" : "TelkomMobile",
+			"21" : "IM3",
+			"28" : "Fren/Hepi",
+			"1" : "INDOSAT",
+			"0" : "PSN",
+			"3" : "StarOne",
+			"89" : "3",
+			"99" : "Esia",
+			"7" : "TelkomFlexi",
+			"9" : "SMART",
+			"8" : "AXIS"
+		}
+	},
+	"434" : {
+		"country" : "Uzbekistan",
+		"operators" : {
+			"1" : "Buztel",
+			"2" : "Uzmacom",
+			"5" : "Ucell",
+			"4" : "Beeline",
+			"7" : "MTS",
+			"6" : "Perfectum Mobile"
+		}
+	},
+	"648" : {
+		"country" : "Zimbabwe",
+		"operators" : {
+			"1" : "Net One",
+			"3" : "Telecel",
+			"4" : "Econet"
+		}
+	},
+	"432" : {
+		"country" : "Iran",
+		"operators" : {
+			"11" : "IR-MCI",
+			"14" : "TKC",
+			"19" : "MTCE",
+			"32" : "Taliya",
+			"35" : "Irancell",
+			"70" : "TCI",
+			"93" : "Iraphone"
+		}
+	},
+	"514" : {
+		"country" : "Timor-Leste (East Timor)",
+		"operators" : {
+			"2" : "Timor Telecom"
+		}
+	},
+	"623" : {
+		"country" : "Central African Republic",
+		"operators" : {
+			"1" : "MOOV",
+			"3" : "Orange",
+			"2" : "TC",
+			"4" : "Nationlink"
+		}
+	},
+	"622" : {
+		"country" : "Chad",
+		"operators" : {
+			"1" : "Zain",
+			"3" : "Millicom Tchad",
+			"2" : "Tawali",
+			"4" : "Salam"
+		}
+	},
+	"621" : {
+		"country" : "Nigeria",
+		"operators" : {
+			"25" : "Visafone",
+			"20" : "Airtel",
+			"30" : "MTN",
+			"50" : "Glo",
+			"40" : "M-Tel",
+			"60" : "Etisalat"
+		}
+	},
+	"620" : {
+		"country" : "Ghana",
+		"operators" : {
+			"997" : "Glo Mobile",
+			"1" : "MTN",
+			"3" : "tiGO",
+			"2" : "Vodafone",
+			"4" : "Expresso",
+			"6" : "Airtel"
+		}
+	},
+	"627" : {
+		"country" : "Equatorial Guinea",
+		"operators" : {
+			"1" : "Orange GQ",
+			"3" : "Hits GQ"
+		}
+	},
+	"338" : {
+		"country" : "Jamaica",
+		"operators" : {
+			"20" : "LIME (formerly known as Cable & Wireless)",
+			"180" : "LIME (formerly known as Cable & Wireless)",
+			"5" : "JM DIGICEL",
+			"50" : "Digicel",
+			"70" : "Claro"
+		}
+	},
+	"625" : {
+		"country" : "Cape Verde",
+		"operators" : {
+			"1" : "CVMOVEL",
+			"2" : "T+"
+		}
+	},
+	"624" : {
+		"country" : "Cameroon",
+		"operators" : {
+			"1" : "MTN Cameroon",
+			"2" : "Orange"
+		}
+	},
+	"450" : {
+		"country" : "Korea (South)",
+		"operators" : {
+			"0" : "Dacom",
+			"3" : "Digital 017",
+			"2" : "KT",
+			"5" : "SKT",
+			"4" : "KT",
+			"6" : "LGT",
+			"8" : "KTF Show"
+		}
+	},
+	"334" : {
+		"country" : "Mexico",
+		"operators" : {
+			"20" : "Telcel",
+			"50" : "Iusacell / Unefon",
+			"1" : "Nextel",
+			"3" : "Movistar",
+			"2" : "Telcel",
+			"5" : "Iusacell / Unefon",
+			"4" : "Iusacell / Unefon"
+		}
+	},
+	"629" : {
+		"country" : "Republic of Congo",
+		"operators" : {
+			"1" : "Zain",
+			"10" : "Libertis Telecom",
+			"7" : "Libertis Telecom"
+		}
+	},
+	"628" : {
+		"country" : "Gabon",
+		"operators" : {
+			"1" : "Libertis",
+			"3" : "Airtel",
+			"2" : "Moov",
+			"5" : "RAG",
+			"4" : "Azur"
+		}
+	},
+	"454" : {
+		"country" : "Hongkong, China",
+		"operators" : {
+			"22" : "SmarTone Mobile (P-Plus)",
+			"47" : "Hong Kong Police Force - TETRA systems",
+			"29" : "PCCW Mobile",
+			"40" : "shared by private TETRA systems",
+			"1" : "CITIC Telecom 1616",
+			"0" : "1O1O / One2Free",
+			"3" : "3 (3G)",
+			"2" : "CSL",
+			"5" : "3 (CDMA)",
+			"4" : "3 (2G)",
+			"7" : "China Unicom (Hong Kong) Ltd",
+			"6" : "SmarTone-Vodafone",
+			"9" : "China Motion Telecom",
+			"8" : "Trident Telecom",
+			"11" : "China-Hong Kong Telecom",
+			"10" : "New World Mobility",
+			"12" : "CMCC HK",
+			"15" : "3G Radio System/SMT3G",
+			"14" : "Hutchison Telecom",
+			"17" : "SmarTone Mobile Communications Limited",
+			"16" : "PCCW Mobile",
+			"19" : "PCCW Mobile",
+			"18" : "CSL"
+		}
+	},
+	"607" : {
+		"country" : "Gambia",
+		"operators" : {
+			"1" : "Gamcel",
+			"3" : "Comium",
+			"2" : "Africell",
+			"4" : "QCell"
+		}
+	},
+	"456" : {
+		"country" : "Cambodia",
+		"operators" : {
+			"11" : "Excell",
+			"18" : "Mfone",
+			"1" : "Mobitel",
+			"3" : "S Telecom",
+			"2" : "Hello",
+			"5" : "Star-Cell",
+			"4" : "QB",
+			"6" : "Smart Mobile",
+			"9" : "Beeline",
+			"8" : "Mefone"
+		}
+	},
+	"457" : {
+		"country" : "Laos",
+		"operators" : {
+			"1" : "LaoTel",
+			"8" : "Tigo",
+			"3" : "Unitel",
+			"2" : "ETL"
+		}
+	},
+	"259" : {
+		"country" : "Moldova",
+		"operators" : {
+			"1" : "Orange",
+			"3" : "IDC",
+			"2" : "Moldcell",
+			"5" : "Unite",
+			"4" : "Evntis"
+		}
+	},
+	"250" : {
+		"country" : "Russia",
+		"operators" : {
+			"20" : "Tele2",
+			"23" : "Mobicom",
+			"44" : "Stuvtelesot",
+			"28" : "Beeline",
+			"1" : "MTS",
+			"3" : "NCC",
+			"2" : "MegaFon",
+			"5" : "ETK",
+			"4" : "Sibchallenge",
+			"7" : "SMARTS",
+			"6" : "Skylink",
+			"9" : "Skylink",
+			"811" : "Votek Mobile",
+			"39" : "Utel",
+			"99" : "Beeline",
+			"810" : "Volga Telecom",
+			"38" : "Tambov GSM",
+			"93" : "Telecom XXI",
+			"92" : "MTS - Primtelefon",
+			"11" : "Orensot",
+			"10" : "DTC",
+			"13" : "KUGSM",
+			"12" : "Baykal",
+			"15" : "SMARTS",
+			"17" : "Utel",
+			"16" : "NTC",
+			"19" : "Indigo",
+			"37" : "ZAO Kodotel",
+			"35" : "MOTIV",
+			"809" : "Vimpelcom",
+			"808" : "Tele 2",
+			"803" : "MegaFon",
+			"802" : "MegaFon",
+			"801" : "EastWest Telecom",
+			"807" : "ST Mobile",
+			"806" : "Smolensk Cellular",
+			"805" : "RTCOM",
+			"804" : "MegaFon"
+		}
+	},
+	"413" : {
+		"country" : "Sri Lanka",
+		"operators" : {
+			"1" : "Mobitel",
+			"8" : "Hutch",
+			"3" : "Etisalat",
+			"2" : "Dialog",
+			"5" : "Airtel"
+		}
+	},
+	"257" : {
+		"country" : "Belarus",
+		"operators" : {
+			"1" : "Velcom",
+			"3" : "DIALLOG",
+			"2" : "MTS",
+			"4" : "life :)",
+			"501" : "BelCel JV"
+		}
+	},
+	"255" : {
+		"country" : "Ukraine",
+		"operators" : {
+			"25" : "Newtone",
+			"39" : "Golden Telecom GSM",
+			"21" : "PEOPLEnet",
+			"23" : "ITC",
+			"67" : "Kyivstar",
+			"50" : "Ukrainian Mobile Communications",
+			"1" : "MTS",
+			"3" : "Kyivstar",
+			"2" : "Beeline",
+			"5" : "Golden Telecom",
+			"4" : "IT",
+			"7" : "Ukrtelecom",
+			"6" : "life:)",
+			"68" : "Wellcom"
+		}
+	},
+	"344" : {
+		"country" : "Antigua and Barbuda",
+		"operators" : {
+			"920" : "Lime",
+			"930" : "Digicel",
+			"30" : "APUA",
+			"50" : "Digicel"
+		}
+	},
+	"746" : {
+		"country" : "Suriname",
+		"operators" : {
+			"1" : "Telesur",
+			"3" : "Digicel",
+			"2" : "Telesur",
+			"4" : "Uniqa"
+		}
+	},
+	"405" : {
+		"country" : "India",
+		"operators" : {
+			"875" : "Uninor",
+			"872" : "LOOP",
+			"873" : "LOOP",
+			"870" : "LOOP",
+			"871" : "LOOP",
+			"24" : "HFCL INFOTEL",
+			"25" : "TATA Teleservices",
+			"26" : "TATA Teleservices",
+			"27" : "TATA Teleservices",
+			"20" : "Reliance Telecom",
+			"21" : "Reliance Telecom",
+			"22" : "Reliance Telecom",
+			"23" : "Reliance Telecom",
+			"930" : "Etisalat DB",
+			"28" : "TATA Teleservices",
+			"29" : "TATA Teleservices",
+			"818" : "Uninor",
+			"819" : "Uninor",
+			"4" : "Reliance Telecom",
+			"810" : "Aircel",
+			"8" : "Reliance Telecom",
+			"812" : "Aircel",
+			"813" : "Uninor",
+			"814" : "Uninor",
+			"815" : "Uninor",
+			"816" : "Uninor",
+			"817" : "Uninor",
+			"869" : "LOOP",
+			"868" : "LOOP",
+			"929" : "Uninor",
+			"55" : "Airtel",
+			"54" : "Airtel",
+			"56" : "Airtel",
+			"51" : "Airtel",
+			"53" : "Airtel",
+			"52" : "Airtel",
+			"928" : "Uninor",
+			"861" : "LOOP",
+			"829" : "Videocon",
+			"828" : "Videocon",
+			"860" : "LOOP",
+			"825" : "Videocon",
+			"824" : "Videocon",
+			"827" : "Videocon",
+			"826" : "Videocon",
+			"821" : "Uninor",
+			"820" : "Uninor",
+			"823" : "Videocon",
+			"822" : "Uninor",
+			"874" : "LOOP",
+			"832" : "Videocon",
+			"833" : "Videocon",
+			"830" : "Videocon",
+			"831" : "Videocon",
+			"836" : "Videocon",
+			"837" : "Videocon",
+			"834" : "Videocon",
+			"835" : "Videocon",
+			"838" : "Videocon",
+			"839" : "Videocon",
+			"799" : "Idea",
+			"3" : "Reliance Telecom",
+			"919" : "Etisalat DB",
+			"918" : "Etisalat DB",
+			"7" : "Reliance Telecom",
+			"915" : "Etisalat DB",
+			"914" : "Etisalat DB",
+			"917" : "Etisalat DB",
+			"916" : "Etisalat DB",
+			"913" : "Etisalat DB",
+			"912" : "Etisalat DB",
+			"920" : "Etisalat DB",
+			"923" : "Etisalat DB",
+			"921" : "Etisalat DB",
+			"904" : "Sistema Shyam",
+			"922" : "Etisalat DB",
+			"902" : "Sistema Shyam",
+			"846" : "Idea",
+			"39" : "TATA Teleservices",
+			"38" : "TATA Teleservices",
+			"843" : "Videocon",
+			"842" : "Videocon",
+			"841" : "Videocon",
+			"840" : "Videocon",
+			"33" : "TATA Teleservices",
+			"32" : "TATA Teleservices",
+			"31" : "TATA Teleservices",
+			"30" : "TATA Teleservices",
+			"37" : "TATA Teleservices",
+			"36" : "TATA Teleservices",
+			"35" : "TATA Teleservices",
+			"34" : "TATA Teleservices",
+			"924" : "Etisalat DB",
+			"926" : "Uninor",
+			"927" : "Uninor",
+			"932" : "Videocon",
+			"900" : "Sistema Shyam",
+			"925" : "Uninor",
+			"66" : "Vodafone",
+			"67" : "Vodafone",
+			"901" : "Sistema Shyam",
+			"854" : "LOOP",
+			"855" : "LOOP",
+			"856" : "LOOP",
+			"857" : "LOOP",
+			"850" : "Idea",
+			"852" : "Idea",
+			"853" : "Idea",
+			"858" : "LOOP",
+			"859" : "LOOP",
+			"6" : "Reliance Telecom",
+			"753" : "Vodafone",
+			"752" : "Vodafone",
+			"751" : "Vodafone",
+			"750" : "Vodafone",
+			"756" : "Vodafone",
+			"755" : "Vodafone",
+			"754" : "Vodafone",
+			"845" : "Idea",
+			"844" : "Uninor",
+			"811" : "Aircel",
+			"906" : "Sistema Shyam",
+			"931" : "Etisalat DB",
+			"907" : "Sistema Shyam",
+			"11" : "Reliance Telecom",
+			"10" : "Reliance Telecom",
+			"13" : "Reliance Telecom",
+			"12" : "Reliance Telecom",
+			"15" : "Reliance Telecom",
+			"14" : "Reliance Telecom",
+			"17" : "Reliance Telecom",
+			"19" : "Reliance Telecom",
+			"18" : "Reliance Telecom",
+			"863" : "LOOP",
+			"862" : "LOOP",
+			"865" : "LOOP",
+			"864" : "LOOP",
+			"867" : "LOOP",
+			"866" : "LOOP",
+			"883" : "S TEL",
+			"882" : "S TEL",
+			"881" : "S TEL",
+			"880" : "Uninor",
+			"887" : "Sistema Shyam",
+			"886" : "S TEL",
+			"885" : "S TEL",
+			"884" : "S TEL",
+			"889" : "Sistema Shyam",
+			"888" : "Sistema Shyam",
+			"849" : "Idea",
+			"848" : "Idea",
+			"905" : "Sistema Shyam",
+			"48" : "Indian Raylways",
+			"879" : "Uninor",
+			"46" : "TATA Teleservices",
+			"47" : "TATA Teleservices",
+			"44" : "TATA Teleservices",
+			"45" : "TATA Teleservices",
+			"42" : "TATA Teleservices",
+			"43" : "TATA Teleservices",
+			"40" : "TATA Teleservices",
+			"41" : "TATA Teleservices",
+			"1" : "Reliance Telecom",
+			"5" : "Reliance Telecom",
+			"9" : "Reliance Telecom",
+			"890" : "Sistema Shyam",
+			"891" : "Sistema Shyam",
+			"892" : "Sistema Shyam",
+			"893" : "Sistema Shyam",
+			"894" : "Sistema Shyam",
+			"895" : "Sistema Shyam",
+			"896" : "Sistema Shyam",
+			"897" : "Sistema Shyam",
+			"898" : "Sistema Shyam",
+			"899" : "Sistema Shyam",
+			"70" : "Idea",
+			"878" : "Uninor",
+			"903" : "Sistema Shyam",
+			"876" : "Uninor",
+			"809" : "Aircel",
+			"808" : "Aircel",
+			"877" : "Uninor",
+			"803" : "Aircel",
+			"802" : "Aircel",
+			"801" : "Aircel",
+			"800" : "Aircel",
+			"807" : "Aircel",
+			"806" : "Aircel",
+			"805" : "Aircel",
+			"804" : "Aircel"
+		}
+	},
+	"730" : {
+		"country" : "Chile",
+		"operators" : {
+			"10" : "entel",
+			"1" : "entel",
+			"99" : "Will",
+			"3" : "Claro",
+			"2" : "movistar",
+			"5" : "VTR M\u00f3vil",
+			"4" : "Nextel",
+			"9" : "Nextel"
+		}
+	},
+	"654" : {
+		"country" : "Comoros and Mayotte",
+		"operators" : {
+			"1" : "HURI - SNPT"
+		}
+	},
+	"732" : {
+		"country" : "Colombia",
+		"operators" : {
+			"99" : "Emcali",
+			"123" : "Movistar",
+			"20" : "Emtelsa",
+			"130" : "Avantel",
+			"1" : "Colombia Telecomunicaciones S.A.",
+			"2" : "Edatel",
+			"111" : "Tigo",
+			"102" : "Movistar",
+			"103" : "Tigo",
+			"101" : "Comcel"
+		}
+	},
+	"652" : {
+		"country" : "Botswana",
+		"operators" : {
+			"1" : "Mascom",
+			"2" : "Orange",
+			"4" : "BTC Mobile"
+		}
+	},
+	"653" : {
+		"country" : "Swaziland",
+		"operators" : {
+			"10" : "Swazi MTN"
+		}
+	},
+	"650" : {
+		"country" : "Malawi",
+		"operators" : {
+			"1" : "TNM",
+			"10" : "Airtel"
+		}
+	},
+	"736" : {
+		"country" : "Bolivia",
+		"operators" : {
+			"1" : "Nuevatel",
+			"3" : "Tigo",
+			"2" : "Entel",
+			"20" : "Entel BOlivia"
+		}
+	},
+	"738" : {
+		"country" : "Guyana",
+		"operators" : {
+			"1" : "Digicel",
+			"2" : "GT&T; Cellink Plus"
+		}
+	},
+	"505" : {
+		"country" : "Australia",
+		"operators" : {
+			"11" : "Telstra Corporation Ltd.",
+			"24" : "Advanced Communications Technologies Pty. Ltd.",
+			"13" : "Railcorp",
+			"12" : "Hi3G",
+			"15" : "3GIS",
+			"14" : "AAPT",
+			"38" : "Crazy John`s",
+			"88" : "Localstar Holding Pty. Ltd.",
+			"1" : "Telstra",
+			"99" : "One.Tel GSM 1800 Pty. Ltd.",
+			"3" : "Vodafone",
+			"2" : "Optus",
+			"5" : "Ozitel",
+			"4" : "Department of Defence",
+			"71" : "Telstra",
+			"6" : "Hi3G",
+			"9" : "Airnet",
+			"8" : "One.Tel",
+			"72" : "Telstra",
+			"90" : "Optus",
+			"21" : "SOUL"
+		}
+	},
+	"502" : {
+		"country" : "Malaysia",
+		"operators" : {
+			"11" : "MTX Utara",
+			"13" : "Celcom",
+			"12" : "Maxis",
+			"17" : "Maxis",
+			"16" : "DiGi",
+			"19" : "Celcom",
+			"18" : "U Mobile",
+			"1" : "TM CDMA",
+			"0" : "Art900"
+		}
+	},
+	"311" : {
+		"country" : "United States",
+		"operators" : {
+			"150" : "Wilkes Cellular",
+			"210" : "Farmers Cellular",
+			"330" : "Bug Tussel Wireless",
+			"270" : "Lamar Country Cellular",
+			"130" : "Alltel",
+			"110" : "High Plains Wireless",
+			"80" : "Pine Cellular",
+			"170" : "PetroCom",
+			"20" : "Missouri RSA 5 Partnership",
+			"40" : "Commnet Wireless",
+			"0" : "Mid-Tex Cellular",
+			"140" : "Sprocket",
+			"60" : "Farmers Cellular",
+			"260" : "Cellular One",
+			"70" : "AT&T;",
+			"90" : "Long Lines Wireless",
+			"100" : "High Plains Wireless",
+			"10" : "Chariton Valley",
+			"30" : "Indigo Wireless",
+			"50" : "Wikes Cellular",
+			"530" : "NewCore Wireless",
+			"370" : "GCI Wireless in Alaska",
+			"290" : "NEP Wireless"
+		}
+	},
+	"658" : {
+		"country" : "St. Helena, Ascension and Tristan",
+		"operators" : {
+			"0" : "Cable & Wireless Plc"
+		}
+	},
+	"547" : {
+		"country" : "French Polynesia",
+		"operators" : {
+			"20" : "Tikiphone",
+			"1" : "Orange Caraibe Mobiles",
+			"0" : "Digicel Antilles Francaises Guyane",
+			"3" : "Saint Martin et Saint Barthelemy Telcell Sarl",
+			"2" : "Outremer Telecom",
+			"8" : "AMIGO GSM"
+		}
+	},
+	"630" : {
+		"country" : "Democratic Rep. of Congo",
+		"operators" : {
+			"10" : "Libertis Telecom",
+			"89" : "SAIT Telecom",
+			"1" : "Vodacom",
+			"88" : "Yozma Timeturns",
+			"2" : "Zain",
+			"5" : "Supercell",
+			"86" : "CCT"
+		}
+	},
+	"631" : {
+		"country" : "Angola",
+		"operators" : {
+			"3" : "Movicel",
+			"2" : "Unitel",
+			"4" : "Movicel"
+		}
+	},
+	"632" : {
+		"country" : "Guinea-Bissau",
+		"operators" : {
+			"1" : "Guin\u00e9tel S.A.",
+			"3" : "Orange",
+			"2" : "Spacetel Guin\u00e9-Bissau S.A.",
+			"7" : "Guinetel (Telecel Guinee SARL)"
+		}
+	},
+	"750" : {
+		"country" : "Falkland Islands",
+		"operators" : {
+			"1" : "Cable & Wireless"
+		}
+	},
+	"634" : {
+		"country" : "Sudan",
+		"operators" : {
+			"1" : "Zain SD",
+			"2" : "MTN",
+			"5" : "Vivacell (NOW)",
+			"7" : "Sudani One"
+		}
+	},
+	"544" : {
+		"country" : "American Samoa",
+		"operators" : {
+			"11" : "Blue Sky Communications"
+		}
+	},
+	"636" : {
+		"country" : "Ethiopia",
+		"operators" : {
+			"1" : "ETH MTN"
+		}
+	},
+	"637" : {
+		"country" : "Somalia",
+		"operators" : {
+			"10" : "Nationlink",
+			"25" : "Hormuud",
+			"19" : "Hormuud Telecom",
+			"30" : "Golis",
+			"1" : "Telesom",
+			"62" : "Telecom Mobile",
+			"4" : "Somafone",
+			"82" : "Telcom",
+			"65" : "Telecom Mobile"
+		}
+	},
+	"638" : {
+		"country" : "Djibouti",
+		"operators" : {
+			"1" : "Evatis"
+		}
+	},
+	"639" : {
+		"country" : "Kenya",
+		"operators" : {
+			"3" : "Zain",
+			"2" : "Safaricom",
+			"5" : "yu",
+			"7" : "Orange Kenya"
+		}
+	},
+	"467" : {
+		"country" : "Korea (North)",
+		"operators" : {
+			"193" : "SUN NET"
+		}
+	},
+	"545" : {
+		"country" : "Kiribati",
+		"operators" : {
+			"9" : "Kiribati Frigate"
+		}
+	},
+	"460" : {
+		"country" : "China",
+		"operators" : {
+			"20" : "China Tietong (GSM-R)",
+			"1" : "China Unicom",
+			"0" : "China Mobile",
+			"3" : "China Unicom CDMA",
+			"2" : "Liaoning PPTA",
+			"5" : "China Telecom",
+			"4" : "China Satellite Global Star Network",
+			"7" : "China Mobile",
+			"6" : "China Unicom"
+		}
+	},
+	"242" : {
+		"country" : "Norway",
+		"operators" : {
+			"11" : "Systemnet AS",
+			"12" : "Telenor",
+			"20" : "Jernbaneverket",
+			"21" : "Jernbaneverket",
+			"22" : "Network Norway",
+			"23" : "Lyca Mobile Ltd",
+			"1" : "Telenor",
+			"3" : "MTU",
+			"2" : "Netcom",
+			"5" : "Network Norway",
+			"4" : "Tele2",
+			"7" : "Ventelo",
+			"6" : "ICE",
+			"9" : "Com4",
+			"8" : "TDC"
+		}
+	},
+	"608" : {
+		"country" : "Senegal",
+		"operators" : {
+			"1" : "Orange",
+			"3" : "Expresso",
+			"2" : "Tigo"
+		}
+	},
+	"546" : {
+		"country" : "New Caledonia",
+		"operators" : {
+			"1" : "Mobilis"
+		}
+	},
+	"228" : {
+		"country" : "Switzerland",
+		"operators" : {
+			"12" : "Sunrise",
+			"54" : "Lyca Mobile",
+			"51" : "Bebbicell AG",
+			"50" : "3G Mobile AG",
+			"53" : "UPC",
+			"52" : "Barablu",
+			"1" : "Swisscom",
+			"3" : "Orange",
+			"2" : "Sunrise",
+			"5" : "Togewanet AG (Comfone)",
+			"7" : "IN&Phone;",
+			"6" : "SBB AG",
+			"9" : "Comfone",
+			"8" : "Tele2"
+		}
+	},
+	"226" : {
+		"country" : "Romania",
+		"operators" : {
+			"10" : "Orange Romania",
+			"1" : "Vodafone Romania SA",
+			"3" : "Cosmote (Zapp)",
+			"2" : "Romtelecom",
+			"5" : "Digi mobil",
+			"4" : "Cosmote (Zapp)",
+			"6" : "Cosmote"
+		}
+	},
+	"283" : {
+		"country" : "Armenia",
+		"operators" : {
+			"1" : "Beeline (telecommunications)",
+			"10" : "Orange",
+			"77" : "VivaCell-MTS",
+			"5" : "VivaCell-MTS",
+			"4" : "Karabakh Telecom"
+		}
+	},
+	"220" : {
+		"country" : "Serbia",
+		"operators" : {
+			"1" : "Telenor",
+			"3" : "mt:s",
+			"2" : "Telenor",
+			"5" : "VIP",
+			"4" : "Monet"
+		}
+	},
+	"549" : {
+		"country" : "Samoa",
+		"operators" : {
+			"1" : "Digicel",
+			"27" : "SamoaTel"
+		}
+	},
+	"401" : {
+		"country" : "Kazakhstan",
+		"operators" : {
+			"1" : "Beeline",
+			"8" : "Kazakhtelecom",
+			"2" : "Kcell",
+			"77" : "Mobile Telecom Service",
+			"7" : "Dalacom"
+		}
+	},
+	"724" : {
+		"country" : "Brazil",
+		"operators" : {
+			"51" : "Telma Cel",
+			"43" : "Telepisa Cel",
+			"53" : "Telepara Cel",
+			"24" : "Oi / Brasil Telecom",
+			"25" : "Telebrasilia Cel",
+			"27" : "Telegoias Cel",
+			"21" : "Telerj Cel",
+			"48" : "Teleceara Cel",
+			"23" : "Oi",
+			"47" : "Telern Cel",
+			"45" : "Telpa Cel",
+			"29" : "Telemat Cel",
+			"41" : "Telpe Cel",
+			"1" : "CRT Cellular",
+			"0" : "Nextel",
+			"3" : "TIM",
+			"2" : "TIM",
+			"5" : "Claro",
+			"4" : "TIM",
+			"7" : "CTBC Celular",
+			"6" : "Vivo",
+			"9" : "Telepar Cel",
+			"8" : "TIM",
+			"39" : "Nextel",
+			"59" : "Telaima Cel",
+			"11" : "Vivo",
+			"10" : "Vivo",
+			"13" : "Telesp Cel",
+			"12" : "Americel",
+			"15" : "Sercomtel",
+			"14" : "Maxitel BA",
+			"17" : "Ceterp Cel",
+			"16" : "Oi",
+			"19" : "Telemig Cel",
+			"18" : "Norte Brasil Tel",
+			"31" : "Oi",
+			"37" : "Aeiou",
+			"35" : "Telebahia Cel",
+			"34" : "CTBC Celular",
+			"33" : "CTBC Celular",
+			"55" : "Teleamazon Cel",
+			"32" : "CTBC Celular",
+			"57" : "Teleamapa Cel"
+		}
+	},
+	"295" : {
+		"country" : "Liechtenstein",
+		"operators" : {
+			"1" : "Swisscom",
+			"77" : "Alpmobil",
+			"2" : "Orange",
+			"5" : "FL1",
+			"4" : "Cubic Telecom"
+		}
+	},
+	"722" : {
+		"country" : "Argentina",
+		"operators" : {
+			"10" : "Movistar",
+			"20" : "Nextel",
+			"350" : "Port-Hable",
+			"310" : "Claro",
+			"36" : "Personal",
+			"35" : "Port-Hable",
+			"34" : "Personal",
+			"1" : "Movistar",
+			"320" : "Claro",
+			"2" : "Nextel",
+			"330" : "Claro",
+			"40" : "Globalstar",
+			"7" : "Movistar",
+			"70" : "Movistar",
+			"340" : "Personal",
+			"341" : "Personal"
+		}
+	},
+	"659" : {
+		"country" : "South Sudan",
+		"operators" : {
+			"1" : "Now"
+		}
+	},
+	"740" : {
+		"country" : "Ecuador",
+		"operators" : {
+			"1" : "Porta",
+			"0" : "Moviestar",
+			"2" : "Alegro"
+		}
+	},
+	"604" : {
+		"country" : "Morocco",
+		"operators" : {
+			"1" : "IAM",
+			"0" : "M\u00e9ditel",
+			"2" : "INWI",
+			"5" : "INWI"
+		}
+	},
+	"742" : {
+		"country" : "French Guiana",
+		"operators" : {
+			"1" : "Orange Caribe French Guiana",
+			"20" : "Digicel"
+		}
+	},
+	"606" : {
+		"country" : "Libya",
+		"operators" : {
+			"1" : "Madar",
+			"0" : "Libyana Mobile Phone"
+		}
+	},
+	"744" : {
+		"country" : "Paraquay",
+		"operators" : {
+			"1" : "VOX",
+			"3" : "Compa\u00f1ia Privada de Comunicaciones S.A.",
+			"2" : "Claro",
+			"5" : "Personal",
+			"4" : "Claro"
+		}
+	},
+	"603" : {
+		"country" : "Algeria",
+		"operators" : {
+			"1" : "Mobilis",
+			"3" : "Nedjma",
+			"2" : "Djezzy"
+		}
+	},
+	"602" : {
+		"country" : "Egypt",
+		"operators" : {
+			"1" : "Mobinil",
+			"3" : "Etisalat",
+			"2" : "Vodafone"
+		}
+	},
+	"748" : {
+		"country" : "Uruguay",
+		"operators" : {
+			"1" : "Ancel",
+			"0" : "Ancel",
+			"3" : "Ancel",
+			"7" : "Movistar",
+			"10" : "Claro"
+		}
+	},
+	"609" : {
+		"country" : "Mauritania",
+		"operators" : {
+			"1" : "Mattel",
+			"10" : "Mauritel",
+			"2" : "Chinguitel S.A."
+		}
+	},
+	"550" : {
+		"country" : "Micronesia",
+		"operators" : {
+			"1" : "FSM Telecom"
+		}
+	},
+	"552" : {
+		"country" : "Palau",
+		"operators" : {
+			"1" : "PNCC",
+			"80" : "Palau Mobile"
+		}
+	},
+	"633" : {
+		"country" : "Seychelles",
+		"operators" : {
+			"1" : "Cable & Wireless",
+			"10" : "Airtel",
+			"2" : "Mediatech International"
+		}
+	},
+	"238" : {
+		"country" : "Denmark",
+		"operators" : {
+			"10" : "TDC",
+			"12" : "Lyca",
+			"20" : "Telia",
+			"23" : "Banedanmark",
+			"30" : "Telia",
+			"40" : "Ericsson Danmark A/S",
+			"1" : "TDC",
+			"77" : "Telenor",
+			"3" : "End2End",
+			"2" : "Telenor",
+			"5" : "Dansk Beredskapskommunikasjon",
+			"7" : "Mundio Mobile",
+			"6" : "3",
+			"8" : "Nordisk Mobiltelefon"
+		}
+	},
+	"234" : {
+		"country" : "UK",
+		"operators" : {
+			"60" : "Dobson Telephone Co",
+			"24" : "Greenfone",
+			"25" : "Truphone (UK)",
+			"20" : "3",
+			"22" : "RoutoMessaging",
+			"1" : "Vectone MObile",
+			"0" : "BT",
+			"3" : "Airtel-Vodafone",
+			"2" : "O2",
+			"5" : "COLT Mobile Telecommunications Ltd",
+			"4" : "FMS Solutions Ltd",
+			"7" : "Cable and Wireless Plc",
+			"6" : "Internet Computer Bureau Ltd",
+			"9" : "Tismi BV",
+			"8" : "OnePhone Ltd",
+			"78" : "Airwave",
+			"995" : "Guernsey Airtel",
+			"76" : "BT",
+			"75" : "Inquam",
+			"91" : "Vodafone",
+			"95" : "Railtrack Plc (UK)",
+			"58" : "Manx Telecom",
+			"11" : "O2",
+			"10" : "O2",
+			"13" : "Railtrack Plc (UK)",
+			"12" : "Railtrack Plc (UK)",
+			"15" : "Vodafone",
+			"14" : "Hay Systems Ltd",
+			"17" : "Flextel Ltd",
+			"16" : "Talk Talk",
+			"19" : "Teleware",
+			"18" : "Cloud9",
+			"31" : "Virgin",
+			"30" : "T-mobile",
+			"37" : "Synectiv Ltd",
+			"50" : "JT-Wave",
+			"35" : "JSC Ingenium Ltd",
+			"34" : "Orange",
+			"33" : "Orange",
+			"55" : "Cable and Wireless",
+			"32" : "Virgin"
+		}
+	},
+	"230" : {
+		"country" : "Czech Rep.",
+		"operators" : {
+			"10" : "O2",
+			"1" : "T-Mobile",
+			"98" : "S\u008eDC s.o.",
+			"3" : "Vodafone",
+			"2" : "O2",
+			"5" : "Travel Telecomunication s.r.o.",
+			"4" : "U:fon",
+			"6" : "Osno Telecomunication s.r.o.",
+			"99" : "Vodafone"
+		}
+	},
+	"231" : {
+		"country" : "Slovakia",
+		"operators" : {
+			"99" : "\u008eSR",
+			"15" : "Orange Slovensko",
+			"1" : "Orange",
+			"3" : "Unient Communications",
+			"2" : "T-Mobile",
+			"5" : "Orange",
+			"4" : "T-Mobile",
+			"6" : "O2"
+		}
+	},
+	"232" : {
+		"country" : "Austria",
+		"operators" : {
+			"11" : "Bob",
+			"10" : "3 (Drei)",
+			"12" : "Yesss",
+			"15" : "Barablu",
+			"14" : "3 (Drei)",
+			"1" : "A1",
+			"91" : "GSM-R A",
+			"3" : "T-Mobile",
+			"2" : "A1",
+			"5" : "Orange",
+			"7" : "Tele.ring",
+			"6" : "Orange",
+			"9" : "A1"
+		}
+	},
+	"635" : {
+		"country" : "Rwanda",
+		"operators" : {
+			"11" : "Rwandatel (CDMA)",
+			"10" : "MTN",
+			"13" : "Tigo",
+			"12" : "Rwandatel (GSM)"
+		}
+	},
+	"362" : {
+		"country" : "Netherlands Antilles",
+		"operators" : {
+			"630" : "Cingular Wireless",
+			"951" : "UTS Wireless Curacao",
+			"51" : "TelCell",
+			"76" : "Antiliano Por N.V.",
+			"91" : "UTS",
+			"69" : "Digicel",
+			"95" : "MIO",
+			"94" : "Bayos"
+		}
+	},
+	"466" : {
+		"country" : "Taiwan",
+		"operators" : {
+			"11" : "Chunghwa LDM",
+			"99" : "TransAsia",
+			"1" : "FarEasTone",
+			"88" : "KG Telecom",
+			"89" : "VIBO",
+			"5" : "APTG",
+			"6" : "Tuntex",
+			"68" : "ACeS",
+			"93" : "MobiTai",
+			"92" : "Chungwa",
+			"97" : "Taiwan Mobile"
+		}
+	},
+	"374" : {
+		"country" : "Trinidad and Tobago",
+		"operators" : {
+			"13" : "Digicel",
+			"12" : "bMobile",
+			"140" : "LaqTel Ltd."
+		}
+	},
+	"618" : {
+		"country" : "Liberia",
+		"operators" : {
+			"20" : "LIB Telco",
+			"1" : "Lonestar Cell",
+			"3" : "Cellcom",
+			"2" : "Libercell",
+			"4" : "Comium",
+			"7" : "Cellcom"
+		}
+	},
+	"202" : {
+		"country" : "Greece",
+		"operators" : {
+			"1" : "Cosmote",
+			"9" : "Wind",
+			"5" : "Vodafone",
+			"10" : "Wind"
+		}
+	},
+	"204" : {
+		"country" : "Netherlands",
+		"operators" : {
+			"67" : "RadioAccess B.V.",
+			"68" : "Unify Group Holding B.V",
+			"69" : "KPN",
+			"24" : "Private Mobility Netherlands B.V",
+			"25" : "CapX B.V.",
+			"26" : "SpeakUp B.V",
+			"27" : "Brezz Nederland B.V",
+			"20" : "T-mobile",
+			"21" : "ProRail B.V",
+			"22" : "Ministerie van Defensie",
+			"23" : "ASPIDER Solutions B.V",
+			"28" : "Lancelot B.V",
+			"1" : "Scarlet Telecom B.V",
+			"3" : "Voiceworks B.V",
+			"2" : "Tele2",
+			"5" : "Elephant Talk Communications",
+			"4" : "Vodafone",
+			"7" : "Teleena",
+			"6" : "Mundio Mobile",
+			"9" : "Lyca mobile",
+			"8" : "KPN",
+			"10" : "KPN",
+			"13" : "Unica Installatietechniek B.V.",
+			"12" : "Telfort",
+			"15" : "Ziggo B.V",
+			"14" : "6GMobile",
+			"17" : "Intercity Mobile Communications B.V",
+			"16" : "T-mobile",
+			"19" : "Mixe Communication Solutions B.V",
+			"18" : "UPC"
+		}
+	},
+	"206" : {
+		"country" : "Belgium",
+		"operators" : {
+			"1" : "Proximus",
+			"10" : "Mobistar",
+			"5" : "Telenet",
+			"20" : "Base"
+		}
+	},
+	"612" : {
+		"country" : "C\u00f4te d'Ivoire",
+		"operators" : {
+			"1" : "Cora de Comstar",
+			"3" : "Orange",
+			"2" : "Moov",
+			"5" : "MTN",
+			"4" : "Koz",
+			"6" : "OriCel"
+		}
+	},
+	"208" : {
+		"country" : "France",
+		"operators" : {
+			"11" : "SFR",
+			"10" : "SFR",
+			"13" : "SFR",
+			"15" : "Free Mobile",
+			"14" : "Free Mobile",
+			"1" : "Orange",
+			"0" : "Orange",
+			"88" : "Bouygues",
+			"2" : "Orange",
+			"5" : "Globalstar Europe",
+			"7" : "Globalstar Europe",
+			"6" : "Globalstar Europe",
+			"20" : "Bouygues",
+			"21" : "Bouygues"
+		}
+	},
+	"610" : {
+		"country" : "Mali",
+		"operators" : {
+			"1" : "Malitel",
+			"2" : "Orange"
+		}
+	},
+	"611" : {
+		"country" : "Guinea",
+		"operators" : {
+			"1" : "Orange S.A.",
+			"3" : "Telecel Guinee",
+			"2" : "Sotelgui",
+			"5" : "Cellcom",
+			"4" : "MTN"
+		}
+	},
+	"616" : {
+		"country" : "Benin",
+		"operators" : {
+			"1" : "Libercom",
+			"0" : "BBCOM",
+			"3" : "MTN",
+			"2" : "Moov",
+			"5" : "Glo",
+			"4" : "BBCOM"
+		}
+	},
+	"617" : {
+		"country" : "Mauritius",
+		"operators" : {
+			"1" : "Orange",
+			"10" : "Emtel",
+			"2" : "MTML"
+		}
+	},
+	"614" : {
+		"country" : "Niger",
+		"operators" : {
+			"1" : "SahelCom",
+			"3" : "Telecel",
+			"2" : "Zain",
+			"4" : "Orange"
+		}
+	},
+	"615" : {
+		"country" : "Togo",
+		"operators" : {
+			"1" : "Togo Cell",
+			"3" : "Moov",
+			"2" : "Telecel",
+			"5" : "Telecel"
+		}
+	},
+	"436" : {
+		"country" : "Tajikistan",
+		"operators" : {
+			"12" : "Tcell",
+			"1" : "Tcell",
+			"3" : "MLT",
+			"2" : "Tcell",
+			"5" : "Beeline",
+			"4" : "Babilon-M"
+		}
+	},
+	"437" : {
+		"country" : "Kyrqyzstan",
+		"operators" : {
+			"1" : "Bitel GSM",
+			"9" : "O!",
+			"3" : "Fonex",
+			"5" : "MEGACOM"
+		}
+	},
+	"655" : {
+		"country" : "South Africa",
+		"operators" : {
+			"11" : "SAPS Gauteng",
+			"10" : "MTN",
+			"13" : "Neotel",
+			"21" : "Cape Town Metropolitan Council",
+			"25" : "Wirels Connect",
+			"19" : "iBurst",
+			"32" : "Ilizwi Telecommunications",
+			"31" : "Karabo Telecoms (Pty) Ltd.",
+			"30" : "Bokamoso Consortium",
+			"36" : "Amatole Telecommunication Services",
+			"35" : "Kingdom Communications",
+			"34" : "Bokone Telecoms",
+			"1" : "Vodacom",
+			"33" : "Thinta Thinta Telecommunications",
+			"2" : "Telkom Mobile / 8.ta",
+			"4" : "Sasol (PTY) LTD",
+			"7" : "Cell C & Virgin",
+			"6" : "Sentech",
+			"41" : "South African Police Service"
+		}
+	},
+	"710" : {
+		"country" : "Nicaraqua",
+		"operators" : {
+			"730" : "SERCOM S.A. (Nicaragua)",
+			"30" : "movistar",
+			"73" : "SERCOM",
+			"21" : "Claro"
+		}
+	},
+	"515" : {
+		"country" : "Philippines",
+		"operators" : {
+			"11" : "PLDT via ACeS Philippines",
+			"18" : "Cure",
+			"88" : "Nextel",
+			"1" : "Islacom",
+			"3" : "Smart",
+			"2" : "Globe",
+			"5" : "Sun"
+		}
+	},
+	"541" : {
+		"country" : "Vanuatu",
+		"operators" : {
+			"1" : "Smile",
+			"5" : "Digicel"
+		}
+	},
+	"472" : {
+		"country" : "Maldives",
+		"operators" : {
+			"1" : "Dhiraagu",
+			"2" : "Wataniya"
+		}
+	},
+	"356" : {
+		"country" : "Saint Kitts and Nevis",
+		"operators" : {
+			"110" : "LIME",
+			"50" : "Digicel",
+			"70" : "Chippie"
+		}
+	},
+	"470" : {
+		"country" : "Bangladesh",
+		"operators" : {
+			"1" : "GramenPhone",
+			"3" : "Banglalink",
+			"2" : "Robi",
+			"5" : "Citycell",
+			"4" : "TeleTalk",
+			"7" : "Airtel",
+			"6" : "Airtel"
+		}
+	},
+	"354" : {
+		"country" : "Montserrat",
+		"operators" : {
+			"860" : "Cable & Wireless West Indies (Montserrat)"
+		}
+	},
+	"352" : {
+		"country" : "Grenada",
+		"operators" : {
+			"30" : "Digicel",
+			"110" : "Cable & Wireless"
+		}
+	},
+	"350" : {
+		"country" : "Bermuda",
+		"operators" : {
+			"1" : "Digicel Bermuda",
+			"10" : "Cellular One (Cingular)",
+			"2" : "Mobility",
+			"38" : "Digicel"
+		}
+	},
+	"358" : {
+		"country" : "Saint Lucia",
+		"operators" : {
+			"30" : "Cingular Wireless",
+			"50" : "Digicel",
+			"110" : "Lime (Cable & Wireless)"
+		}
+	}
+}
