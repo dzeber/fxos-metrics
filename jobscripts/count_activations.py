@@ -29,6 +29,8 @@ def load_country_table():
     with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
         table = json.load(table_file)
     return table
+    
+# Loading for mobile codes. 
 
 #-------------------
 
@@ -147,6 +149,11 @@ def map(key, dims, value, context):
         vals['device'] = ftu_formatter.get_device_name(
             data.get('deviceinfo.product_model'),
             context.whitelist['device'])
+            
+        # Look up mobile operator.
+        vals['operator'] = ftu_formatter.get_operator(
+            data.get('icc'), data.get('network'),
+            None, {})
         
         # Add entries for "All" by expanding combinations of fields. 
         vals = expand_all(vals)
