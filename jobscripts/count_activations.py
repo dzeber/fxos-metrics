@@ -31,6 +31,11 @@ def load_country_table():
     return table
     
 # Loading for mobile codes. 
+def load_operator_table():
+    with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
+        table = json.load(table_file)
+    return table
+
 
 #-------------------
 
@@ -113,6 +118,9 @@ def map(key, dims, value, context):
         context.whitelist = load_whitelist()
     if not hasattr(context, 'country_table'):
         context.country_table = load_country_table()
+    if not hasattr(context, 'operator_table'):
+        context.operator_table = load_operator_table()
+    
     
     increment_counter(context, 'nrecords')
     
@@ -153,7 +161,8 @@ def map(key, dims, value, context):
         # Look up mobile operator.
         vals['operator'] = ftu_formatter.get_operator(
             data.get('icc'), data.get('network'),
-            None, {})
+            None, 
+            context.operator_table)
         
         # Add entries for "All" by expanding combinations of fields. 
         vals = expand_all(vals)
