@@ -52,6 +52,14 @@ subs = dict(
     }]
 )
 
+# Date range for ping dates to be considered valid.
+valid_dates = {
+    'earliest': earliest_valid_date = date(2014, 4, 1),
+    # Latest: a few days before today's date. 
+    'latest': date.today() - timedelta(3)
+}
+
+
 
 #--------------------
 
@@ -70,7 +78,7 @@ def get_ping_date(val):
     except Exception:
         raise ValueError('invalid ping time')
         
-    if pingdate < earliest_valid_date or pingdate > latest_valid_date:
+    if pingdate < valid_dates['earliest'] or pingdate > valid_dates['latest']:
         raise ValueError('outside date range')
     
     return pingdate

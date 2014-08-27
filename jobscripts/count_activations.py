@@ -32,17 +32,6 @@ def load_country_table():
 
 #-------------------
 
-# Valid date range for ping dates.
-
-# The earliest ping date to consider. 
-earliest_valid_date = date(2014, 4, 1)
-
-# The latest ping date to consider. 
-# A few days before today's date. 
-latest_valid_date = date.today() - timedelta(3)
-
-#--------------------
-
 # Custom context writing functionality. 
 
 # Convert a dict to a format that can be used as map-reduce keys, 
