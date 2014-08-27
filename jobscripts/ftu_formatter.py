@@ -719,6 +719,19 @@ def lookup_operator_from_codes(fields, mobile_codes):
     return mobile_codes[fields['mcc']]['operators'].get(fields['mnc'])
 
     
+# Look up mobile operator from field in payload.
+def lookup_operator_from_field(fields, key):
+    operator = fields.get(key)
+    if operator is None:
+        return None
+        
+    operator = str(operator).strip()
+    if len(operator) == 0:
+        return None
+    
+    return operator
+    
+    
 # Logic to look up operator name from payload.
 # Try looking up operator from SIM/ICC codes, if available. 
 # If that fails, try using SIM SPN. 
@@ -735,7 +748,7 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
         # At this point, we were not able to resolve the operator 
         # from the codes.
         # Try the name string instead.
-        operator = icc_fields.get('spn')
+        operator = lookup_operator_from_field(icc_fields, 'spn')
         if operator is not None:
             return operator
     
@@ -747,7 +760,7 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
             return operator
         
         # Otherwise, try the name string instead.
-        operator = network_fields.get('operator')
+        operator = lookup_operator_from_field(network_fields, 'operator')
         if operator is not None:
             return operator
     
@@ -759,11 +772,9 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
 # Only record counts for recognized operators. 
 def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
     operator = lookup_operator(icc_fields, network_fields, mobile_codes)
-    if operator is None:
+    if operator is None or len(operator) == 0:
         return 'Unknown'
         
-    operator = str(operator)
-    
     # Make formatting consistent to avoid duplication.
     for s in subs['operator']:
         # Device name patterns should be mutually exclusive.
