@@ -25,6 +25,7 @@ DATA_FILE=$JOB_OUTPUT_DIR/$JOB_OUTPUT_FILE
 JOB_LOG=$JOB_OUTPUT_DIR/$JOB_LOG_FILE
 
 # CSV_FILE=data.csv
+CSV_PATH=$DATA_DIR/$CSV_FILE
 # UPDATED_TIME_FILE=last_updated
 
 ADDR=dzeber
@@ -67,9 +68,9 @@ fi
 
 # At this point we should have the latest data. 
 echo "Processing data..."
-python $SCRIPT_DIR/generate_csv.py $DATA_FILE $CSV_FILE
+python $SCRIPT_DIR/generate_csv.py $DATA_FILE $CSV_PATH
     
-if [ ! -e "$CSV_FILE" ]; then
+if [ ! -e "$CSV_PATH" ]; then
     echo "Something went wrong - no CSV file generated!"
     echo "" | mail -s "FAILED: FxOS FTU data - no csv" "$ADDR@mozilla.com" 
     exit
@@ -77,7 +78,7 @@ fi
 
 # Look up the time the data was updated. 
 echo "Recorded data update time."
-date -r $DATA_FILE +"%Y-%m-%d %H:%M:%S" > $UPDATED_TIME_FILE
+date -r $DATA_FILE +"%Y-%m-%d %H:%M:%S" > $DATA_DIR/$UPDATED_TIME_FILE
 
 # Copy files to web server. 
 echo "Copying data to app1."
@@ -90,11 +91,14 @@ ssh $APP1 ". .bash_profile;
     mv $CSV_FILE ${CSV_FILE}_; \
     mv $UPDATED_TIME_FILE ${UPDATED_TIME_FILE}_"
     
-tar czf new_data.tar.gz $CSV_FILE $UPDATED_TIME_FILE 
+# tar czf new_data.tar.gz $CSV_FILE $UPDATED_TIME_FILE 
+cd $DATA_DIR
+tar czf $WORK_DIR/new_data.tar.gz ./*
+cd $WORK_DIR
 scp new_data.tar.gz "$APP1:\$HOME"
 ssh $APP1 ". .bash_profile; \
     tar xzf new_data.tar.gz -C \$FTU/data; \
-    chmod o+r \$FTU/data/$CSV_FILE \$FTU/data/$UPDATED_TIME_FILE; \
+    chmod o+r \$FTU/data/*; \
     rm new_data.tar.gz"
 rm new_data.tar.gz
 
