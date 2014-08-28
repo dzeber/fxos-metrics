@@ -65,7 +65,7 @@ for row in open(job_output):
 def write_row(csv_writer, row):
     if row['pingdate'] != 'All':
         # Reorder.
-        row = [row[key] for key in headers]
+        row = [(row[key] if key in row else None) for key in headers]
         # Encode explicitly to try to avoid errors.
         row = [unicode(r).encode('utf-8', 'replace') for r in row]
         csv_writer.writerow(row)
