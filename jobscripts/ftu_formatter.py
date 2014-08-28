@@ -48,7 +48,7 @@ subs = dict(
         'repl': lambda match: 'Geeksphone ' + match.group(1).capitalize()
     },{
         # Emulators/dev devices
-        'regex': re.compile('^.*android|aosp.*$', re.I),
+        'regex': re.compile('^.*(android|aosp).*$', re.I),
         'repl': 'Emulator/Android'
     }],
     
