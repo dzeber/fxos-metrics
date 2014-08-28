@@ -13,6 +13,7 @@ cp $THIS_DIR/jobscripts/count_activations.py jobscripts
 cp $THIS_DIR/filters/all_fxos.json filters
 cp $THIS_DIR/lookup/* lookup
 cp $THIS_DIR/scheduled_runner.sh .
+cp $THIS_DIR/settings.env
 # Permissions. 
 chmod -R 755 .
 

@@ -5,34 +5,40 @@
 . ~/.bash_profile
 . /etc/profile.d/mozilla.sh
 
-TARBALL=ftu_data.tar.gz
-DATA_DIR=$HOME/fxos-ftu-data
 SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
-LOG_FILE=$DATA_DIR/processing.log
-DATA_FILE=$DATA_DIR/output/ftu_data.out
-JOB_LOG=$DATA_DIR/output/ftu_job.log
 
-# CSV_FILENAME=data.csv
-CSV_FILE=data.csv
-# CSV_PATH=$DATA_DIR/$CSV_FILENAME
-# UPDATED_TIME_FILENAME=last_updated
-UPDATED_TIME_FILE=last_updated
-# UPDATED_TIME_PATH=$DATA_DIR/$UPDATED_TIME_FILENAME
+. $SCRIPT_DIR/../settings.env
+
+# Where to run the processing script from.
+WORK_DIR=$HOME/fxos-ftu-data
+# Subdir to contain the unpackaged job output files.
+JOB_OUTPUT_DIR=$WORK_DIR/$OUTPUT_DIR_NAME
+# Subdir to contain the processed data files to be copied to the web server.
+DATA_DIR=$WORK_DIR/data_files
+
+
+# Tarball containing job output to download from AWS.
+# TARBALL=ftu_data.tar.gz
+TARBALL=$JOB_TARBALL
+LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
+DATA_FILE=$JOB_OUTPUT_DIR/$JOB_OUTPUT_FILE
+JOB_LOG=$JOB_OUTPUT_DIR/$JOB_LOG_FILE
+
+# CSV_FILE=data.csv
+# UPDATED_TIME_FILE=last_updated
 
 ADDR=dzeber
 
-#rm -f $DATA_DIR/*
-
 exec > $LOG_FILE 2>&1
 
-cd $DATA_DIR
+cd $WORK_DIR
 rm -f $TARBALL
 
 # Update output files from latest run. 
 echo "Downloading latest output from AWS."
-aws s3 cp "$S3_FXOS/$TARBALL" $DATA_DIR
+aws s3 cp "$S3_FXOS/$TARBALL" $WORK_DIR
 
-## Extract tarball into DATA_DIR. 
+## Extract tarball into WORK_DIR. 
 ## Creates a subdir called "output" containing files. 
 
 if [ ! -e "$TARBALL" ]; then
@@ -42,7 +48,7 @@ if [ ! -e "$TARBALL" ]; then
     exit
 fi
 
-rm -f output/*
+rm -f $JOB_OUTPUT_DIR/*
 tar xvzf $TARBALL
 
 if [ ! -e "$DATA_FILE" ]; then
@@ -75,7 +81,7 @@ date -r $DATA_FILE +"%Y-%m-%d %H:%M:%S" > $UPDATED_TIME_FILE
 
 # Copy files to web server. 
 echo "Copying data to app1."
-# cd $DATA_DIR
+# cd $WORK_DIR
 
 # Append underscore to existing data files. 
 ssh $APP1 ". .bash_profile;

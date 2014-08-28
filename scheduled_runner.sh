@@ -6,12 +6,19 @@ BASE=$(pwd)
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
 
-OUTPUT_DIR=$BASE/output
-OUTPUT_FILE=$OUTPUT_DIR/ftu_data.out
-LOG_FILE=$OUTPUT_DIR/ftu_job.log
-BOTO_LOG=$OUTPUT_DIR/boto.log
-JOB_LOG=$OUTPUT_DIR/job.log
-TARBALL=ftu_data.tar.gz
+. settings.env
+
+OUTPUT_DIR=$BASE/$OUTPUT_DIR_NAME
+# OUTPUT_FILE=$OUTPUT_DIR/ftu_data.out
+OUTPUT_FILE=$OUTPUT_DIR/$JOB_OUTPUT_FILE
+# LOG_FILE=$OUTPUT_DIR/ftu_job.log
+LOG_FILE=$OUTPUT_DIR/$JOB_LOG_FILE
+# BOTO_LOG=$OUTPUT_DIR/boto.log
+BOTO_LOG=$OUTPUT_DIR/$BOTO_LOG_FILE
+# JOB_LOG=$OUTPUT_DIR/job.log
+JOB_LOG=$OUTPUT_DIR/$MAPRED_LOG_FILE
+# TARBALL=ftu_data.tar.gz
+TARBALL=$JOB_TARBALL
 
 if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
