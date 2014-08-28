@@ -6,8 +6,6 @@
 import json
 import csv
 import sys
-import codecs
-import cStringIO
 
 job_output = sys.argv[1]
 csv_file = sys.argv[2]
