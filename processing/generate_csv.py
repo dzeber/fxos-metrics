@@ -10,16 +10,16 @@ import sys
 job_output = sys.argv[1]
 csv_file = sys.argv[2]
 # The keys to write to the CSV output. 
-headers = ['pingdate', 'os', 'country',
-    # 'device', 
-    'operator', 'count']
+headers = ['pingdate', 'os', 'country', 'device', 
+    # 'operator', 
+    'count']
 # The keys that should not be encoded.
 not_encoded = ['count', 'pingdate']
 # The headings to use in the CSV, as expected by the display page script, 
 # corresponding to the keys in header by order.
-final_headers = ['date', 'os', 'country', 
-    # 'device', 
-    'operator', 'activations']
+final_headers = ['date', 'os', 'country', 'device', 
+    # 'operator', 
+    'activations']
 
 # The complete set of parsed records. 
 # Each record is represented as a dict. 
