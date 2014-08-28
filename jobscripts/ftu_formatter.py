@@ -652,7 +652,7 @@ def get_ping_date(val):
 def get_os_version(val):    
     if val is None:
         raise ValueError('no os version')
-    os = str(val)
+    os = unicode(val)
   
     # Check OS against expected format. 
     if matches['valid_os'].match(os) is None:
@@ -671,7 +671,7 @@ def get_os_version(val):
 def get_device_name(val, recognized_list):
     if val is None:
         return 'Unknown'
-    device = str(val)
+    device = unicode(val)
     
     # Make formatting consistent to avoid duplication.
     # Apply replacement regexes.
@@ -696,7 +696,7 @@ def get_device_name(val, recognized_list):
 def get_country(val, recognized_list, country_codes):
     if val is None:
         return 'Unknown'
-    geo = str(val)
+    geo = unicode(val)
     
     # Look up country name. 
     if geo not in country_codes: 
