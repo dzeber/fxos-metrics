@@ -639,7 +639,8 @@ def get_ping_date(val):
         pingdate = date.fromtimestamp(val)
     except Exception:
         raise ValueError('invalid ping time')
-        
+    
+    # Enforce date range.
     if pingdate < valid_dates['earliest'] or pingdate > valid_dates['latest']:
         raise ValueError('outside date range')
     
@@ -665,13 +666,15 @@ def get_os_version(val):
 
 
 # Format device name. 
-# Only record distinct counts for certain recognized device names. 
+# Only record distinct counts for certain recognized device names.
+# Pass recognized_list as a tuple. 
 def get_device_name(val, recognized_list):
     if val is None:
         return 'Unknown'
     device = str(val)
     
     # Make formatting consistent to avoid duplication.
+    # Apply replacement regexes.
     for s in subs['device']:
         # Device name patterns should be mutually exclusive.
         # If any regex matches, make the replacement and exit loop. 
@@ -689,6 +692,7 @@ def get_device_name(val, recognized_list):
 
 # Look up country name from 2-letter code. 
 # Only record counts for recognized countries. 
+# Pass recognized_list as a set.
 def get_country(val, recognized_list, country_codes):
     if val is None:
         return 'Unknown'
@@ -769,13 +773,17 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
 
 
 # Format operator name. 
-# Only record counts for recognized operators. 
+# Only record counts for recognized operators.
+# Pass recognized_list as a set. 
 def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
+    # Look up operator name either using mobile codes 
+    # or from name listed in the data.
     operator = lookup_operator(icc_fields, network_fields, mobile_codes)
     if operator is None or len(operator) == 0:
         return 'Unknown'
         
     # Make formatting consistent to avoid duplication.
+    # Apply replacement regexes.
     for s in subs['operator']:
         # Device name patterns should be mutually exclusive.
         # If any regex matches, make the replacement and exit loop. 
@@ -783,6 +791,10 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
         if n > 0:
             operator = formatted
             break
+    
+    # Don't keep name if not in recognized list. 
+    if operator not in recognized_list: 
+        return 'Other'
     
     return operator
 

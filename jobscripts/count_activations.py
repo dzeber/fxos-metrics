@@ -1,8 +1,6 @@
 # Run job to count records by date. 
 
 import json
-# from datetime import date, timedelta
-#from collections import namedtuple
 import copy
 import os.path
 
@@ -21,6 +19,8 @@ def load_whitelist():
     tables['country'] = set(tables['country'])
     # Device table contains string prefixes. Convert to tuple. 
     tables['device'] = tuple(tables['device'])
+    # Operator table will be a set.
+    tables['operator'] = set(tables['operator'])
     return tables
     
     
@@ -121,7 +121,6 @@ def map(key, dims, value, context):
     if not hasattr(context, 'operator_table'):
         context.operator_table = load_operator_table()
     
-    
     increment_counter(context, 'nrecords')
     
     try:
@@ -161,7 +160,7 @@ def map(key, dims, value, context):
         # Look up mobile operator.
         vals['operator'] = ftu_formatter.get_operator(
             data.get('icc'), data.get('network'),
-            None, 
+            context.whitelist['operator'], 
             context.operator_table)
         
         # Add entries for "All" by expanding combinations of fields. 
