@@ -61,7 +61,7 @@ for row in open(job_output):
 # Custom row writing function to allow subsetting and additional formatting. 
 # Accepts the writer object and elements of records list.
 def write_row(csv_writer, row):
-    if row['pingdate'] != 'All' and row['operator'] == 'All':
+    if row['pingdate'] != 'All':
         # Reorder.
         row = [(row[key] if key in row else None) for key in headers]
         # Encode explicitly to try to avoid errors.
