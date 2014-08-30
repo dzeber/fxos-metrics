@@ -14,8 +14,76 @@ library(rjson)
 ## and convert it to a data table. 
 
 get.ftu <- function(server, datafile, destpath) {
-    convert.ftu(download.ftu(server, datafile, destpath))
+    datafile <- download.ftu(server, datafile, destpath)
+    dd <- convert.ftu(datafile)
+    sanitize.ftu(dd, sub("\\.out(\\.gz)?$", "", datafile))
 }
+
+
+## Sanitize the FTU data table by formatting strings, deduplicating,
+## and removing redundant fields. 
+## If savepath is not null, result will be saved. 
+sanitize.ftu <- function(dd, savepath = NULL) {
+    cat("Sanitizing table...\n")
+
+    ## Remove display properties. 
+    dd[, devicePixelRatio := NULL]
+    dd[, screenHeight := NULL][, screenWidth := NULL]
+    
+    ## Remove platform info.
+    # dd[, platform_version := NULL]
+    dd[, platform_build_id := NULL]
+    
+    ## Date.
+    
+    ## Add ping date. 
+    dd[, pingDate := as.Date(pingTime)]
+    ## Remove skewed dates.
+    dd <- dd[pingDate > "2014-04-01" & pingDate <= Sys.Date()]
+    ## Remove activation times and ping times.
+    dd[, pingTime := NULL][, activationTime := NULL]
+
+    ## Update channel. 
+    
+    ## Should have at most one non-missing of app.update.channel 
+    ## and update_channel. 
+    ## Merge them.
+    no.channel <- dd[, is.na(update_channel)]
+    dd[no.channel, update_channel := app.update.channel]
+    ## Remove app.update.channel, unless there are any inconsistent values. 
+    if(!any(dd[!no.channel, !is.na(app.update.channel) & 
+            app.update.channel != update_channel]))
+        dd[, app.update.channel := NULL]
+        
+    ## Country.
+    
+    ## Add country name. 
+    if(!exists("country.name"))
+        load("~/github/work-tools/R/other/country-codes/countrycodes.RData")
+    dd[, country := country.name(geoCountry, NA)]
+    
+    ## Mobile codes.
+    
+    ## Remove network carrier and region fields (redundant).
+    dd[, network.region := NULL][, network.carrier := NULL]
+    
+    
+    ############################
+    
+    ## Save and output table if required.
+    if(!is.null(savepath)) {
+        if(!grepl("\\.RData$", savepath))
+            savepath <- sprintf("%s.RData", savepath)
+            
+        cat(sprintf("Saving tables to %s.\n", savepath))
+        ftu <- dd
+        save(ftu, file = savepath)
+    }
+    
+    cat("Done.\n")
+    ftu
+}
+
 
 ## Download the data from the EC2 instance.
 ## Return the path to the downloaded data file.
@@ -34,8 +102,12 @@ download.ftu <- function(server, datafile, destpath) {
     file.path(destpath, datafile)
 }
 
-## Convert data to a relatively clean data table.
-## Save to same dir as datafile.
+
+## Convert raw JSON payloads to a data table.
+## This is still "raw", in the sense that the fields are not modified. 
+## Save the resulting table to same dir as datafile, with the suffix "raw".
+## Also saves list of bad records for later inspection, if any.
+## Returns the table.
 convert.ftu <- function(datafile) {
     cat("Loading data...\n")
     dd <- readLines(datafile)
@@ -127,31 +199,22 @@ convert.ftu <- function(datafile) {
     dd[, activationTime := ts.to.datetime(activationTime)]
     dd[, pingTime := ts.to.datetime(pingTime)]
     
-    ## Add ping date. 
-    dd[, pingDate := as.Date(pingTime)]
-    ## Remove skewed dates.
-    dd <- dd[pingDate > "2014-04-01" & pingDate <= Sys.Date()]
-
-    ## Add country name. 
-    if(!exists("country.name"))
-        load("~/github/work-tools/R/other/country-codes/countrycodes.RData")
-    dd[, country := country.name(geoCountry, "")]
-
     ############################
     
     ## Save and output tables.
     
-    cat("Saving tables...\n")
+    datafile <- sub("\\.out(\\.gz)?$", "_raw.RData", datafile)
+    cat(sprintf("Saving tables to %s.\n", datafile))
     
-    ftu <- dd
-    tbls <- "ftu"
+    ftu.raw <- dd
+    tbls <- "ftu.raw"
     if(length(ftu.bad) > 0) tbls <- c(tbls, "ftu.bad")
     
     ## Save processed data to file. 
-    save(list = tbls, file = sub(".out(.gz)?$", ".RData", outfile))
+    save(list = tbls, file = datafile)
     
     cat("Done.\n")
-    ftu
+    dd
 }
 
 
