@@ -55,6 +55,10 @@ subs = dict(
         # Emulators/dev devices
         'regex': re.compile('^.*(android|aosp).*$', re.I),
         'repl': 'Emulator/Android'
+    },{
+        # Tarako - Cloud FX.
+        'regex': re.compile('^.*clou.d\\s*fx.$', re.I),
+        'repl': 'Cloud FX'
     }],
     
     operator = [{
