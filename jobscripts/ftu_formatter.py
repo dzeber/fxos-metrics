@@ -815,7 +815,7 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
 # and other raw payload values. 
 def format_values(clean_values, payload):
     # Discard v1.5.
-    if(clean_values['os'].startswith('1.5'):
+    if clean_values['os'].startswith('1.5'):
         raise ValueError('Ignoring OS version 1.5')
         
     # Tarako/India.
