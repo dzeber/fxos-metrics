@@ -13,7 +13,12 @@ def add_suffix(name, suffix):
 
 # Regular expressions for checking validity and formatting values. 
 matches = dict(
-    valid_os = re.compile('^(\d\.){3}\d([.\-]prerelease)?$', re.I)    
+    valid_os = re.compile('(' +
+        # Standard string.
+        '^(\d\.){3}\d([.\-]prerelease)?$' + '|' +
+        # Tarako/India devices. 
+        '^(ind|intex)_' +
+        ')', re.I)    
 )
 
 # Substitution patterns for formatting field values.
@@ -649,6 +654,8 @@ def get_ping_date(val):
 
 # Parse OS version. 
 # If an invalid condition occurs, throws ValueError with a custom message.
+# Do not include "Other" field for OS - 
+# drop records with non-matching values instead.
 def get_os_version(val):    
     if val is None:
         raise ValueError('no os version')
@@ -799,6 +806,25 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
     return operator
 
 
+# Additional formatting to cover special cases. 
+# Replacement rules draw on combination of sanitized values 
+# and other raw payload values. 
+def format_values(clean_values, payload):
+    # Discard v1.5.
+    if(clean_values['os'].startswith('1.5'):
+        raise ValueError('Ignoring OS version 1.5')
+        
+    # Tarako/India.
+    # OS should either be standard or else one of the Tarako strings.
+    if clean_values['os'].lower().startswith(('ind_', 'intex_')):
+        # If the Tarako devices are from India, record. 
+        if clean_values['country'] == 'India':
+            clean_values['os'] = 'Tarako (India)'
+        else: 
+        # Discard.
+            raise ValueError('Ignoring non-India Tarako')
+    
+    return clean_values
 
 
 
