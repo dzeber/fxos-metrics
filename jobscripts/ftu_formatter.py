@@ -627,7 +627,7 @@ subs = dict(
 valid_dates = {
     'earliest': date(2014, 4, 1),
     # Latest: a few days before today's date. 
-    'latest': date.today() - timedelta(3)
+    'latest': date.today() - timedelta(1)
 }
 
 
@@ -822,11 +822,11 @@ def format_values(clean_values, payload):
     # OS should either be standard or else one of the Tarako strings.
     if clean_values['os'].lower().startswith(('ind_', 'intex_')):
         # If the Tarako devices are from India, record. 
-        if clean_values['country'] == 'India':
-            clean_values['os'] = 'Tarako (India)'
-        else: 
+        # if clean_values['country'] == 'India':
+        clean_values['os'] = 'Tarako'
+        # else: 
         # Discard.
-            raise ValueError('Ignoring non-India Tarako')
+            # raise ValueError('Ignoring non-India Tarako')
     
     return clean_values
 
