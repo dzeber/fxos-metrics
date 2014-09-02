@@ -57,8 +57,12 @@ subs = dict(
         'repl': 'Emulator/Android'
     },{
         # Tarako - Cloud FX.
-        'regex': re.compile('^.*clou.d\\s*fx.$', re.I),
-        'repl': 'Cloud FX'
+        'regex': re.compile('^.*clou.d\\s*fx.*$', re.I),
+        'repl': 'Cloud FX (Tarako)'
+    },{
+        # Tarako - Spice.
+        'regex': re.compile('^.*spice\\s*mifx1.*$', re.I),
+        'repl': 'Spice MIFX1 (Tarako)'
     }],
     
     operator = [{
@@ -823,7 +827,7 @@ def format_values(clean_values, payload):
     if clean_values['os'].lower().startswith(('ind_', 'intex_')):
         # If the Tarako devices are from India, record. 
         # if clean_values['country'] == 'India':
-        clean_values['os'] = 'Tarako'
+        clean_values['os'] = '1.3T (Tarako)'
         # else: 
         # Discard.
             # raise ValueError('Ignoring non-India Tarako')
