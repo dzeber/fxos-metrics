@@ -163,6 +163,14 @@ def map(key, dims, value, context):
             context.whitelist['operator'], 
             context.operator_table)
         
+        # Apply any additional formatting based on sanitized values 
+        # and other data fields. 
+        try:
+            vals = ftu_formatter.format_values(vals, data)
+        except ValueError as e:
+            write_condition(context, str(e))
+            return
+            
         # Add entries for "All" by expanding combinations of fields. 
         vals = expand_all(vals)
         
