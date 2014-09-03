@@ -19,7 +19,7 @@ matches = dict(
         # # Tarako/India devices. 
         # '^(ind|intex)_' +
         # ')', re.I),
-    valid_os = re.compile('^\d\.\d(T|\s\(pre-release\))?$')
+    valid_os = re.compile('^(1\.[34]|2\.[01])(T|\s\(pre-release\))?$')
 )
 
 # Substitution patterns for formatting field values.
@@ -829,19 +829,19 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
 # and other raw payload values. 
 def format_values(clean_values, payload):
     # Discard v1.5.
-    if clean_values['os'].startswith('1.5'):
-        raise ValueError('Ignoring OS version 1.5')
-        
+    # if clean_values['os'].startswith(('1.0', '1.5', '2.2')):
+        # raise ValueError('Ignoring OS version')
+    #
     # Tarako/India.
     # OS should either be standard or else one of the Tarako strings.
-    if clean_values['os'].lower().startswith(('ind_', 'intex_')):
+    # if clean_values['os'].lower().startswith(('ind_', 'intex_')):
         # If the Tarako devices are from India, record. 
         # if clean_values['country'] == 'India':
-        clean_values['os'] = '1.3T'
+        # clean_values['os'] = '1.3T'
         # else: 
         # Discard.
             # raise ValueError('Ignoring non-India Tarako')
-    
+    #
     return clean_values
 
 
