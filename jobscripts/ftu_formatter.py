@@ -62,7 +62,7 @@ subs = dict(
         'repl': 'Emulator/Android'
     },{
         # Tarako - Cloud FX.
-        'regex': re.compile('^.*clou.d\\s*fx.*$', re.I),
+        'regex': re.compile('^.*clou.?d\\s*fx.*$', re.I),
         'repl': 'Intex Cloud FX'
     },{
         # Tarako - Spice.
