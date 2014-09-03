@@ -13,12 +13,13 @@ def add_suffix(name, suffix):
 
 # Regular expressions for checking validity and formatting values. 
 matches = dict(
-    valid_os = re.compile('(' +
-        # Standard string.
-        '^(\d\.){3}\d([.\-]prerelease)?$' + '|' +
-        # Tarako/India devices. 
-        '^(ind|intex)_' +
-        ')', re.I)    
+    # valid_os = re.compile('(' +
+        # # Standard string.
+        # '^(\d\.){3}\d([.\-]prerelease)?$' + '|' +
+        # # Tarako/India devices. 
+        # '^(ind|intex)_' +
+        # ')', re.I),
+    valid_os = re.compile('^\d\.\d(T|\s\(pre-release\))?$')
 )
 
 # Substitution patterns for formatting field values.
@@ -30,6 +31,10 @@ subs = dict(
         'regex': re.compile(
             '^(?P<num>[1-9]\.[0-9](\.[1-9]){0,2})(\.0){0,2}', re.I),
         'repl': '\g<num>'
+    },{
+        # For now, Tarako label is based on mapping from partner/device.
+        'regex': re.compile('^(ind|intex)_.+$', re.I),
+        'repl': '1.3T'
     }],
     
     device = [{
@@ -58,11 +63,11 @@ subs = dict(
     },{
         # Tarako - Cloud FX.
         'regex': re.compile('^.*clou.d\\s*fx.*$', re.I),
-        'repl': 'Cloud FX (Tarako)'
+        'repl': 'Intex Cloud FX'
     },{
         # Tarako - Spice.
         'regex': re.compile('^.*spice\\s*mifx1.*$', re.I),
-        'repl': 'Spice MIFX1 (Tarako)'
+        'repl': 'Spice MIFX1'
     }],
     
     operator = [{
@@ -670,13 +675,18 @@ def get_os_version(val):
     os = unicode(val)
   
     # Check OS against expected format. 
-    if matches['valid_os'].match(os) is None:
-        raise ValueError('invalid os version')
+    # if matches['valid_os'].match(os) is None:
+        # raise ValueError('invalid os version')
     
     # Reformat to be more readable. 
+    # Apply all patterns. 
     for s in subs['os']:
         os = s['regex'].sub(s['repl'], os, count = 1)
         
+    # Check OS against format regex. If not matching, class as 'Other'.
+    if matches['valid_os'].match(os) is None:
+        return 'Other'
+    
     return os
 
 
@@ -827,7 +837,7 @@ def format_values(clean_values, payload):
     if clean_values['os'].lower().startswith(('ind_', 'intex_')):
         # If the Tarako devices are from India, record. 
         # if clean_values['country'] == 'India':
-        clean_values['os'] = '1.3T (Tarako)'
+        clean_values['os'] = '1.3T'
         # else: 
         # Discard.
             # raise ValueError('Ignoring non-India Tarako')
