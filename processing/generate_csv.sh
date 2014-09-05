@@ -24,13 +24,22 @@ LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
 DATA_FILE=$JOB_OUTPUT_DIR/$JOB_OUTPUT_FILE
 JOB_LOG=$JOB_OUTPUT_DIR/$JOB_LOG_FILE
 
-# CSV_FILE=data.csv
 CSV_PATH=$DATA_DIR/$CSV_FILE
-# UPDATED_TIME_FILE=last_updated
+LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 
 ADDR=dzeber
 
 exec > $LOG_FILE 2>&1
+
+# Check if the file on the server is newer than the one 
+# currently showing in the dashboard.
+# Check is done by date only (not by time).
+SERVER_LAST_UPDATED=`aws s3 ls "$S3_FXOS/$TARBALL" | grep -Eo "^[0-9]{4}(-[0-9]{2}){2}"`
+if grep -q "$SERVER_LAST_UPDATED" $LAST_UPDATED_PATH; then
+    echo "Current data is up-to-date. Exiting."
+    exit 2
+fi
+
 
 cd $WORK_DIR
 rm -f $TARBALL
@@ -46,7 +55,7 @@ if [ ! -e "$TARBALL" ]; then
     echo "Failed to download tarball from AWS!"
     echo "" | mail -s "FAILED: FxOS FTU data - no tar downloaded" \
         "$ADDR@mozilla.com" 
-    exit
+    exit 1
 fi
 
 rm -f $JOB_OUTPUT_DIR/*
@@ -63,7 +72,7 @@ if [ ! -e "$DATA_FILE" ]; then
     # Send email notice with log file as text. 
     mail -s "FAILED: FxOS FTU data - no data" "$ADDR@mozilla.com" < $JOB_LOG
     echo "Sent email notice. Exiting..."
-    exit
+    exit 1
 fi
 
 # At this point we should have the latest data. 
@@ -73,7 +82,7 @@ python $SCRIPT_DIR/generate_csv.py $DATA_FILE $CSV_PATH
 if [ ! -e "$CSV_PATH" ]; then
     echo "Something went wrong - no CSV file generated!"
     echo "" | mail -s "FAILED: FxOS FTU data - no csv" "$ADDR@mozilla.com" 
-    exit
+    exit 1
 fi
 
 # Look up the time the data was updated. 
