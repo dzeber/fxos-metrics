@@ -36,6 +36,11 @@ fi
 
 exec >> $LOG_FILE 2>&1
 
+echo
+echo "------------"
+echo
+echo "Starting processing script: `date`."
+
 # Check if the file on the server is newer than the one 
 # currently showing in the dashboard.
 # Check is done by date only (not by time).
@@ -116,6 +121,7 @@ ssh $APP1 ". .bash_profile; \
     rm new_data.tar.gz"
 rm new_data.tar.gz
 
-echo "Done."
+echo "Done: `date`."
+
 exit 0
 
