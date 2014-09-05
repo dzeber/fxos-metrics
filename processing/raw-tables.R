@@ -109,6 +109,8 @@ download.ftu <- function(server, datafile, destpath) {
 ## Also saves list of bad records for later inspection, if any.
 ## Returns the table.
 convert.ftu <- function(datafile) {
+    require(rjson)
+    
     cat("Loading data...\n")
     dd <- readLines(datafile)
 
@@ -130,8 +132,9 @@ convert.ftu <- function(datafile) {
     }
     cons <- unlist(lapply(dd, consistent.info))
     if(!all(cons)) {
-        cat(paste("  >> Some inconsistency between info and deviceinfo.",
-            "Removing inconsistent records.\n"))
+        cat(sprintf(paste("  >> Some inconsistency between info and deviceinfo:",
+            "%s bad records.\n",
+            "Removing inconsistent records.\n"), sum(!cons)))
         ftu.bad[["inconsistent"]] <- dd[!cons]
         dd <- dd[cons]
     }
