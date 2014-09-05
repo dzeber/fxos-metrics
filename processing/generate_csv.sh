@@ -29,7 +29,12 @@ LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 
 ADDR=dzeber
 
-exec > $LOG_FILE 2>&1
+# Flush log file once per day.
+if [[ "$(date +%Y%m%d)" > "$(date -r $LOGFILE +%Y%m%d)" ]]; then
+    > $LOGFILE
+fi
+
+exec >> $LOG_FILE 2>&1
 
 # Check if the file on the server is newer than the one 
 # currently showing in the dashboard.
