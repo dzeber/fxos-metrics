@@ -29,13 +29,12 @@ LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 
 ADDR=dzeber
 
-# Flush log file once per day.
+exec >> $LOG_FILE 2>&1
 
-if [[ "$(date +%Y%m%d)" > "$(date -r $LOG_FILE +%Y%m%d)" ]]; then
+# Flush log file once per day.
+if [ -e $LOG_FILE ] && [[ "$(date +%Y%m%d)" > "$(date -r $LOG_FILE +%Y%m%d)" ]]; then
     > $LOG_FILE
 fi
-
-exec >> $LOG_FILE 2>&1
 
 echo
 echo "------------"
