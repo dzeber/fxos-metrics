@@ -5,6 +5,7 @@ import copy
 import os.path
 
 import ftu_formatter
+import mapred
 
 
 # The directory containing the lookup tables. 
@@ -35,59 +36,6 @@ def load_operator_table():
     with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
         table = json.load(table_file)
     return table
-
-
-#-------------------
-
-# Custom context writing functionality. 
-
-# Convert a dict to a format that can be used as map-reduce keys, 
-# preserving the structure of keys mapping to objects. 
-# Convert to JSON format (as a string). 
-# The items in the dict will be sorted alphabetically by field_name 
-# to ensure that dicts containing the same keys are recorded as the same. 
-def dict_to_key(d):
-    # d = d.items()
-    # d.sort(key=lambda e: e[0])
-    # return tuple(d)
-    return json.dumps(d, sort_keys=True)
-
-# Write a dict of field names mapping to values as a key
-# mapping to 1, in order to count occurrences. 
-def write_fieldvals(context, d): 
-    context.write(dict_to_key(d), 1)
-
-# Increment a counter identified by a name optionally contained
-# in a group by the specified value. 
-# Key is of the form  {'counter': name, 'group': group}, 
-# with group omitted if not specified. 
-def increment_counter(context, name, group='', n=1):
-    k = {'counter': name}
-    if len(group) > 0: 
-        # k.append(('group', group))
-        k['group'] = group
-    context.write(dict_to_key(k), n)
-
-# Count occurrences of end conditions. 
-# Key is of the form {'condition': condition}. 
-def write_condition(context, condition):
-    context.write(dict_to_key({'condition': condition}), 1)
-
-# Format for a dataset row. 
-# colvars = 'pingdate, os, country, device'
-# DataRow = namedtuple('DataRow', colvars)
-
-# # Mapreduce counter.
-# Counter = namedtuple('Counter', 'counter_group, counter_name')
-
-# def increment_counter(context, name, group='', n=1):
-    # context.write(Counter._make([group, name]), n)
-
-# # Facility for counting end conditions.
-# Condition = namedtuple('Condition', 'condition')
-
-# def write_condition(context, condition):
-    # context.write(Condition._make([condition]), 1)
 
 
 #--------------------
@@ -121,7 +69,7 @@ def map(key, dims, value, context):
     if not hasattr(context, 'operator_table'):
         context.operator_table = load_operator_table()
     
-    increment_counter(context, 'nrecords')
+    mapred.increment_counter(context, 'nrecords')
     
     try:
         data = json.loads(value)
@@ -131,7 +79,7 @@ def map(key, dims, value, context):
         try: 
             ping_date = ftu_formatter.get_ping_date(data.get('pingTime'))
         except ValueError as e:
-            write_condition(context, str(e))
+            mapred.write_condition(context, str(e))
             return
         
         # Create dataset row. 
@@ -142,7 +90,7 @@ def map(key, dims, value, context):
         try:
             os = ftu_formatter.get_os_version(data.get('deviceinfo.os'))
         except ValueError as e:
-            write_condition(context, str(e))
+            mapred.write_condition(context, str(e))
             return
         vals['os'] = os
         
@@ -168,7 +116,7 @@ def map(key, dims, value, context):
         try:
             vals = ftu_formatter.format_values(vals, data)
         except ValueError as e:
-            write_condition(context, str(e))
+            mapred.write_condition(context, str(e))
             return
             
         # Add entries for "All" by expanding combinations of fields. 
@@ -176,10 +124,10 @@ def map(key, dims, value, context):
         
         # Output data row.
         for v in vals: 
-            write_fieldvals(context, v)
+            mapred.write_fieldvals(context, v)
     
     except Exception as e:
-        write_condition(context, str(e))
+        mapred.write_condition(context, str(e))
         return
 
 

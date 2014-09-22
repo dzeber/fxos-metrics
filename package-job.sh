@@ -11,6 +11,7 @@ cd $PACKAGE_DIR
 mkdir jobscripts filters lookup
 cp $THIS_DIR/jobscripts/count_activations.py jobscripts
 cp $THIS_DIR/jobscripts/ftu_formatter.py jobscripts
+cp $THIS_DIR/jobscripts/mapred.py jobscripts
 cp $THIS_DIR/filters/all_fxos.json filters
 cp $THIS_DIR/lookup/* lookup
 cp $THIS_DIR/scheduled_runner.sh .
