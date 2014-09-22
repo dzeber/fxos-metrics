@@ -8,8 +8,8 @@ mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
 
 # Create directory structure. 
-cp $THIS_DIR/jobscripts/dump_all.py
-cp $THIS_DIR/filters/all_fxos_date.json
+cp $THIS_DIR/jobscripts/dump_all.py .
+cp $THIS_DIR/filters/all_fxos_date.json .
 cp $THIS_DIR/dump_records.sh .
 cp $THIS_DIR/settings.env .
 # Permissions. 
