@@ -1,53 +1,82 @@
 #!/bin/bash
 
-# Dump all FxOS records and download to hala.
-# Pass remote instance hostname as argument.
+# Dump all FxOS records dated within the last 3 months of today.
 
-AWS_HOST="ubuntu@$1"
-SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
-JOB_TAR=jobfiles.tar.gz
-OUTPUT_FILE="ftu_`date '+%Y-%m-%d'`.out"
-LOCAL_DATA_DIR=$HOME/fxos/raw-data
+BASE=$(pwd)
+THIS_DIR=$(cd "`dirname "$0"`"; pwd)
+TELEMETRY_SERVER_DIR=$HOME/telemetry-server
 
-# Package necessary files and send to node.
-echo "Packaging job files..."
+. settings.env
 
-mkdir package
-cp $SCRIPT_DIR/jobscripts/dump_all.py \
-   $SCRIPT_DIR/filters/all_fxos.json \
-   package   
-tar cvzf $JOB_TAR -C package .
-rm -rf package
-scp $JOB_TAR "$AWS_HOST:/home/ubuntu/"
-rm -f $JOB_TAR
+OUTPUT_DIR=$BASE/$OUTPUT_DIR_NAME
+OUTPUT_FILE=$OUTPUT_DIR/$DUMP_FILE
+LOG_FILE=$OUTPUT_DIR/$JOB_LOG_FILE
+BOTO_LOG=$OUTPUT_DIR/$BOTO_LOG_FILE
+JOB_LOG=$OUTPUT_DIR/$MAPRED_LOG_FILE
+TARBALL=$DUMP_TARBALL
 
-echo "Running job..."
+if [ ! -d "$OUTPUT_DIR" ]; then
+    mkdir "$OUTPUT_DIR"
+fi
 
-ssh "$AWS_HOST" \ 
-    "tar xvfz $JOB_TAR;
-    mkdir data work output; 
-    sudo pip install -Iv boto==2.25.0; 
-    cd telemetry-server;
-    python -m mapreduce.job ~/dump_all.py \
-       --input-filter ~/all_fxos.json \
-       --num-mappers 16 \
-       --num-reducers 4 \
-       --work-dir ~/work \
-       --data-dir ~/data \
-       --output ~/$OUTPUT_FILE \
-       --bucket telemetry-published-v2 \
-       --verbose;
-    gzip $OUTPUT_FILE;"
+# Write output to log for debugging. 
+exec > $LOG_FILE 2>&1
 
-echo "Job completed. Downloading data..."
-    
-scp "$AWS_HOST:/home/ubuntu/$OUTPUT_FILE.gz" $LOCAL_DATA_DIR
-gzip -d $LOCAL_DATA_DIR/$OUTPUT_FILE.gz
+echo "It is now `date`"
+echo "Preparing job..."
 
-echo "Done." 
-echo "--- Don't forget to kill the node!! ---"
+WORK_DIR=$BASE/work
+DATA_DIR=$BASE/data
+
+if [ ! -d "$WORK_DIR" ]; then
+    mkdir "$WORK_DIR"
+fi
+
+if [ ! -d "$DATA_DIR" ]; then
+    mkdir "$DATA_DIR"
+fi
+
+JOB_FILE=$THIS_DIR/dump_all.py
+FILTER=$THIS_DIR/filter.json
+
+# Set up dates to capture a three-week window leading up to today.
+START_DATE=`date +%Y%m%d -d "-3 months"`
+DATE_STRING="\"min\": \""$START_DATE"\""
+sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
+
+echo "Job setup complete."
+echo "Updating boto."
+
+## Fix for BOTO.
+sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
+# exec >> $LOG_FILE
+echo "boto install complete."
+
+echo "Running job." 
+
+cd "$TELEMETRY_SERVER_DIR"
+
+python -m mapreduce.job "$JOB_FILE" \
+   --input-filter "$FILTER" \
+   --num-mappers 16 \
+   --num-reducers 4 \
+   --work-dir "$WORK_DIR" \
+   --data-dir "$DATA_DIR" \
+   --output "$OUTPUT_FILE" \
+   --bucket "telemetry-published-v2" \
+   --verbose > $JOB_LOG
+
+echo "Mapreduce job exited with code: $?"
+echo "It is now `date`"
+echo "Packaging output..."
+
+cd "$BASE"
+tar czf "$TARBALL" "`basename $OUTPUT_DIR`"
+rm -f $OUTPUT_DIR/*
+mv $TARBALL $OUTPUT_DIR
+
+echo "Done. Exiting..."
 
 exit 0
-    
 
-    
+
