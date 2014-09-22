@@ -87,6 +87,10 @@ sanitize.ftu <- function(dd, savepath = NULL) {
 
 ## Download the data from the EC2 instance.
 ## Return the path to the downloaded data file.
+##
+## Defaults to preset connection named "aws", 
+## gzipped file dated with today's date,
+## and getwd()/data. 
 download.ftu <- function(server, datafile, destpath) {
     # Default server name is preset connection. 
     server <- if(missing(server)) "aws" else sprintf("ubuntu@%s", server)
