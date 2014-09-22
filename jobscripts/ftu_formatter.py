@@ -19,7 +19,7 @@ matches = dict(
         # # Tarako/India devices. 
         # '^(ind|intex)_' +
         # ')', re.I),
-    valid_os = re.compile('^(1\.[34]|2\.[01])(T|\s\(pre-release\))?$')
+    valid_os = re.compile('^(1\.[34]|2\.[0-9])(T|\s\(pre-release\))?$')
 )
 
 # Substitution patterns for formatting field values.
@@ -68,9 +68,17 @@ subs = dict(
         # Tarako - Spice.
         'regex': re.compile('^.*spice\\s*mifx1.*$', re.I),
         'repl': 'Spice MIFX1'
-    }],
+    }
+    # ,{
+        # # GoFox.
+        # 'regex': re.compile('^.*gofox.*$', re.I),
+        # 'repl': 'GoFox F15'
+    # }
+    ],
     
-    operator = [{
+    operator = [
+    # Filtering based on prefixes.
+    {
         'regex': re.compile('^A1.*$', re.I),
         'repl': 'A1'
     },{
@@ -217,6 +225,12 @@ subs = dict(
     },{
         'regex': re.compile('^Golden Telecom.*$', re.I),
         'repl': 'Golden Telecom'
+    },{
+        'regex': re.compile('^Grameen.*$', re.I),
+        'repl': 'Grameenphone'
+    },{
+        'regex': re.compile('^GP$', re.I),
+        'repl': 'Grameenphone'
     },{
         'regex': re.compile('^Hello.*$', re.I),
         'repl': 'Hello'
@@ -478,7 +492,9 @@ subs = dict(
     },{
         'regex': re.compile('^Zain.*$', re.I),
         'repl': 'Zain'
-    },{
+    },
+    # More general pattern matching (eg. spelling differences).
+    {
         'regex': re.compile('^!dea(\s.+)?$', re.I),
         'repl': 'Idea'
     },{
@@ -537,8 +553,8 @@ subs = dict(
         'regex': re.compile('^glo(\s.+)?$', re.I),
         'repl': 'Glo'
     },{
-        'regex': re.compile('^gramee?nphone$', re.I),
-        'repl': 'GrameenPhone'
+        'regex': re.compile('^gramee?n(phone)?$', re.I),
+        'repl': 'Grameenphone'
     },{
         'regex': re.compile('^guin.tel.*$', re.I),
         'repl': 'Guinetel'
@@ -667,8 +683,7 @@ def get_ping_date(val):
 
 # Parse OS version. 
 # If an invalid condition occurs, throws ValueError with a custom message.
-# Do not include "Other" field for OS - 
-# drop records with non-matching values instead.
+# If OS value is not recognized, class as "Other".
 def get_os_version(val):    
     if val is None:
         raise ValueError('no os version')
