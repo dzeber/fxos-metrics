@@ -11,7 +11,7 @@ import mapred
 # The directory containing the lookup tables. 
 lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
 
-# Loading for whitelists    . 
+# Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
     with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
@@ -23,14 +23,14 @@ def load_whitelist():
     # Operator table will be a set.
     tables['operator'] = set(tables['operator'])
     return tables
-    
+
     
 # Loading for country codes. 
 def load_country_table():
     with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
         table = json.load(table_file)
     return table
-    
+
 # Loading for mobile codes. 
 def load_operator_table():
     with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
