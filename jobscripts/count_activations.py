@@ -132,8 +132,11 @@ def map(key, dims, value, context):
 
 
 # Summing reducer with combiner. 
-def reduce(key, values, context):
-    context.write(key, sum(values))
-
+reduce = mapred.summing_reducer
 combine = reduce
+
+# def reduce(key, values, context):
+    # context.write(key, sum(values))
+
+# combine = reduce
 

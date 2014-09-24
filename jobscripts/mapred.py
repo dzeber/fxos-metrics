@@ -34,3 +34,10 @@ def increment_counter(context, name, group='', n=1):
 # Key is of the form {'condition': condition}. 
 def write_condition(context, condition):
     context.write(dict_to_key({'condition': condition}), 1)
+
+    
+# Reducer function that sums numeric values. 
+def summing_reducer(key, values, context):
+    context.write(key, sum(values))
+
+    
