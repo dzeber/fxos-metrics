@@ -12,10 +12,24 @@ def add_suffix(name, suffix):
     return name
 
 # Make all substitutions in sequence.
-# def make_all_subs(value, sub_list):
+# Sequence is a list of dicts with entries named 'regex' and 'repl'.
+def make_all_subs(value, sub_list):
+    for s in sub_list:
+        value = s['regex'].sub(s['repl'], value, count = 1)
+    return value
+
 
 # Make at most one substitution in sequence. 
-# def make_one_sub(value, sub_list):
+# Sequence is a list of dicts with entries named 'regex' and 'repl'.
+def make_one_sub(value, sub_list):
+    for s in sub_list:
+        formatted, n = s['regex'].subn(s['repl'], value, count = 1)
+        if n > 0:
+            value = formatted
+            break
+    return value
+
+
 
 #--------------------
 
@@ -56,8 +70,9 @@ def get_os_version(val):
     
     # Reformat to be more readable. 
     # Apply all patterns. 
-    for s in formatting_rules.os_subs:
-        os = s['regex'].sub(s['repl'], os, count = 1)
+    # for s in formatting_rules.os_subs:
+        # os = s['regex'].sub(s['repl'], os, count = 1)
+    os = make_all_subs(os, formatting_rules.os_subs)
         
     # Check OS against format regex. If not matching, class as 'Other'.
     if formatting_rules.valid_os.match(os) is None:
@@ -76,13 +91,14 @@ def get_device_name(val, recognized_list):
     
     # Make formatting consistent to avoid duplication.
     # Apply replacement regexes.
-    for s in formatting_rules.device_subs:
+    # for s in formatting_rules.device_subs:
         # Device name patterns should be mutually exclusive.
         # If any regex matches, make the replacement and exit loop. 
-        formatted, n = s['regex'].subn(s['repl'], device, count = 1)
-        if n > 0:
-            device = formatted
-            break
+        # formatted, n = s['regex'].subn(s['repl'], device, count = 1)
+        # if n > 0:
+            # device = formatted
+            # break
+    device = make_one_sub(device, formatting_rules.device_subs)
     
     # Don't keep distinct name if does not start with recognized prefix.
     if not device.startswith(recognized_list): 
@@ -185,13 +201,14 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
         
     # Make formatting consistent to avoid duplication.
     # Apply replacement regexes.
-    for s in formatting_rules.operator_subs:
+    # for s in formatting_rules.operator_subs:
         # Device name patterns should be mutually exclusive.
         # If any regex matches, make the replacement and exit loop. 
-        formatted, n = s['regex'].subn(s['repl'], operator, count = 1)
-        if n > 0:
-            operator = formatted
-            break
+        # formatted, n = s['regex'].subn(s['repl'], operator, count = 1)
+        # if n > 0:
+            # operator = formatted
+            # break
+    operator = make_one_sub(operator, formatting_rules.operator_subs)
     
     # Don't keep name if not in recognized list. 
     if operator not in recognized_list: 
