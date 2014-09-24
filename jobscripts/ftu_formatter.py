@@ -49,8 +49,8 @@ def get_ping_date(val):
         raise ValueError('invalid ping time')
     
     # Enforce date range.
-    if pingdate < formatting_rules.valid_dates['earliest'] or 
-            pingdate > formatting_rules.valid_dates['latest']:
+    if (pingdate < formatting_rules.valid_dates['earliest'] or 
+            pingdate > formatting_rules.valid_dates['latest']):
         raise ValueError('outside date range')
     
     return pingdate
