@@ -41,8 +41,8 @@ if [ ! -d "$DATA_DIR" ]; then
     mkdir "$DATA_DIR"
 fi
 
-JOB_FILE=$THIS_DIR/jobscripts/count_activations.py
-FILTER=$THIS_DIR/filters/all_fxos.json
+JOB_FILE=$THIS_DIR/count_activations.py
+FILTER=$THIS_DIR/all_fxos.json
 
 echo "Job setup complete."
 echo "Updating boto."

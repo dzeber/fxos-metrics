@@ -13,7 +13,7 @@ import formatting_rules as fmt
 # Lookup table handling.
 
 # The directory containing the lookup tables. 
-lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
+# lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
 
 # Container for the lookup tables, to be loaded as necessary.
 lookup = {}
@@ -21,7 +21,11 @@ lookup = {}
 # Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
-    with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
+    with open(
+        # os.path.join(lookup_dir, 
+        'ftu-fields.json'
+        # )
+        ) as table_file:
         tables = json.load(table_file)
     # Country table will be straight lookup - use set.
     lookup['countrylist'] = set(tables['country'])
@@ -32,13 +36,21 @@ def load_whitelist():
 
 # Loading for country codes. 
 def load_country_table():
-    with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
+    with open(
+        # os.path.join(lookup_dir, 
+        'countrycodes.json'
+        # )
+        ) as table_file:
         table = json.load(table_file)
     lookup['countrycodes'] = table
 
 # Loading for mobile codes. 
 def load_operator_table():
-    with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
+    with open(
+        # os.path.join(lookup_dir, 
+        'mobile-codes.json'
+        # )
+        ) as table_file:
         table = json.load(table_file)
     lookup['mobilecodes'] = table
 
@@ -201,21 +213,46 @@ def get_country(val):
     return geo
 
 
-# Look up mobile operator using mobile codes.
-def lookup_operator_from_codes(fields):
+# Look up mobile country code.
+# Returns the country associated with the code, 
+# or None if the code did not appear in the list.
+def lookup_mcc(mcc):
     if 'mobilecodes' not in lookup:
         load_operator_table()
+    
+    if mcc not in lookup['mobilecodes']:
+        return None
+        
+    return lookup['mobilecodes'][mcc]['country']
+
+# Look up mobile network code.
+# Returns the operator associated with the code, 
+# or None if the code did not appear in the list.
+def lookup_mnc(mcc, mnc):
+    if 'mobilecodes' not in lookup:
+        load_operator_table()
+    
+    if mcc not in lookup['mobilecodes']:
+        return None
+        
+    return lookup['mobilecodes'][mcc]['operators'].get(mnc)
+
+# Look up mobile operator using mobile codes.
+def lookup_operator_from_codes(fields):
+    # if 'mobilecodes' not in lookup:
+        # load_operator_table()
     
     if 'mcc' not in fields or 'mnc' not in fields:
         # Missing codes. 
         return None
     
-    if fields['mcc'] not in lookup['mobilecodes']:
-        # Country code is not recognized in lookup table.
-        return None
+    return lookup_mnc(fields['mcc'], fields['mnc'])
+    # if fields['mcc'] not in lookup['mobilecodes']:
+        # # Country code is not recognized in lookup table.
+        # return None
     
-    ops = lookup['mobilecodes'][fields['mcc']]['operators']
-    return ops.get(fields['mnc'])
+    # ops = lookup['mobilecodes'][fields['mcc']]['operators']
+    # return ops.get(fields['mnc'])
 
     
 # Look up mobile operator from field in payload.

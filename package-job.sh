@@ -8,16 +8,17 @@ mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
 
 # Create directory structure. 
-mkdir jobscripts filters lookup
-cp $THIS_DIR/jobscripts/count_activations.py jobscripts
-cp $THIS_DIR/jobscripts/ftu_formatter.py jobscripts
-cp $THIS_DIR/jobscripts/mapred.py jobscripts
-cp $THIS_DIR/filters/all_fxos.json filters
-cp $THIS_DIR/lookup/* lookup
-cp $THIS_DIR/scheduled_runner.sh .
+# mkdir jobscripts filters lookup
+cp $THIS_DIR/jobs/ftu_dashboard/count_activations.py .
+cp $THIS_DIR/shared/ftu_formatter.py .
+cp $THIS_DIR/shared/mapred.py .
+cp $THIS_DIR/shared/formatting_rules.py .
+cp $THIS_DIR/filters/all_fxos.json .
+cp $THIS_DIR/lookup/* .
+cp $THIS_DIR/jobs/ftu_dashboard/scheduled_runner.sh .
 cp $THIS_DIR/settings.env .
 # Permissions. 
-chmod -R 755 .
+chmod 755 scheduled_runner.sh
 
 # Package. 
 cd ..

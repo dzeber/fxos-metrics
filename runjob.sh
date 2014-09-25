@@ -82,7 +82,7 @@ fi
 BASE=$(pwd)
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
-FILTER_TEMPLATE=$THIS_DIR/filters/$FILTER_TEMPLATE
+FILTER_TEMPLATE=$THIS_DIR/$FILTER_TEMPLATE
 
 WORK_DIR=$BASE/work
 DATA_CACHE=$WORK_DIR/cache
@@ -95,9 +95,9 @@ if [ ! -d "$DATA_CACHE" ]; then
     mkdir "$DATA_CACHE"
 fi
 
-JOB_FILE=$THIS_DIR/jobscripts/$1
+JOB_FILE=$THIS_DIR/$1
 OUTPUT_FILE=$BASE/$2
-FILTER=$THIS_DIR/filters/${FILTER_FILE:-_date_filter.json}  
+FILTER=$THIS_DIR/${FILTER_FILE:-filters/_date_filter.json}  
 
 # If filter file was not specified, set up filter with date range.
 if [ -z "$FILTER_FILE" ]; then
