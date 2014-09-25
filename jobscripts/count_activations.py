@@ -8,40 +8,6 @@ import ftu_formatter
 import mapred
 
 
-# The directory containing the lookup tables. 
-lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
-
-# Loading for whitelists. 
-# Convert each list to convenient format for querying. 
-def load_whitelist():
-    with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
-        tables = json.load(table_file)
-    # Country table will be straight lookup - use set.
-    tables['country'] = set(tables['country'])
-    # Device table contains string prefixes. Convert to tuple. 
-    tables['device'] = tuple(tables['device'])
-    # Operator table will be a set.
-    tables['operator'] = set(tables['operator'])
-    return tables
-
-    
-# Loading for country codes. 
-def load_country_table():
-    with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
-        table = json.load(table_file)
-    return table
-
-# Loading for mobile codes. 
-def load_operator_table():
-    with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
-        table = json.load(table_file)
-    return table
-
-
-#--------------------
-
-# Map-reduce job.
-
 # Expand a dict to a list of dicts
 # containing a copy of the original dict for each subset of its keys
 # with keys in the subset mapping to 'All'.
@@ -62,12 +28,12 @@ def expand_all(d):
 # Mapper looks up and processes fields. 
 def map(key, dims, value, context):
     # Load lookup tables and join to context.
-    if not hasattr(context, 'whitelist'):
-        context.whitelist = load_whitelist()
-    if not hasattr(context, 'country_table'):
-        context.country_table = load_country_table()
-    if not hasattr(context, 'operator_table'):
-        context.operator_table = load_operator_table()
+    # if not hasattr(context, 'whitelist'):
+        # context.whitelist = load_whitelist()
+    # if not hasattr(context, 'country_table'):
+        # context.country_table = load_country_table()
+    # if not hasattr(context, 'operator_table'):
+        # context.operator_table = load_operator_table()
     
     mapred.increment_counter(context, 'nrecords')
     
@@ -96,20 +62,23 @@ def map(key, dims, value, context):
         
         # Look up geo-country.
         vals['country'] = ftu_formatter.get_country(
-            data.get('info').get('geoCountry'),
-            context.whitelist['country'], 
-            context.country_table)
+            data.get('info').get('geoCountry')
+            # ,context.whitelist['country'] 
+            # ,context.country_table
+            )
         
         # Look up device name and reformat.
         vals['device'] = ftu_formatter.get_device_name(
-            data.get('deviceinfo.product_model'),
-            context.whitelist['device'])
+            data.get('deviceinfo.product_model')
+            # ,context.whitelist['device']
+            )
             
         # Look up mobile operator.
         vals['operator'] = ftu_formatter.get_operator(
-            data.get('icc'), data.get('network'),
-            context.whitelist['operator'], 
-            context.operator_table)
+            data.get('icc'), data.get('network')
+            # ,context.whitelist['operator'] 
+            # ,context.operator_table
+            )
         
         # Apply any additional formatting based on sanitized values 
         # and other data fields. 

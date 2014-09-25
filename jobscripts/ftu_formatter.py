@@ -6,6 +6,42 @@ from datetime import datetime
 import formatting_rules
 
 
+# Lookup table handling.
+
+# The directory containing the lookup tables. 
+lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
+
+# Container for the lookup tables, to be loaded as necessary.
+lookup = {}
+
+# Loading for whitelists. 
+# Convert each list to convenient format for querying. 
+def load_whitelist():
+    with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
+        tables = json.load(table_file)
+    # Country table will be straight lookup - use set.
+    lookup['countrylist'] = set(tables['country'])
+    # Device table contains string prefixes. Convert to tuple. 
+    lookup['devicelist'] = tuple(tables['device'])
+    # Operator table will be a set.
+    lookup['operatorlist'] = set(tables['operator'])
+
+# Loading for country codes. 
+def load_country_table():
+    with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
+        table = json.load(table_file)
+    lookup['countrycodes'] = table
+
+# Loading for mobile codes. 
+def load_operator_table():
+    with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
+        table = json.load(table_file)
+    lookup['mobilecodes'] = table
+
+
+#--------------------
+
+
 # Add suffix to name separated by a space, if suffix is non-empty.
 def add_suffix(name, suffix):
     if len(suffix) > 0:
@@ -90,8 +126,11 @@ def get_os_version(val):
 
 # Format device name. 
 # Only record distinct counts for certain recognized device names.
-# Pass recognized_list as a tuple. 
-def get_device_name(val, recognized_list):
+# List of recognized devices is expected to be a tuple. 
+def get_device_name(val):
+    if 'devicelist' not in lookup:
+        load_whitelist()
+    
     if val is None:
         return 'Unknown'
     device = unicode(val)
@@ -108,7 +147,7 @@ def get_device_name(val, recognized_list):
     device = make_one_sub(device, formatting_rules.device_subs)
     
     # Don't keep distinct name if does not start with recognized prefix.
-    if not device.startswith(recognized_list): 
+    if not device.startswith(lookup['devicelist']): 
         return 'Other'
     
     return device
@@ -116,35 +155,44 @@ def get_device_name(val, recognized_list):
 
 # Look up country name from 2-letter code. 
 # Only record counts for recognized countries. 
-# Pass recognized_list as a set.
-def get_country(val, recognized_list, country_codes):
+# List of recognized countries is expected to be a set.
+def get_country(val):
+    if 'countrylist' not in lookup:
+        load_whitelist()
+    if 'countrycodes' not in lookup:
+        load_country_table()
+    
     if val is None:
         return 'Unknown'
     geo = unicode(val)
     
     # Look up country name. 
-    if geo not in country_codes: 
+    if geo not in lookup['countrycodes']: 
         return 'Unknown'
     
-    geo = country_codes[geo]['name']
+    geo = lookup['countrycodes'][geo]['name']
     # Don't keep distinct name if not in recognized list. 
-    if geo not in recognized_list: 
+    if geo not in lookup['countrylist']: 
         return 'Other'
         
     return geo
 
 
 # Look up mobile operator using mobile codes.
-def lookup_operator_from_codes(fields, mobile_codes):
+def lookup_operator_from_codes(fields):
+    if 'mobilecodes' not in lookup:
+        load_operator_table()
+    
     if 'mcc' not in fields or 'mnc' not in fields:
         # Missing codes. 
         return None
     
-    if fields['mcc'] not in mobile_codes:
+    if fields['mcc'] not in lookup['mobilecodes']:
         # Country code is not recognized in lookup table.
         return None
     
-    return mobile_codes[fields['mcc']]['operators'].get(fields['mnc'])
+    ops = lookup['mobilecodes'][fields['mcc']]['operators']
+    return ops.get(fields['mnc'])
 
     
 # Look up mobile operator from field in payload.
@@ -166,10 +214,10 @@ def lookup_operator_from_field(fields, key):
 # If no SIM is present, look up operator from network codes.
 # If that fails, try reading network operator name field. 
 # If none of these are present, operator is 'Unknown'.
-def lookup_operator(icc_fields, network_fields, mobile_codes):
+def lookup_operator(icc_fields, network_fields):
     if icc_fields is not None:
         # SIM is present. 
-        operator = lookup_operator_from_codes(icc_fields, mobile_codes)
+        operator = lookup_operator_from_codes(icc_fields)
         if operator is not None:
             return operator
         
@@ -183,7 +231,7 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
     # Lookup using SIM card info failed.
     # Try using network info instead. 
     if network_fields is not None:
-        operator = lookup_operator_from_codes(network_fields, mobile_codes)
+        operator = lookup_operator_from_codes(network_fields)
         if operator is not None:
             return operator
         
@@ -198,11 +246,14 @@ def lookup_operator(icc_fields, network_fields, mobile_codes):
 
 # Format operator name. 
 # Only record counts for recognized operators.
-# Pass recognized_list as a set. 
-def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
+# List of recognized operators is expected to be a set.
+def get_operator(icc_fields, network_fields):
+    if 'operatorlist' not in lookup:
+        load_whitelist()
+    
     # Look up operator name either using mobile codes 
     # or from name listed in the data.
-    operator = lookup_operator(icc_fields, network_fields, mobile_codes)
+    operator = lookup_operator(icc_fields, network_fields)
     if operator is None or len(operator) == 0:
         return 'Unknown'
         
@@ -218,7 +269,7 @@ def get_operator(icc_fields, network_fields, recognized_list, mobile_codes):
     operator = make_one_sub(operator, formatting_rules.operator_subs)
     
     # Don't keep name if not in recognized list. 
-    if operator not in recognized_list: 
+    if operator not in lookup['operatorlist']: 
         return 'Other'
     
     return operator
