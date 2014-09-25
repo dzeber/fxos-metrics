@@ -102,6 +102,10 @@ def get_ping_date(val):
     
     return pingdate
 
+    
+# Format OS string using regexes.
+def format_os_string(val):
+    return make_all_subs(unicode(val), fmt.os_subs)
 
 # Parse OS version. 
 # If an invalid condition occurs, throws ValueError with a custom message.
@@ -109,17 +113,17 @@ def get_ping_date(val):
 def get_os_version(val):    
     if val is None:
         raise ValueError('no os version')
-    os = unicode(val)
+    # os = unicode(val)
   
     # Check OS against expected format. 
     # if matches['valid_os'].match(os) is None:
         # raise ValueError('invalid os version')
     
     # Reformat to be more readable. 
+    os = format_os_string(val)
     # Apply all patterns. 
     # for s in formatting_rules.os_subs:
         # os = s['regex'].sub(s['repl'], os, count = 1)
-    os = make_all_subs(os, fmt.os_subs)
         
     # Check OS against format regex. If not matching, class as 'Other'.
     if fmt.valid_os.match(os) is None:
@@ -127,6 +131,10 @@ def get_os_version(val):
     
     return os
 
+
+# Format device name string based on regexes.
+def format_device_string(val):
+    return make_one_sub(unicode(val), fmt.device_subs)
 
 # Format device name. 
 # Only record distinct counts for certain recognized device names.
@@ -137,7 +145,7 @@ def get_device_name(val):
     
     if val is None:
         return 'Unknown'
-    device = unicode(val)
+    # device = unicode(val)
     
     # Make formatting consistent to avoid duplication.
     # Apply replacement regexes.
@@ -148,7 +156,8 @@ def get_device_name(val):
         # if n > 0:
             # device = formatted
             # break
-    device = make_one_sub(device, fmt.device_subs)
+    # device = make_one_sub(device, fmt.device_subs)
+    device = format_device_string(val)
     
     # Don't keep distinct name if does not start with recognized prefix.
     if not device.startswith(lookup['devicelist']): 
@@ -156,6 +165,16 @@ def get_device_name(val):
     
     return device
 
+    
+# Convert country codes to names. 
+def lookup_country_code(val):
+    if 'countrycodes' not in lookup:
+        load_country_table()
+    
+    geo = unicode(val)
+    if geo not in lookup['countrycodes']: 
+        return None
+    return lookup['countrycodes'][geo]['name']
 
 # Look up country name from 2-letter code. 
 # Only record counts for recognized countries. 
@@ -163,18 +182,18 @@ def get_device_name(val):
 def get_country(val):
     if 'countrylist' not in lookup:
         load_whitelist()
-    if 'countrycodes' not in lookup:
-        load_country_table()
     
     if val is None:
         return 'Unknown'
-    geo = unicode(val)
+    # geo = unicode(val)
     
+    geo = lookup_country_code(val)
+    if geo is None:
     # Look up country name. 
-    if geo not in lookup['countrycodes']: 
+    # if geo not in lookup['countrycodes']: 
         return 'Unknown'
     
-    geo = lookup['countrycodes'][geo]['name']
+    # geo = lookup['countrycodes'][geo]['name']
     # Don't keep distinct name if not in recognized list. 
     if geo not in lookup['countrylist']: 
         return 'Other'
@@ -211,7 +230,7 @@ def lookup_operator_from_field(fields, key):
     
     return operator
     
-    
+
 # Logic to look up operator name from payload.
 # Try looking up operator from SIM/ICC codes, if available. 
 # If that fails, try using SIM SPN. 
@@ -248,6 +267,10 @@ def lookup_operator(icc_fields, network_fields):
     return None
 
 
+# Format operator name string using regexes.
+def format_operartor_string(val):
+    return make_one_sub(val, fmt.operator_subs)
+    
 # Format operator name. 
 # Only record counts for recognized operators.
 # List of recognized operators is expected to be a set.
@@ -270,7 +293,8 @@ def get_operator(icc_fields, network_fields):
         # if n > 0:
             # operator = formatted
             # break
-    operator = make_one_sub(operator, fmt.operator_subs)
+    # operator = make_one_sub(operator, fmt.operator_subs)
+    operator = format_operartor_string(operator)
     
     # Don't keep name if not in recognized list. 
     if operator not in lookup['operatorlist']: 
