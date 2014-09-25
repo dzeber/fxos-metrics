@@ -1,9 +1,13 @@
 # Sanitize/deduplicate field values to be counted.
 
 # import re
+import json
+import os.path
 from datetime import datetime
     # , timedelta
-import formatting_rules
+
+import formatting_rules as fmt
+
 
 
 # Lookup table handling.
@@ -92,8 +96,8 @@ def get_ping_date(val):
         raise ValueError('invalid ping time')
     
     # Enforce date range.
-    if (pingdate < formatting_rules.valid_dates['earliest'] or 
-            pingdate > formatting_rules.valid_dates['latest']):
+    if (pingdate < fmt.valid_dates['earliest'] or 
+            pingdate > fmt.valid_dates['latest']):
         raise ValueError('outside date range')
     
     return pingdate
@@ -115,10 +119,10 @@ def get_os_version(val):
     # Apply all patterns. 
     # for s in formatting_rules.os_subs:
         # os = s['regex'].sub(s['repl'], os, count = 1)
-    os = make_all_subs(os, formatting_rules.os_subs)
+    os = make_all_subs(os, fmt.os_subs)
         
     # Check OS against format regex. If not matching, class as 'Other'.
-    if formatting_rules.valid_os.match(os) is None:
+    if fmt.valid_os.match(os) is None:
         return 'Other'
     
     return os
@@ -144,7 +148,7 @@ def get_device_name(val):
         # if n > 0:
             # device = formatted
             # break
-    device = make_one_sub(device, formatting_rules.device_subs)
+    device = make_one_sub(device, fmt.device_subs)
     
     # Don't keep distinct name if does not start with recognized prefix.
     if not device.startswith(lookup['devicelist']): 
@@ -266,7 +270,7 @@ def get_operator(icc_fields, network_fields):
         # if n > 0:
             # operator = formatted
             # break
-    operator = make_one_sub(operator, formatting_rules.operator_subs)
+    operator = make_one_sub(operator, fmt.operator_subs)
     
     # Don't keep name if not in recognized list. 
     if operator not in lookup['operatorlist']: 

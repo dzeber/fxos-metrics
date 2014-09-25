@@ -2,9 +2,8 @@
 
 import json
 import copy
-import os.path
 
-import ftu_formatter
+import ftu_formatter as ftu
 import mapred
 
 
@@ -43,7 +42,7 @@ def map(key, dims, value, context):
         # Convert ping time to date.    
         # If missing or invalid, ignore record. 
         try: 
-            ping_date = ftu_formatter.get_ping_date(data.get('pingTime'))
+            ping_date = ftu.get_ping_date(data.get('pingTime'))
         except ValueError as e:
             mapred.write_condition(context, str(e))
             return
@@ -54,27 +53,27 @@ def map(key, dims, value, context):
         # Parse OS version string.
         # If missing or invalid, ignore record. 
         try:
-            os = ftu_formatter.get_os_version(data.get('deviceinfo.os'))
+            os = ftu.get_os_version(data.get('deviceinfo.os'))
         except ValueError as e:
             mapred.write_condition(context, str(e))
             return
         vals['os'] = os
         
         # Look up geo-country.
-        vals['country'] = ftu_formatter.get_country(
+        vals['country'] = ftu.get_country(
             data.get('info').get('geoCountry')
             # ,context.whitelist['country'] 
             # ,context.country_table
             )
         
         # Look up device name and reformat.
-        vals['device'] = ftu_formatter.get_device_name(
+        vals['device'] = ftu.get_device_name(
             data.get('deviceinfo.product_model')
             # ,context.whitelist['device']
             )
             
         # Look up mobile operator.
-        vals['operator'] = ftu_formatter.get_operator(
+        vals['operator'] = ftu.get_operator(
             data.get('icc'), data.get('network')
             # ,context.whitelist['operator'] 
             # ,context.operator_table
@@ -83,7 +82,7 @@ def map(key, dims, value, context):
         # Apply any additional formatting based on sanitized values 
         # and other data fields. 
         try:
-            vals = ftu_formatter.format_values(vals, data)
+            vals = ftu.format_values(vals, data)
         except ValueError as e:
             mapred.write_condition(context, str(e))
             return
