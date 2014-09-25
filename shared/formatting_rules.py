@@ -4,6 +4,14 @@
 import re
 from datetime import date, timedelta
 
+
+# Add suffix to name separated by a space, if suffix is non-empty.
+def add_suffix(name, suffix):
+    if len(suffix) > 0:
+        return name + ' ' + suffix
+    return name
+
+
 # Date range for ping dates to be considered valid.
 valid_dates = {
     'earliest': date(2014, 4, 1),

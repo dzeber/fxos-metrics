@@ -3,7 +3,7 @@
 # import re
 import json
 import os.path
-from datetime import datetime
+from datetime import datetime, date
     # , timedelta
 
 import formatting_rules as fmt
@@ -38,7 +38,7 @@ def load_whitelist():
 def load_country_table():
     with open(
         # os.path.join(lookup_dir, 
-        'countrycodes.json'
+        '../lookup/countrycodes.json'
         # )
         ) as table_file:
         table = json.load(table_file)
@@ -48,7 +48,7 @@ def load_country_table():
 def load_operator_table():
     with open(
         # os.path.join(lookup_dir, 
-        'mobile-codes.json'
+        '../lookup/mobile-codes.json'
         # )
         ) as table_file:
         table = json.load(table_file)
@@ -56,13 +56,6 @@ def load_operator_table():
 
 
 #--------------------
-
-
-# Add suffix to name separated by a space, if suffix is non-empty.
-def add_suffix(name, suffix):
-    if len(suffix) > 0:
-        return name + ' ' + suffix
-    return name
 
 # Make all substitutions in sequence.
 # Sequence is a list of dicts with entries named 'regex' and 'repl'.
@@ -86,7 +79,7 @@ def make_one_sub(value, sub_list):
 # Convert millisecond timestamp to date.
 def ms_timestamp_to_date(val):
     val = int(val) / 1000
-    return datetime.utcfromtimestamp(val).date()
+    return datetime.utcfromtimestamp(val).date().isoformat()
 
     
 #--------------------
@@ -183,7 +176,7 @@ def lookup_country_code(val):
     if 'countrycodes' not in lookup:
         load_country_table()
     
-    geo = unicode(val)
+    geo = unicode(val).strip()
     if geo not in lookup['countrycodes']: 
         return None
     return lookup['countrycodes'][geo]['name']
@@ -212,6 +205,15 @@ def get_country(val):
         
     return geo
 
+# Remove any leading zeros, unless string is all zeros.
+def remove_leading_zeros(val):
+    val = unicode(val).strip()
+    if len(val) == 0:
+        return ''
+    val = val.lstrip('0')
+    if len(val) == 0:
+        return '0'
+    return val
 
 # Look up mobile country code.
 # Returns the country associated with the code, 
@@ -220,6 +222,7 @@ def lookup_mcc(mcc):
     if 'mobilecodes' not in lookup:
         load_operator_table()
     
+    mcc = remove_leading_zeros(mcc)    
     if mcc not in lookup['mobilecodes']:
         return None
         
@@ -232,6 +235,8 @@ def lookup_mnc(mcc, mnc):
     if 'mobilecodes' not in lookup:
         load_operator_table()
     
+    mcc = remove_leading_zeros(mcc)
+    mnc = remove_leading_zeros(mnc)
     if mcc not in lookup['mobilecodes']:
         return None
         
@@ -305,7 +310,7 @@ def lookup_operator(icc_fields, network_fields):
 
 
 # Format operator name string using regexes.
-def format_operartor_string(val):
+def format_operator_string(val):
     return make_one_sub(val, fmt.operator_subs)
     
 # Format operator name. 
@@ -331,7 +336,7 @@ def get_operator(icc_fields, network_fields):
             # operator = formatted
             # break
     # operator = make_one_sub(operator, fmt.operator_subs)
-    operator = format_operartor_string(operator)
+    operator = format_operator_string(operator)
     
     # Don't keep name if not in recognized list. 
     if operator not in lookup['operatorlist']: 
