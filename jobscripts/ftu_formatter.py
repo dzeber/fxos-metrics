@@ -1,7 +1,8 @@
 # Sanitize/deduplicate field values to be counted.
 
 # import re
-from datetime import date, timedelta
+from datetime import datetime
+    # , timedelta
 import formatting_rules
 
 
@@ -30,7 +31,12 @@ def make_one_sub(value, sub_list):
     return value
 
 
+# Convert millisecond timestamp to date.
+def ms_timestamp_to_date(val):
+    val = int(val) / 1000
+    return datetime.utcfromtimestamp(val).date()
 
+    
 #--------------------
 
 # Processing for each individual field. 
@@ -43,8 +49,9 @@ def get_ping_date(val):
     
     try: 
         # pingTime is millisecond-resolution timestamp.
-        val = int(val) / 1000
-        pingdate = date.fromtimestamp(val)
+        # val = int(val) / 1000
+        # pingdate = date.fromtimestamp(val)
+        pingdate = ms_timestamp_to_date(val)
     except Exception:
         raise ValueError('invalid ping time')
     
