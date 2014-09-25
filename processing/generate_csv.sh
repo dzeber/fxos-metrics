@@ -71,7 +71,7 @@ fi
 rm -f $JOB_OUTPUT_DIR/*
 tar xvzf $TARBALL
 
-if [ ! -e "$DATA_FILE" ]; then
+if [ ! -s "$DATA_FILE" ]; then
     # Something went wrong - no data file downloaded.
     echo "No data file!"
     # Check for log file. 
