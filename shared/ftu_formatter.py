@@ -38,7 +38,8 @@ def load_whitelist():
 def load_country_table():
     with open(
         # os.path.join(lookup_dir, 
-        '../lookup/countrycodes.json'
+        # '../lookup/countrycodes.json'
+        'countrycodes.json'
         # )
         ) as table_file:
         table = json.load(table_file)
@@ -48,7 +49,8 @@ def load_country_table():
 def load_operator_table():
     with open(
         # os.path.join(lookup_dir, 
-        '../lookup/mobile-codes.json'
+        # '../lookup/mobile-codes.json'
+        'mobile-codes.json'
         # )
         ) as table_file:
         table = json.load(table_file)
@@ -79,7 +81,7 @@ def make_one_sub(value, sub_list):
 # Convert millisecond timestamp to date.
 def ms_timestamp_to_date(val):
     val = int(val) / 1000
-    return datetime.utcfromtimestamp(val).date().isoformat()
+    return datetime.utcfromtimestamp(val).date()
 
     
 #--------------------
@@ -105,7 +107,7 @@ def get_ping_date(val):
             pingdate > fmt.valid_dates['latest']):
         raise ValueError('outside date range')
     
-    return pingdate
+    return pingdate.isoformat()
 
     
 # Format OS string using regexes.
