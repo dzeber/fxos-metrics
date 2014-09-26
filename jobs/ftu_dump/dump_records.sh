@@ -36,7 +36,7 @@ if [ ! -d "$DATA_DIR" ]; then
     mkdir "$DATA_DIR"
 fi
 
-JOB_FILE=$THIS_DIR/dump_all.py
+JOB_FILE=$THIS_DIR/dump_and_format.py
 FILTER=$THIS_DIR/filter.json
 
 # Set up dates to capture a three-week window leading up to today.
