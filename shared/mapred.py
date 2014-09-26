@@ -68,7 +68,7 @@ def write_fieldvals_tuple(context, d, schema):
         if key not in d or d[key] is None:
             vals.append('')
         else:
-            vals.append(d[key])
+            vals.append(str(d[key]))
     
     context.write(tuple(vals), 1)
 

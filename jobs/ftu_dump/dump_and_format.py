@@ -73,9 +73,11 @@ def map(key, dims, value, context):
         
         # Convert dates.
         if 'activationTime' in r:
-            r['activationDate'] = ftu.ms_timestamp_to_date(r['activationTime'])
+            r['activationDate'] = (
+                ftu.ms_timestamp_to_date(r['activationTime']).isoformat())
         if 'pingTime' in r:
-            r['pingDate'] = ftu.ms_timestamp_to_date(r['pingTime'])
+            r['pingDate'] = (
+                ftu.ms_timestamp_to_date(r['pingTime']).isoformat()
         if len(dims) == 6:
             r['submissionDate'] = (
                 datetime.strptime(dims[5], '%Y%m%d').date().isoformat())
