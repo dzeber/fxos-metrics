@@ -12,6 +12,7 @@ cp $THIS_DIR/jobs/ftu_dump/dump_and_format.py .
 cp $THIS_DIR/shared/ftu_formatter.py .
 cp $THIS_DIR/shared/mapred.py .
 cp $THIS_DIR/shared/formatting_rules.py .
+cp $THIS_DIR/shared/dump_schema.py .
 cp $THIS_DIR/lookup/* .
 cp $THIS_DIR/filters/all_fxos_date.json .
 cp $THIS_DIR/jobs/ftu_dump/dump_records.sh .
