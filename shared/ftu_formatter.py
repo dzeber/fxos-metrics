@@ -14,6 +14,7 @@ import formatting_rules as fmt
 
 # The directory containing the lookup tables. 
 # lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
+lookup_dir = os.path.dirname(__file__)
 
 # Container for the lookup tables, to be loaded as necessary.
 lookup = {}
@@ -22,9 +23,9 @@ lookup = {}
 # Convert each list to convenient format for querying. 
 def load_whitelist():
     with open(
-        # os.path.join(lookup_dir, 
+        os.path.join(lookup_dir, 
         'ftu-fields.json'
-        # )
+        )
         ) as table_file:
         tables = json.load(table_file)
     # Country table will be straight lookup - use set.
@@ -37,10 +38,10 @@ def load_whitelist():
 # Loading for country codes. 
 def load_country_table():
     with open(
-        # os.path.join(lookup_dir, 
+        os.path.join(lookup_dir, 
         # '../lookup/countrycodes.json'
         'countrycodes.json'
-        # )
+        )
         ) as table_file:
         table = json.load(table_file)
     lookup['countrycodes'] = table
@@ -48,10 +49,10 @@ def load_country_table():
 # Loading for mobile codes. 
 def load_operator_table():
     with open(
-        # os.path.join(lookup_dir, 
+        os.path.join(lookup_dir, 
         # '../lookup/mobile-codes.json'
         'mobile-codes.json'
-        # )
+        )
         ) as table_file:
         table = json.load(table_file)
     lookup['mobilecodes'] = table
