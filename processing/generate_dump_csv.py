@@ -2,12 +2,13 @@
 
 # Arguments supplied should be the input data file and the output CSV file. 
 
-# Hack to be able to import from required directory. 
 import os.path
+import sys
+import csv
+
+# Hack to be able to import from required directory. 
 sys.path.append(os.path.join(os.path.dirname(sys.path[0]), 'shared'))
 
-import csv
-import sys
 import mapred
 import dump_schema as schema
 
