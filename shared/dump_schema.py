@@ -23,4 +23,18 @@ final_keys = [
     'software', 'hardware', 'firmware_revision', 'activationDate'
 ]
 
-
+csv_headers = [
+    'ping_date', 'submission_date',
+    'os',
+    'country',
+    'device',
+    'locale',
+    'update_channel', 'update_channel_other',
+    'platform_version', 'platform_build_id',
+    'sim_mcc', 'sim_mnc',
+    'sim_mcc_country', 'sim_mnc_network', 'sim_network_name',
+    'network_mcc', 'network_mnc',
+    'network_mcc_country', 'network_mnc_network', 'network_network_name',
+    'screen_width', 'screen_height', 'device_pixel_ratio',
+    'software', 'hardware', 'firmware_revision', 'activation_date'
+]

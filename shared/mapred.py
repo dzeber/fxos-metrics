@@ -1,7 +1,7 @@
 # Helper functions for collecting data in a map-reduce context.
 
 import json
-
+import ast
 
 # Reducer function that sums numeric values. 
 def summing_reducer(key, values, context):
@@ -87,8 +87,62 @@ def increment_counter_tuple(context, name, group=None, n=1):
 def write_condition_tuple(context, condition):
     context.write(('condition', condition), 1)
 
+ 
+#-------------------------------------
+
+# Processing for output of a map-reduce job using tuples for output.
+
+# Read in output file containing one output record per line. 
+# Separate out records, conditions and counters.
+# Records will be returned as lists with the count appended at the end.
+# Output is a map with keys 'records', 'counters', 'conditions'.
+def parse_output_tuple(output_file):
+    # Initialize storage. 
+    data = {}
+    data['records'] = []
+    data['counters'] = {}
+    data['conditions'] = {}
     
+    # Parse records line by line.
+    for row in open(output_file):
+        parsed_row = row.rstrip().rsplit('\t', 1)
+        
+        vals = list(ast.literal_eval(parsed_row[0]))
+        # Strip the key type identifier.
+        type = vals.pop(0)
+        n = int(parsed_row[1])
+        
+        # Proceed according to key type. 
+        if type == 'condition': 
+            if 'conditions' not in data:
+                data['conditions'] = {}
+            data['conditions'][vals[0]] = n
+            continue
+        
+        if type == 'counter':
+            if 'counters' not in data:
+                data['counters'] = {}
+            # If the counter has a group, 
+            # create a subdict for it.
+            # Otherwise store as a single value.
+            if len(vals) == 2:
+                group_name = vals[1]
+                if group_name not in data['counters']:
+                    data['counters'][group_name] = {}
+                data['counters'][group_name][vals[0]] = n
+            else:
+                data['counters'][vals[0]] = n
+            continue
+        
+        # Otherwise we a have a data record.
+        if 'records' not in data:
+            data['records'] = []
+        vals.append(n)
+        data['records'].append(vals)
     
+    return data
+
+   
     
 
     

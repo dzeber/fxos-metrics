@@ -6,6 +6,7 @@
 . /etc/profile.d/mozilla.sh
 
 SCRIPT_DIR=$(cd "`dirname "$0"`"; pwd)
+PYTHONPATH="$SCRIPT_DIR/../shared"
 
 . $SCRIPT_DIR/../settings.env
 
