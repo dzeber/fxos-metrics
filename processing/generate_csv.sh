@@ -24,6 +24,10 @@ DUMP_DATA_SCRIPT=generate_dump_csv.py
 LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
 LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 
+# Create temporary copy of previous last_updated. 
+LAST_UPDATED_TMP=$WORK_DIR/last_updated_tmp
+cp $LAST_UPDATED_PATH $LAST_UPDATED_TMP
+
 ADDR=dzeber
 
 exec >> $LOG_FILE 2>&1
@@ -46,7 +50,7 @@ up_to_date(){
     fi
     
     SERVER_LAST_UPDATED=`aws s3 ls "$AWS_PATH" | grep -Eo "^[0-9]{4}(-[0-9]{2}){2}"`
-    grep -q "$SERVER_LAST_UPDATED" $LAST_UPDATED_PATH
+    grep -q "$SERVER_LAST_UPDATED" $LAST_UPDATED_TMP
 }
 
 
@@ -179,6 +183,8 @@ if [[ "$FILES_TO_UPDATE" ]]; then
         rm new_data.tar.gz"
     rm new_data.tar.gz
 fi
+
+rm $LAST_UPDATED_TMP
 
 echo "Done: `date`."
 exit 0
