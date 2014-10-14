@@ -11,12 +11,18 @@ sys.path.append(os.path.join(os.path.dirname(sys.path[0]), 'shared'))
 
 import mapred
 import dump_schema as schema
+from datetime import date, timedelta
 
 job_output = sys.argv[1]
 csv_file = sys.argv[2]
 
 # Parse in output file.
 data = mapred.parse_output_tuple(job_output)
+
+# Cutoff date is within 3 months of today.
+cutoff_date = date.today() - date.timedelta(days = 90)
+cutoff_date = cutoff_date.isoformat()
+data_records = [ r for r in data['records'] if r[1] >= cutoff_date ]
 
 # Output records to CSV.
 headers = schema.csv_headers
@@ -25,7 +31,7 @@ headers.append('count')
 with open(csv_file, 'w') as outfile:
     writer = csv.writer(outfile)
     writer.writerow(headers)
-    writer.writerows(data['records'])
+    writer.writerows(data_records)
 
 print('CSV written.')
 
