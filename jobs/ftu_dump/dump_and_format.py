@@ -8,6 +8,10 @@ import ftu_formatter as ftu
 import mapred
 import dump_schema as schema
 
+# Simple sanity check. 
+# Payloads should have a field called 'info' with preset 'reason' and 'appName'.
+# Other elements of 'info' should have been populated automatically 
+# and should match corresponding payload fields.
 def consistent_ftu(r):
     if 'info' not in r:
         return False
@@ -39,8 +43,6 @@ def map(key, dims, value, context):
         # Keep only geo code from info.
         r['country'] = r['info']['geoCountry']
         del r['info']
-        # if 'ver' in r:
-            # del r['ver']
         
         # Strip deviceinfo prefix when it occurs. 
         dikeys = [k for k in r if k.startswith('deviceinfo.')]
@@ -145,10 +147,4 @@ def map(key, dims, value, context):
 # Summing reducer with combiner. 
 reduce = mapred.summing_reducer
 combine = reduce
-
-# def reduce(key, values, context):
-    # context.write(key, sum(values))
-
-# combine = reduce
-
 
