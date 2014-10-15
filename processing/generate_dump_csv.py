@@ -25,7 +25,7 @@ cutoff_date = cutoff_date.isoformat()
 data_records = [ r for r in data['records'] if r[1] >= cutoff_date ]
 
 # Output records to CSV.
-headers = schema.csv_headers
+headers = schema.dump_csv_headers
 headers.append('count')
 
 with open(csv_file, 'w') as outfile:
