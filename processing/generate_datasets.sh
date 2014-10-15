@@ -3,6 +3,9 @@
 ## Download FTU records, sanitize and generate CSV datasets.
 ## Copy resulting datasets to web server. 
 
+## Pass option --nocopy to prevent from copying files to web server.
+## For testing purposes. 
+
 # Environment for communicating with AWS and app1.
 . ~/.bash_profile
 . /etc/profile.d/mozilla.sh
@@ -105,7 +108,16 @@ fi
 echo "Done. Recording data update time."
 date -r $OUTPUT_DATA +"%Y-%m-%d %H:%M:%S" > $LAST_UPDATED_PATH
         
+        
+if [[ "$1" == "--nocopy" ]]; then
+    echo "Data files will not be copied to web server."
+    echo "Done: `date`."
+    exit 0
+fi
+
+        
 # Copy new data to web server.
+echo "Copying data files to web server."
 # Append underscore to existing data files names on server. 
 UNDERSCORE_CMD="ssh \$APP1 \". .bash_profile; cd \\\$FTU/data; rm -f *_;"
 UNDERSCORE_CMD="$UNDERSCORE_CMD mv $CSV_FILE ${CSV_FILE}_;" 
