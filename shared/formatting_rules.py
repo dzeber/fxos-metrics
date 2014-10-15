@@ -15,9 +15,9 @@ def add_suffix(name, suffix):
 # Date range for ping dates to be considered valid.
 # Keep pings from the past 6 months.
 valid_dates = {
-    'earliest': date.today() - timedelta(days = 180),
+    'earliest': (date.today() - timedelta(days = 180)).isoformat(),
     # Latest: yesterday.
-    'latest': date.today() - timedelta(days = 1)
+    'latest': (date.today() - timedelta(days = 1)).isoformat()
 }
 
 # Form of valid OS string. 

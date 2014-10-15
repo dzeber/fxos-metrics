@@ -57,7 +57,7 @@ data = mapred.parse_output_tuple(job_output)
 
 # Cutoff date for inclusion in dump csv is 3 months before today.
 dump_cutoff_date = date.today() - timedelta(days = 90)
-dump_cutoff_date = cutoff_date.isoformat()
+dump_cutoff_date = dump_cutoff_date.isoformat()
 
 # Accumulate subsets of data to be converted to CSV.
 # Dump rows will be stored as a list of row lists. 

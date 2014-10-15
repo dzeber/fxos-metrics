@@ -257,7 +257,7 @@ def get_country(val):
 # Convert country name to a value to be displayed in dashboard. 
 # Checks that name is a recognized country, 
 # and looks up name in table of relevant countries. 
-def summarize_county(val):
+def summarize_country(val):
     if 'countrylist' not in lookup:
         load_whitelist()
     if 'countrynames' not in lookup:
@@ -430,14 +430,14 @@ def summarize_operator(icc_network, icc_name, network_network, network_name):
     
     # Determine operator based on information first from SIM card,
     # then from network. 
-    networks_vals = [icc_network, icc_name, network_network, network_name]
+    network_vals = [icc_network, icc_name, network_network, network_name]
     operator = ''
-    for v in vals:
+    for v in network_vals:
         if v != '':
             operator = v
             break
     
-    if operator == ''
+    if operator == '':
         return 'Unknown'
         
     # Don't keep name if not in recognized list. 
