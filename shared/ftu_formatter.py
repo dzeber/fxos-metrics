@@ -46,6 +46,14 @@ def load_country_table():
         table = json.load(table_file)
     lookup['countrycodes'] = table
 
+# Loading for list of recognized country names from code list. 
+def load_country_names():
+    if 'countrycodes' not in lookup:
+        load_country_table()
+    country_names = set([ v['name'] for v in lookup['countrycodes'].itervalues() ])
+    lookup['countrynames'] = country_names
+
+
 # Loading for mobile codes. 
 def load_operator_table():
     with open(
@@ -110,6 +118,17 @@ def get_ping_date(val):
     
     return pingdate.isoformat()
 
+# Determine whether or not to keep an FTU record based on its date.
+
+def relevant_date(rdate):
+    if date == '':
+        return False
+    
+    return (rdate >= fmt.valid_dates['earliest'] and
+        rdate <= fmt.valid_dates['latest'])
+
+
+#------------------
     
 # Format OS string using regexes.
 def format_os_string(val):
@@ -139,7 +158,17 @@ def get_os_version(val):
     
     return os
 
+# Convert formatted OS string to value that can be used in dashboard.
+# Checks format against regex.
+def summarize_os(val):
+    # Check OS against format regex. If not matching, class as 'Other'.
+    if fmt.valid_os.match(val) is None:
+        return 'Other'
+    
+    return val
 
+#------------------
+    
 # Format device name string based on regexes.
 def format_device_string(val):
     return make_one_sub(unicode(val), fmt.device_subs)
@@ -173,6 +202,23 @@ def get_device_name(val):
     
     return device
 
+# Convert device name to a value to be displayed in dashboard. 
+# Looks up name in table of relevant countries. 
+def summarize_device(val):
+    if 'devicelist' not in lookup:
+        load_whitelist()
+    
+    # If val was None in the FTU record, will be '' in the dump.
+    if val == '':
+        return 'Unknown'
+    
+    # Don't keep distinct name if does not start with recognized prefix.
+    if not val.startswith(lookup['devicelist']): 
+        return 'Other'
+        
+    return val
+
+#------------------
     
 # Convert country codes to names. 
 def lookup_country_code(val):
@@ -208,6 +254,32 @@ def get_country(val):
         
     return geo
 
+# Convert country name to a value to be displayed in dashboard. 
+# Checks that name is a recognized country, 
+# and looks up name in table of relevant countries. 
+def summarize_county(val):
+    if 'countrylist' not in lookup:
+        load_whitelist()
+    if 'countrynames' not in lookup:
+        load_country_names()
+    
+    # If val was None in the FTU record, will be '' in the dump.
+    if val == '':
+        return 'Unknown'
+    
+    # Country will be name, or else country code if code was not recognized. 
+    # Check whether val is the name of one of the recognized codes. 
+    if val not in lookup['countrynames']: 
+        return 'Unknown'
+    
+    # Don't keep distinct name if not in recognized list. 
+    if val not in lookup['countrylist']: 
+        return 'Other'
+        
+    return val
+
+#------------------
+    
 # Remove any leading zeros, unless string is all zeros.
 def remove_leading_zeros(val):
     val = unicode(val).strip()
@@ -347,6 +419,35 @@ def get_operator(icc_fields, network_fields):
     
     return operator
 
+
+# Convert operator name to a value to be displayed in dashboard. 
+# Input is list of [icc.network, icc.name, network.network, network.name]. 
+# Deduces operator name based on presence of SIM card or network fields. 
+# Checks name against table of recognized operators.
+def summarize_operator(icc_network, icc_name, network_network, network_name):
+    if 'operatorlist' not in lookup:
+        load_whitelist()
+    
+    # Determine operator based on information first from SIM card,
+    # then from network. 
+    networks_vals = [icc_network, icc_name, network_network, network_name]
+    operator = ''
+    for v in vals:
+        if v != '':
+            operator = v
+            break
+    
+    if operator == ''
+        return 'Unknown'
+        
+    # Don't keep name if not in recognized list. 
+    if operator not in lookup['operatorlist']: 
+        return 'Other'
+    
+    return operator
+
+
+#--------------------
 
 # Additional formatting to cover special cases. 
 # Replacement rules draw on combination of sanitized values 

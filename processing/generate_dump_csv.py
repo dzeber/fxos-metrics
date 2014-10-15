@@ -20,7 +20,7 @@ csv_file = sys.argv[2]
 data = mapred.parse_output_tuple(job_output)
 
 # Cutoff date is within 3 months of today.
-cutoff_date = date.today() - date.timedelta(days = 90)
+cutoff_date = date.today() - timedelta(days = 90)
 cutoff_date = cutoff_date.isoformat()
 data_records = [ r for r in data['records'] if r[1] >= cutoff_date ]
 

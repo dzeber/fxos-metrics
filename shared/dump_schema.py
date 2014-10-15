@@ -12,18 +12,22 @@ final_keys = [
     'os',
     'country',
     'product_model',
+    # 5: 
     'locale',
     'update_channel', 'app.update.channel',
     'platform_version', 'platform_build_id',
+    # 10, 11:
     'icc.mcc', 'icc.mnc',
     'icc.country', 'icc.network', 'icc.name',
+    # 15, 16:
     'network.mcc', 'network.mnc',
     'network.country', 'network.network', 'network.name',
+    # 20, 21, 22:
     'screenWidth', 'screenHeight', 'devicePixelRatio',
     'software', 'hardware', 'firmware_revision', 'activationDate'
 ]
 
-csv_headers = [
+dump_csv_headers = [
     'ping_date', 'submission_date',
     'os',
     'country',
@@ -36,5 +40,15 @@ csv_headers = [
     'network_mcc', 'network_mnc',
     'network_mcc_country', 'network_mnc_network', 'network_network_name',
     'screen_width', 'screen_height', 'device_pixel_ratio',
-    'software', 'hardware', 'firmware_revision', 'activation_date'
+    'software', 'hardware', 'firmware_revision', 'activation_date',
+    'count'
+]
+
+dashboard_csv_headers = [
+    'date', 
+    'os', 
+    'country', 
+    'device', 
+    'operator', 
+    'activations'
 ]
