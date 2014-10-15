@@ -22,7 +22,7 @@ JOB_OUTPUT=$DUMP_WORK_DIR/$OUTPUT_DIR_NAME
 OUTPUT_DATA=$JOB_OUTPUT/$DUMP_FILE
 OUTPUT_LOG=$JOB_OUTPUT/$JOB_LOG_FILE
 
-PYTHON_SCRIPT=$WORK_DIR/scripts/generate_datasets.py
+PYTHON_SCRIPT=generate_datasets.py
 LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
 LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 DASHBOARD_CSV_PATH=$DATA_DIR/$CSV_FILE
@@ -61,7 +61,7 @@ echo "Downloading latest output from AWS."
 aws s3 cp "$S3_FXOS_DUMP/$DUMP_TARBALL" "$DUMP_WORK_DIR"
 
 if [ ! -e "$TARBALL" ]; then
-    echo "Failed to download tarball from AWS!"
+    echo "Failed to download tarball from AWS."
     echo "" | mail -s "FAILED: FxOS FTU data - unable to download $DUMP_TARBALL" \
         "$ADDR@mozilla.com" 
     echo "Sent email notice. Exiting..."
@@ -70,14 +70,14 @@ fi
 
 # Extract tarball - creates a subdir called "output" containing files. 
 rm -f $JOB_OUTPUT/*
-tar xvzf $TARBALL
+tar xvzf $TARBALL -C  $DUMP_WORK_DIR
 
 if [ ! -s "$OUTPUT_DATA" ]; then
     # Something went wrong - no data file downloaded.
-    echo "No data file!"
+    echo "No data file."
     # Check for log file. 
     if [ ! -e "$OUTPUT_LOG" ]; then
-        echo "No log file either!!"
+        echo "No log file either."
         echo "-- No log file --" > $OUTPUT_LOG
     fi
     # Send email notice with log file as text. 
@@ -91,12 +91,12 @@ echo "Processing data..."
 python $PYTHON_SCRIPT $OUTPUT_DATA $DASHBOARD_CSV_PATH $DUMP_CSV_PATH
     
 if [ ! -e "$DASHBOARD_CSV_PATH" ]; then
-    echo "Something went wrong - no dashboard CSV file generated!"
+    echo "Something went wrong - no dashboard CSV file generated."
     echo "" | mail -s "FAILED: FxOS FTU data - no csv `$CSV_FILE`" "$ADDR@mozilla.com" 
     exit 1
 fi
 if [ ! -e "$DUMP_CSV_PATH" ]; then
-    echo "Something went wrong - no dump CSV file generated!"
+    echo "Something went wrong - no dump CSV file generated."
     echo "" | mail -s "FAILED: FxOS FTU data - no csv `$DUMP_CSV`" "$ADDR@mozilla.com" 
     exit 1
 fi
@@ -114,7 +114,7 @@ UNDERSCORE_CMD="$UNDERSCORE_CMD\""
 eval $UNDERSCORE_CMD
 
 cd $DATA_DIR
-eval "tar czf $WORK_DIR/new_data.tar.gz $CSV_FILE $DUMP_CSV $LAST_UPDATED_FILE" 
+tar czf $WORK_DIR/new_data.tar.gz $CSV_FILE $DUMP_CSV $UPDATED_TIME_FILE
 cd $WORK_DIR
 scp new_data.tar.gz "$APP1:\$HOME"
 ssh $APP1 ". .bash_profile; \
