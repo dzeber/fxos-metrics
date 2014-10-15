@@ -81,16 +81,19 @@ with open(dashboard_csv, 'w') as outfile:
         next_row = list(r)
         next_row.append(dash_rows[r])
         writer.writerow(next_row)
+        
+print('Wrote dashboard CSV: %s rows\n' % len(dash_rows))
 
 headers = schema.dump_csv_headers
 with open(dump_csv, 'w') as outfile:
     writer = csv.writer(outfile)
     writer.writerow(headers)
     writer.writerows(dump_rows)
+    
+print('Wrote dump CSV: %s rows\n' % len(dump_rows))
 
 # Output counters and diagnostics.
-print('CSV written.')
-print('\nCounters:')
+print('Counters:')
 for name in data['counters']:
     counter = data['counters'][name]
     # If this is a group, print all subcounters.
