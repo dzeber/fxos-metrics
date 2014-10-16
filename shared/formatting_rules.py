@@ -71,7 +71,7 @@ device_subs = [
         'repl': 'Intex Cloud FX'
     },{
         # Tarako - Spice.
-        'regex': re.compile('^.*spice\\s*mifx1.*$', re.I),
+        'regex': re.compile('^.*spice(\\s*|_)mifx1.*$', re.I),
         'repl': 'Spice MIFX1'
     }
     # ,{
