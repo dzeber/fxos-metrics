@@ -73,6 +73,10 @@ device_subs = [
         # Tarako - Spice.
         'regex': re.compile('^.*spice(\\s*|_)mifx1.*$', re.I),
         'repl': 'Spice MIFX1'
+    },{
+        # Zen U105.
+        'regex': re.compile('u105', re.I),
+        'repl': 'Zen U105'
     }
     # ,{
         # # GoFox.
