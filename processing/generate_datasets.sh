@@ -10,7 +10,9 @@
 . ~/.bash_profile
 . /etc/profile.d/mozilla.sh
 
-. settings.env
+THIS_DIR=$(cd "`dirname "$0"`"; pwd)
+
+. $THIS_DIR/settings.env
 
 # The base dir for the processing script. 
 # Also the working dir for the dashboard data.
@@ -25,7 +27,7 @@ JOB_OUTPUT=$DUMP_WORK_DIR/$OUTPUT_DIR_NAME
 OUTPUT_DATA=$JOB_OUTPUT/$DUMP_FILE
 OUTPUT_LOG=$JOB_OUTPUT/$JOB_LOG_FILE
 
-PYTHON_SCRIPT=generate_datasets.py
+PYTHON_SCRIPT=$THIS_DIR/generate_datasets.py
 LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
 LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 DASHBOARD_CSV_PATH=$DATA_DIR/$CSV_FILE
