@@ -75,7 +75,7 @@ device_subs = [
         'repl': 'Spice MIFX1'
     },{
         # Zen U105.
-        'regex': re.compile('u105', re.I),
+        'regex': re.compile('^.*u105.*$', re.I),
         'repl': 'Zen U105'
     }
     # ,{
