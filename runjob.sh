@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# Pass as arguments jobscript filename, output filename, and optionally filter filename (default is no filter). 
+# Pass as arguments jobscript filename (relative to jobs dir), 
+# output filename, 
+# and optionally filter filename relative to filter dir
+# (default is no filter). 
+# 
 # Initial command-line option -l/--local will use local data if any.
 # Command-line option --since <date> gives start date
 # Command-line option --until <date> gives end date (default is none).
@@ -16,6 +20,7 @@ FILTER_TEMPLATE="all_fxos_date.json"
 
 if [ $# -lt 2 ]; then
     echo "Usage: `basename $0` <opts> jobscript_name output_filename"
+    echo "  (jobscript_name is relative to fxos-metrics/jobs dir)"
     echo "    --filter <filename> : use custom filter file in filters dir"
     echo "    --local : use local data, if any"
     echo "    --since <yyyy-mm-dd> : earliest date to include"
@@ -82,7 +87,7 @@ fi
 BASE=$(pwd)
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
-FILTER_TEMPLATE=$THIS_DIR/$FILTER_TEMPLATE
+FILTER_TEMPLATE=$THIS_DIR/filters/$FILTER_TEMPLATE
 
 WORK_DIR=$BASE/work
 DATA_CACHE=$WORK_DIR/cache
@@ -95,9 +100,9 @@ if [ ! -d "$DATA_CACHE" ]; then
     mkdir "$DATA_CACHE"
 fi
 
-JOB_FILE=$THIS_DIR/$1
+JOB_FILE=$THIS_DIR/jobs/$1
 OUTPUT_FILE=$BASE/$2
-FILTER=$THIS_DIR/${FILTER_FILE:-filters/_date_filter.json}  
+FILTER=$THIS_DIR/filters/${FILTER_FILE:-_date_filter.json}  
 
 # If filter file was not specified, set up filter with date range.
 if [ -z "$FILTER_FILE" ]; then
