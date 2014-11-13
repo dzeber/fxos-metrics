@@ -66,6 +66,11 @@ dump_rows = []
 dash_rows = {}
 
 for r in data['records']:
+    # Apply extra formatting - 
+    # can be used to test new formatting rules 
+    # without touching AWS job.
+    r = apply_post_formatting(r)
+
     if r[1] >= dump_cutoff_date:
         dump_rows.append(r)
     

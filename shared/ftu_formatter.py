@@ -470,7 +470,19 @@ def format_values(clean_values, payload):
     return clean_values
 
 
-
-
+# Formatting to be applied at local level
+# while generating tables from raw data.
+# Input is a data record as outputted from AWS job. 
+# Ordering of values in data_row can be seen from dump_schema.py.
+def apply_post_formattting(data_row):
+    # Set OS for Zen devices to 1.3T.
+    if data_row[4] == 'Zen U105':
+        data_row[2] = '1.3T'
+        
+    # Rename device '4019A'.
+    if data_row[4] == '4019A':
+        data_row[4] = 'One Touch Fire C'
+    
+    return data_row
 
 
