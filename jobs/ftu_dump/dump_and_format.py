@@ -145,7 +145,7 @@ def map(key, dims, value, context):
         mapred.write_fieldvals_tuple(context, r, schema.final_keys)
     
     except Exception as e:
-        mapred.write_condition_tuple(context, str(e))
+        mapred.write_condition_tuple(context, str(type(e)) + ' ' + str(e))
         return
 
 
