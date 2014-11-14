@@ -100,6 +100,9 @@ operator_subs = [
         'regex': re.compile('^AIS.*$', re.I),
         'repl': 'AIS'
     },{
+        'regex': re.compile('^AKTel.*$', re.I),
+        'repl': 'Robi'
+    },{
         'regex': re.compile('^Alltel.*$', re.I),
         'repl': 'Alltel'
     },{
@@ -108,6 +111,9 @@ operator_subs = [
     },{
         'regex': re.compile('^B-Mobile.*$', re.I),
         'repl': 'B-Mobile'
+    },{
+        'regex': re.compile('^Banglalink.*$', re.I),
+        'repl': 'Banglalink'
     },{
         'regex': re.compile('^Base.*$', re.I),
         'repl': 'Base'
@@ -146,7 +152,7 @@ operator_subs = [
         'repl': 'Cloud9'
     },{
         'regex': re.compile('^Comcel.*$', re.I),
-        'repl': 'Comcel'
+        'repl': 'Claro'
     },{
         'regex': re.compile('^Congstar.*$', re.I),
         'repl': 'Congstar'
@@ -277,6 +283,9 @@ operator_subs = [
         'regex': re.compile('^KTF.*$', re.I),
         'repl': 'KTF'
     },{
+        'regex': re.compile('^Liaoning.*$', re.I),
+        'repl': 'China Mobile'
+    },{
         'regex': re.compile('^Libertis.*$', re.I),
         'repl': 'Libertis'
     },{
@@ -358,6 +367,9 @@ operator_subs = [
         'regex': re.compile('^Reliance.*$', re.I),
         'repl': 'Reliance'
     },{
+        'regex': re.compile('^Robi.*$', re.I),
+        'repl': 'Robi'
+    },{
         'regex': re.compile('^Rogers.*$', re.I),
         'repl': 'Rogers'
     },{
@@ -399,6 +411,9 @@ operator_subs = [
     },{
         'regex': re.compile('^Tango.*$', re.I),
         'repl': 'Tango'
+    },{
+        'regex': re.compile('^TATA Teleservices.*$', re.I),
+        'repl': 'Docomo'
     },{
         'regex': re.compile('^Telcel.*$', re.I),
         'repl': 'Telcel'
@@ -459,6 +474,9 @@ operator_subs = [
     },{
         'regex': re.compile('^Velcom.*$', re.I),
         'repl': 'Velcom'
+    },{
+        'regex': re.compile('^Videocon.*$', re.I),
+        'repl': 'Videocon'
     },{
         'regex': re.compile('^Viettel.*$', re.I),
         'repl': 'Viettel'
