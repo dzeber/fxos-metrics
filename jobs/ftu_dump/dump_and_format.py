@@ -134,6 +134,11 @@ def map(key, dims, value, context):
         if 'network.operator' in r:
             r['network.name'] = ftu.format_operator_string(r['network.operator'])
         
+        # Opportunity for general formatting rules 
+        # based on combinations of values. 
+        # In particular, setting OS to '1.3T' for Tarako devices.
+        r = ftu.apply_general_formatting(r)
+        
         #-----
         
         # Output specific keys.

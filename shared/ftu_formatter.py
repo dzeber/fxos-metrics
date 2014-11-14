@@ -476,13 +476,19 @@ def format_values(clean_values, payload):
 # Ordering of values in data_row can be seen from dump_schema.py.
 def apply_post_formatting(data_row):
     # Set OS for Zen devices to 1.3T.
-    if data_row[4] == 'Zen U105':
-        data_row[2] = '1.3T'
+    # if data_row[4] == 'Zen U105':
+        # data_row[2] = '1.3T'
         
-    # Rename device '4019A'.
-    if data_row[4] == '4019A':
-        data_row[4] = 'One Touch Fire C'
+    # # Rename device '4019A'.
+    # if data_row[4] == '4019A':
+        # data_row[4] = 'One Touch Fire C'
     
     return data_row
 
+# General formatting to be applied during MR job, 
+# that relies on combinations of data values.
+def apply_general_formatting(datum):
+    datum = fmt.format_tarako(datum)
+    datum = fmt.general_formatting(datum)
+    return datum
 

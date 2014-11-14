@@ -11,6 +11,21 @@ def add_suffix(name, suffix):
         return name + ' ' + suffix
     return name
 
+# Special formatting for Tarako devices. 
+def format_tarako(datum):    
+    if datum['product_model'].startswith(
+            ('Intex', 'Spice', 'Ace', 'Zen')):
+        datum['os'] = '1.3T'
+    return datum
+
+
+# General formatting based on entire record.    
+def general_formatting(datum):
+    # OS should be 1.4 for GoFox devices. 
+    if datum['product_model'].startswith('GoFox'):
+        datum['os'] = '1.4'
+    return datum
+
 
 # Date range for ping dates to be considered valid.
 # Keep pings from the past 6 months.
@@ -73,6 +88,14 @@ device_subs = [
         # Tarako - Spice.
         'regex': re.compile('^.*spice(\\s*|_)mifx1.*$', re.I),
         'repl': 'Spice MIFX1'
+    },{
+        # Tarako - Cherry Ace.
+        'regex': re.compile('^ace\\s*f100.*$', re.I),
+        'repl': 'Ace F100'
+    },{
+        # Fire C device in Peru
+        'regex': re.compile('^4019a$', re.I),
+        'repl': 'One Touch Fire C'
     },{
         # Zen U105.
         'regex': re.compile('^.*u105.*$', re.I),
