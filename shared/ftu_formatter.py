@@ -1,10 +1,8 @@
 # Sanitize/deduplicate field values to be counted.
 
-# import re
 import json
 import os.path
 from datetime import datetime, date
-    # , timedelta
 
 import formatting_rules as fmt
 
@@ -14,6 +12,7 @@ import formatting_rules as fmt
 
 # The directory containing the lookup tables. 
 # lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
+# Expects to find lookup tables in same dir. 
 lookup_dir = os.path.dirname(__file__)
 
 # Container for the lookup tables, to be loaded as necessary.
@@ -22,11 +21,7 @@ lookup = {}
 # Loading for whitelists. 
 # Convert each list to convenient format for querying. 
 def load_whitelist():
-    with open(
-        os.path.join(lookup_dir, 
-        'ftu-fields.json'
-        )
-        ) as table_file:
+    with open(os.path.join(lookup_dir, 'ftu-fields.json')) as table_file:
         tables = json.load(table_file)
     # Country table will be straight lookup - use set.
     lookup['countrylist'] = set(tables['country'])
@@ -37,12 +32,7 @@ def load_whitelist():
 
 # Loading for country codes. 
 def load_country_table():
-    with open(
-        os.path.join(lookup_dir, 
-        # '../lookup/countrycodes.json'
-        'countrycodes.json'
-        )
-        ) as table_file:
+    with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
         table = json.load(table_file)
     lookup['countrycodes'] = table
 
@@ -50,18 +40,14 @@ def load_country_table():
 def load_country_names():
     if 'countrycodes' not in lookup:
         load_country_table()
-    country_names = set([ v['name'] for v in lookup['countrycodes'].itervalues() ])
+    country_names = set(
+        [ v['name'] for v in lookup['countrycodes'].itervalues() ])
     lookup['countrynames'] = country_names
 
 
 # Loading for mobile codes. 
 def load_operator_table():
-    with open(
-        os.path.join(lookup_dir, 
-        # '../lookup/mobile-codes.json'
-        'mobile-codes.json'
-        )
-        ) as table_file:
+    with open(os.path.join(lookup_dir, 'mobile-codes.json')) as table_file:
         table = json.load(table_file)
     lookup['mobilecodes'] = table
 
@@ -105,8 +91,6 @@ def get_ping_date(val):
     
     try: 
         # pingTime is millisecond-resolution timestamp.
-        # val = int(val) / 1000
-        # pingdate = date.fromtimestamp(val)
         pingdate = ms_timestamp_to_date(val)
     except Exception:
         raise ValueError('invalid ping time')
@@ -134,30 +118,6 @@ def relevant_date(rdate):
 def format_os_string(val):
     return make_all_subs(unicode(val), fmt.os_subs)
 
-# Parse OS version. 
-# If an invalid condition occurs, throws ValueError with a custom message.
-# If OS value is not recognized, class as "Other".
-def get_os_version(val):    
-    if val is None:
-        raise ValueError('no os version')
-    # os = unicode(val)
-  
-    # Check OS against expected format. 
-    # if matches['valid_os'].match(os) is None:
-        # raise ValueError('invalid os version')
-    
-    # Reformat to be more readable. 
-    os = format_os_string(val)
-    # Apply all patterns. 
-    # for s in formatting_rules.os_subs:
-        # os = s['regex'].sub(s['repl'], os, count = 1)
-        
-    # Check OS against format regex. If not matching, class as 'Other'.
-    if fmt.valid_os.match(os) is None:
-        return 'Other'
-    
-    return os
-
 # Convert formatted OS string to value that can be used in dashboard.
 # Checks format against regex.
 def summarize_os(val):
@@ -167,40 +127,26 @@ def summarize_os(val):
     
     return val
 
+
+# Parse OS version. 
+# If an invalid condition occurs, throws ValueError with a custom message.
+# If OS value is not recognized, class as "Other".
+def get_os_version(val):    
+    if val is None:
+        raise ValueError('no os version')
+    # Reformat to be more readable. 
+    os = format_os_string(val)
+    # Check OS against format regex. If not matching, class as 'Other'.
+    os = summarize_os(os)
+    
+    return os
+
+
 #------------------
     
 # Format device name string based on regexes.
 def format_device_string(val):
     return make_one_sub(unicode(val), fmt.device_subs)
-
-# Format device name. 
-# Only record distinct counts for certain recognized device names.
-# List of recognized devices is expected to be a tuple. 
-def get_device_name(val):
-    if 'devicelist' not in lookup:
-        load_whitelist()
-    
-    if val is None:
-        return 'Unknown'
-    # device = unicode(val)
-    
-    # Make formatting consistent to avoid duplication.
-    # Apply replacement regexes.
-    # for s in formatting_rules.device_subs:
-        # Device name patterns should be mutually exclusive.
-        # If any regex matches, make the replacement and exit loop. 
-        # formatted, n = s['regex'].subn(s['repl'], device, count = 1)
-        # if n > 0:
-            # device = formatted
-            # break
-    # device = make_one_sub(device, fmt.device_subs)
-    device = format_device_string(val)
-    
-    # Don't keep distinct name if does not start with recognized prefix.
-    if not device.startswith(lookup['devicelist']): 
-        return 'Other'
-    
-    return device
 
 # Convert device name to a value to be displayed in dashboard. 
 # Looks up name in table of relevant countries. 
@@ -218,6 +164,21 @@ def summarize_device(val):
         
     return val
 
+
+# Format device name. 
+# Only record distinct counts for certain recognized device names.
+# List of recognized devices is expected to be a tuple. 
+def get_device_name(val):
+    if val is None:
+        return 'Unknown'
+    device = format_device_string(val)
+    # Don't keep distinct name if does not start with recognized prefix.
+    device = summarize_device(device)
+    
+    return device
+
+
+
 #------------------
     
 # Convert country codes to names. 
@@ -229,30 +190,6 @@ def lookup_country_code(val):
     if geo not in lookup['countrycodes']: 
         return None
     return lookup['countrycodes'][geo]['name']
-
-# Look up country name from 2-letter code. 
-# Only record counts for recognized countries. 
-# List of recognized countries is expected to be a set.
-def get_country(val):
-    if 'countrylist' not in lookup:
-        load_whitelist()
-    
-    if val is None:
-        return 'Unknown'
-    # geo = unicode(val)
-    
-    geo = lookup_country_code(val)
-    if geo is None:
-    # Look up country name. 
-    # if geo not in lookup['countrycodes']: 
-        return 'Unknown'
-    
-    # geo = lookup['countrycodes'][geo]['name']
-    # Don't keep distinct name if not in recognized list. 
-    if geo not in lookup['countrylist']: 
-        return 'Other'
-        
-    return geo
 
 # Convert country name to a value to be displayed in dashboard. 
 # Checks that name is a recognized country, 
@@ -277,6 +214,22 @@ def summarize_country(val):
         return 'Other'
         
     return val
+    
+    
+# Look up country name from 2-letter code. 
+# Only record counts for recognized countries. 
+# List of recognized countries is expected to be a set.
+def get_country(val):
+    if val is None:
+        return 'Unknown'
+    geo = lookup_country_code(val)
+    if geo is None:
+        return 'Unknown'
+    geo = summarize_country(geo)
+        
+    return geo
+
+
 
 #------------------
     
@@ -319,22 +272,13 @@ def lookup_mnc(mcc, mnc):
 
 # Look up mobile operator using mobile codes.
 def lookup_operator_from_codes(fields):
-    # if 'mobilecodes' not in lookup:
-        # load_operator_table()
-    
     if 'mcc' not in fields or 'mnc' not in fields:
         # Missing codes. 
         return None
     
     return lookup_mnc(fields['mcc'], fields['mnc'])
-    # if fields['mcc'] not in lookup['mobilecodes']:
-        # # Country code is not recognized in lookup table.
-        # return None
-    
-    # ops = lookup['mobilecodes'][fields['mcc']]['operators']
-    # return ops.get(fields['mnc'])
 
-    
+
 # Look up mobile operator from field in payload.
 def lookup_operator_from_field(fields, key):
     operator = fields.get(key)
@@ -387,38 +331,6 @@ def lookup_operator(icc_fields, network_fields):
 # Format operator name string using regexes.
 def format_operator_string(val):
     return make_one_sub(val, fmt.operator_subs)
-    
-# Format operator name. 
-# Only record counts for recognized operators.
-# List of recognized operators is expected to be a set.
-def get_operator(icc_fields, network_fields):
-    if 'operatorlist' not in lookup:
-        load_whitelist()
-    
-    # Look up operator name either using mobile codes 
-    # or from name listed in the data.
-    operator = lookup_operator(icc_fields, network_fields)
-    if operator is None or len(operator) == 0:
-        return 'Unknown'
-        
-    # Make formatting consistent to avoid duplication.
-    # Apply replacement regexes.
-    # for s in formatting_rules.operator_subs:
-        # Device name patterns should be mutually exclusive.
-        # If any regex matches, make the replacement and exit loop. 
-        # formatted, n = s['regex'].subn(s['repl'], operator, count = 1)
-        # if n > 0:
-            # operator = formatted
-            # break
-    # operator = make_one_sub(operator, fmt.operator_subs)
-    operator = format_operator_string(operator)
-    
-    # Don't keep name if not in recognized list. 
-    if operator not in lookup['operatorlist']: 
-        return 'Other'
-    
-    return operator
-
 
 # Convert operator name to a value to be displayed in dashboard. 
 # Input is list of [icc.network, icc.name, network.network, network.name]. 
@@ -447,26 +359,33 @@ def summarize_operator(icc_network, icc_name, network_network, network_name):
     return operator
 
 
+# Format operator name. 
+# Only record counts for recognized operators.
+# List of recognized operators is expected to be a set.
+def get_operator(icc_fields, network_fields):
+    if 'operatorlist' not in lookup:
+        load_whitelist()
+    
+    # Look up operator name either using mobile codes 
+    # or from name listed in the data.
+    operator = lookup_operator(icc_fields, network_fields)
+    if operator is None or len(operator) == 0:
+        return 'Unknown'
+    operator = format_operator_string(operator)
+    # Don't keep name if not in recognized list. 
+    if operator not in lookup['operatorlist']: 
+        return 'Other'
+    
+    return operator
+
+
 #--------------------
 
 # Additional formatting to cover special cases. 
+
 # Replacement rules draw on combination of sanitized values 
 # and other raw payload values. 
 def format_values(clean_values, payload):
-    # Discard v1.5.
-    # if clean_values['os'].startswith(('1.0', '1.5', '2.2')):
-        # raise ValueError('Ignoring OS version')
-    #
-    # Tarako/India.
-    # OS should either be standard or else one of the Tarako strings.
-    # if clean_values['os'].lower().startswith(('ind_', 'intex_')):
-        # If the Tarako devices are from India, record. 
-        # if clean_values['country'] == 'India':
-        # clean_values['os'] = '1.3T'
-        # else: 
-        # Discard.
-            # raise ValueError('Ignoring non-India Tarako')
-    #
     return clean_values
 
 
@@ -475,15 +394,8 @@ def format_values(clean_values, payload):
 # Input is a data record as outputted from AWS job. 
 # Ordering of values in data_row can be seen from dump_schema.py.
 def apply_post_formatting(data_row):
-    # Set OS for Zen devices to 1.3T.
-    # if data_row[4] == 'Zen U105':
-        # data_row[2] = '1.3T'
-        
-    # # Rename device '4019A'.
-    # if data_row[4] == '4019A':
-        # data_row[4] = 'One Touch Fire C'
-    
     return data_row
+
 
 # General formatting to be applied during MR job, 
 # that relies on combinations of data values.
