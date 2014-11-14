@@ -19,15 +19,27 @@ job_output = sys.argv[1]
 dashboard_csv = sys.argv[2]
 dump_csv = sys.argv[3]
 
+
 # Each datum will now be a tuple whose order is determined by 
 # schema.final_keys, rather than a dict.
 # Create a mapping of field names to indices for clear reference. 
 field_index = dict(
     zip(schema.final_keys, range(0, len(schema.final_keys) - 1)))
 
+
+# Cutoff dates for inclusion in datasets.
+# No later than yesterday. 
+latest_date = (date.today() - timedelta(days = 1)).isoformat()
+# No earlier than 180 days ago. 
+earliest_date = (date.today() - timedelta(days = 180)).isoformat()
+# Cutoff date for inclusion in dump csv is 3 months before today.
+earliest_for_dump = (date.today() - timedelta(days = 90)).isoformat()
+
+
 # Encode explicitly to try to avoid errors.
 def encode_for_csv(val):
     return unicode(val).encode('utf-8', 'replace')
+
 
 # Convert raw row to datum for inclusion in dashboard dataset. 
 # Accumulate counts.
@@ -36,13 +48,17 @@ def accumulate_dashboard_row(dataset, raw_row):
     # Extract relevant fields, and check them against lookup tables.
     # See dump_schema.py for list indices.
     # Add date first. 
-    new_row.append(raw_row[field_index['submissionDate']])      
+    new_row.append(raw_row[field_index['submissionDate']])
+    # OS
     new_row.append(encode_for_csv(
         ftu.summarize_os(raw_row[field_index['os']])))
+    # Country name.
     new_row.append(encode_for_csv(
         ftu.summarize_country(raw_row[field_index['country']])))
+    # Device name.
     new_row.append(encode_for_csv(
         ftu.summarize_device(raw_row[field_index['product_model']])))
+    # Operator name. 
     new_row.append(encode_for_csv(
         ftu.summarize_operator(
             raw_row[field_index['icc.network']], 
@@ -65,8 +81,8 @@ def accumulate_dashboard_row(dataset, raw_row):
 data = mapred.parse_output_tuple(job_output)
 
 # Cutoff date for inclusion in dump csv is 3 months before today.
-dump_cutoff_date = date.today() - timedelta(days = 90)
-dump_cutoff_date = dump_cutoff_date.isoformat()
+# dump_cutoff_date = date.today() - timedelta(days = 90)
+# dump_cutoff_date = dump_cutoff_date.isoformat()
 
 # Accumulate subsets of data to be converted to CSV.
 # Dump rows will be stored as a list of row lists. 
@@ -76,13 +92,18 @@ dash_rows = {}
 
 for r in data['records']:
     record_date = r[field_index['submissionDate']]
+    if record_date == '':
+        continue
+    if record_date > latest_date or record_date < earliest_date:
+        continue
     
-    if ftu.relevant_date(record_date):
-        # Apply formatting to be done outside MR job. 
-        r = ftu.apply_post_formatting(r)
-        accumulate_dashboard_row(dash_rows, r)
-
-    if record_date >= dump_cutoff_date:
+    # Apply formatting to be done outside MR job. 
+    r = ftu.apply_post_formatting(r)
+    
+    # Add to dashboard data. 
+    accumulate_dashboard_row(dash_rows, r)
+    # Add to dump CSV if required. 
+    if record_date >= earliest_for_dump:
         dump_rows.append(r)
 
 

@@ -29,11 +29,11 @@ def general_formatting(datum):
 
 # Date range for ping dates to be considered valid.
 # Keep pings from the past 6 months.
-valid_dates = {
-    'earliest': (date.today() - timedelta(days = 180)).isoformat(),
-    # Latest: yesterday.
-    'latest': (date.today() - timedelta(days = 1)).isoformat()
-}
+# valid_dates = {
+    # 'earliest': (date.today() - timedelta(days = 180)).isoformat(),
+    # # Latest: yesterday.
+    # 'latest': (date.today() - timedelta(days = 1)).isoformat()
+# }
 
 # Form of valid OS string. 
 # 1.3, 1.4, or else 2.x.

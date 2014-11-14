@@ -115,12 +115,12 @@ def get_ping_date(val):
 
 # Determine whether or not to keep an FTU record based on its date.
 
-def relevant_date(rdate):
-    if date == '':
-        return False
+# def relevant_date(rdate):
+    # if date == '':
+        # return False    
     
-    return (rdate >= fmt.valid_dates['earliest'] and
-        rdate <= fmt.valid_dates['latest'])
+    # return (rdate >= fmt.valid_dates['earliest'] and
+        # rdate <= fmt.valid_dates['latest'])
 
 
 #------------------
