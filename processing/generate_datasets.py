@@ -19,6 +19,11 @@ job_output = sys.argv[1]
 dashboard_csv = sys.argv[2]
 dump_csv = sys.argv[3]
 
+# Each datum will now be a tuple whose order is determined by 
+# schema.final_keys, rather than a dict.
+# Create a mapping of field names to indices for clear reference. 
+field_index = dict(
+    zip(schema.final_keys, range(0, len(schema.final_keys) - 1)))
 
 # Encode explicitly to try to avoid errors.
 def encode_for_csv(val):
@@ -31,18 +36,22 @@ def accumulate_dashboard_row(dataset, raw_row):
     # Extract relevant fields, and check them against lookup tables.
     # See dump_schema.py for list indices.
     # Add date first. 
-    new_row.append(raw_row[1])      
+    new_row.append(raw_row[field_index['submissionDate']])      
     new_row.append(encode_for_csv(
-        ftu.summarize_os(raw_row[2])))
+        ftu.summarize_os(raw_row[field_index['os']])))
     new_row.append(encode_for_csv(
-        ftu.summarize_country(raw_row[3])))
+        ftu.summarize_country(raw_row[field_index['country']])))
     new_row.append(encode_for_csv(
-        ftu.summarize_device(raw_row[4])))
+        ftu.summarize_device(raw_row[field_index['product_model']])))
     new_row.append(encode_for_csv(
-        ftu.summarize_operator(raw_row[13], raw_row[14], raw_row[18], raw_row[19])))
+        ftu.summarize_operator(
+            raw_row[field_index['icc.network']], 
+            raw_row[field_index['icc.name']], 
+            raw_row[field_index['network.network']], 
+            raw_row[field_index['network.name']])))
     
     new_row = tuple(new_row)
-    count = raw_row[- 1]
+    count = raw_row[-1]
     
     if new_row not in dataset:
         dataset[new_row] = count
@@ -66,16 +75,16 @@ dump_rows = []
 dash_rows = {}
 
 for r in data['records']:
-    # Apply extra formatting - 
-    # can be used to test new formatting rules 
-    # without touching AWS job.
-    r = ftu.apply_post_formatting(r)
-
-    if r[1] >= dump_cutoff_date:
-        dump_rows.append(r)
+    record_date = r[field_index['submissionDate']]
     
-    if ftu.relevant_date(r[1]):
+    if ftu.relevant_date(record_date):
+        # Apply formatting to be done outside MR job. 
+        r = ftu.apply_post_formatting(r)
         accumulate_dashboard_row(dash_rows, r)
+
+    if record_date >= dump_cutoff_date:
+        dump_rows.append(r)
+
 
 # Write to output files.
 headers = schema.dashboard_csv_headers

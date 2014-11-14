@@ -79,6 +79,17 @@ def ms_timestamp_to_date(val):
     return datetime.utcfromtimestamp(val).date()
 
     
+# Remove any leading zeros, unless string is all zeros.
+def remove_leading_zeros(val):
+    val = unicode(val).strip()
+    if len(val) == 0:
+        return ''
+    val = val.lstrip('0')
+    if len(val) == 0:
+        return '0'
+    return val
+
+    
 #--------------------
 
 # Processing for each individual field. 
@@ -114,6 +125,8 @@ def relevant_date(rdate):
 
 #------------------
     
+# OS version
+    
 # Format OS string using regexes.
 def format_os_string(val):
     return make_all_subs(unicode(val), fmt.os_subs)
@@ -143,6 +156,8 @@ def get_os_version(val):
 
 
 #------------------
+
+# Device name
     
 # Format device name string based on regexes.
 def format_device_string(val):
@@ -180,6 +195,8 @@ def get_device_name(val):
 
 
 #------------------
+
+# Country name
     
 # Convert country codes to names. 
 def lookup_country_code(val):
@@ -230,18 +247,16 @@ def get_country(val):
     return geo
 
 
+#------------------
+
+# Linguistic locale
+
+
+
 
 #------------------
-    
-# Remove any leading zeros, unless string is all zeros.
-def remove_leading_zeros(val):
-    val = unicode(val).strip()
-    if len(val) == 0:
-        return ''
-    val = val.lstrip('0')
-    if len(val) == 0:
-        return '0'
-    return val
+
+# Operator name
 
 # Look up mobile country code.
 # Returns the country associated with the code, 

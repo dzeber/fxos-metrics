@@ -49,12 +49,14 @@ def write_condition(context, condition):
 #-------------------------------------  
 
 # Tuple-based output for dicts.
-# Dicts are converted to tuples according to the ordering specified by a schema.
+# Dicts are converted to tuples according to the ordering 
+# specified by a schema.
 # The schema is an ordered list of dict keys.
 # The first element of tuple-based output will be reserved 
 # as an identifier for the type of record being outputted.
 
-# Write a dict of field names mapping to values as a key
+
+# Writes a dict of field names mapping to values as a key
 # mapping to 1, in order to count occurrences. 
 # Key is of the form ('datum', ...).
 # Values that get written and their order in the tuple is determined by 
