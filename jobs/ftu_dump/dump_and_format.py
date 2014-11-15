@@ -90,16 +90,25 @@ def map(key, dims, value, context):
             if 'update_channel' in r:
                 # Both values are present.
                 if r['app.update.channel'] != r['update_channel']:
-                    # Note the disparity and keep both.
-                    mapred.write_condition_tuple(context, 'multiple channel')
-                else:
-                    # Keep the common value as 'update_channel'.
-                    del r['app.update.channel']    
+                    # Note the disparity.
+                    mapred.write_condition_tuple(context, 
+                        'multiple channels: ' + 
+                        'update_channel = ' + r['update_channel'] +
+                        ', app.update.channel = ' + r['app.update.channel'])
+                # else:
+                # del r['app.update.channel']    
             else:
                 # Only 'app.update.channel' is present.
                 # Save the value as 'update_channel'.
                 r['update_channel'] = r['app.update.channel']
-                del r['app.update.channel']
+            # Keep 'update_channel'.
+            del r['app.update.channel']
+        
+        # Add simplified form of update channel - 
+        # more useful for separating them.
+        if 'update_channel' in r:
+            r['update_channel_standardized'] = ftu.get_standard_channel(
+                r['update_channel'])
         
         # Apply substitutions:
         if 'os' in r:
@@ -113,6 +122,11 @@ def map(key, dims, value, context):
             # If lookup fails, keep original geo code.
             if country_name is not None:
                 r['country'] = country_name
+                
+        # Convert locale code to language name.
+        # Keep original locale code for reference.
+        # if 'locale' in r:
+        
         
         # Keep original network codes, but try looking them up.
         for prefix in 'icc','network':

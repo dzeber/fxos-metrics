@@ -75,6 +75,21 @@ def accumulate_dashboard_row(dataset, raw_row):
         dataset[new_row] = dataset[new_row] + count
 
 
+# Apply additional formatting to data records. 
+# This will mainly be value substitutions based on lookup tables,
+# and other 1-to-1 changes. 
+# def format_values(data_row):
+    # # Look up country code. 
+    # if data_row[field_index['country']] != '':
+        # country_name = ftu.lookup_country_code(r['country'])
+        # # If lookup fails, keep original geo code.
+        # if country_name is not None:
+            # data_row[field_index['country']] = country_name
+    
+    # return data_row
+
+
+
 #-----------------------------
 
 # Parse in output file.
@@ -98,7 +113,7 @@ for r in data['records']:
         continue
     
     # Apply formatting to be done outside MR job. 
-    r = ftu.apply_post_formatting(r)
+    # r = ftu.apply_post_formatting(r)
     
     # Add to dashboard data. 
     accumulate_dashboard_row(dash_rows, r)
