@@ -122,6 +122,18 @@ def get_ping_date(val):
     # return (rdate >= fmt.valid_dates['earliest'] and
         # rdate <= fmt.valid_dates['latest'])
 
+#------------------
+
+# Update channel
+
+# Map custom channel strings to one of the standard channels.
+def get_standardized_channel(val):
+    std = fmt.standard_channels.search(unicode(val))
+    if std is None:
+        return 'other'
+    return std.group()
+
+
 
 #------------------
     
@@ -408,8 +420,8 @@ def format_values(clean_values, payload):
 # while generating tables from raw data.
 # Input is a data record as outputted from AWS job. 
 # Ordering of values in data_row can be seen from dump_schema.py.
-def apply_post_formatting(data_row):
-    return data_row
+# def apply_post_formatting(data_row):
+    # return data_row
 
 
 # General formatting to be applied during MR job, 

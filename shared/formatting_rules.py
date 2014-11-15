@@ -39,6 +39,9 @@ def general_formatting(datum):
 # 1.3, 1.4, or else 2.x.
 valid_os = re.compile('^(1\.[34]|2\.[0-9])(T|\s\(pre-release\))?$')
 
+# Standard channels to search for in channel string.
+standard_channels = re.compile('release|beta|aurora|nightly|default')
+
 
 # Regexes for substitutions.
 os_subs = [

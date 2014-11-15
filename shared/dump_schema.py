@@ -16,7 +16,8 @@ final_keys = [
     # 5 
     'locale',
     'update_channel', 
-    'app.update.channel',
+    # 'app.update.channel',
+    'update_channel_standardized',
     'platform_version', 
     'platform_build_id',
     # 10
@@ -51,7 +52,8 @@ dump_csv_headers = [
     # 5
     'locale',
     'update_channel', 
-    'update_channel_other',
+    # 'update_channel_other',
+    'update_channel_standardized',
     'platform_version', 
     'platform_build_id',
     # 10
