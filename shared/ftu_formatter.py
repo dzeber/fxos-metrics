@@ -139,10 +139,6 @@ def get_standard_channel(val):
 
 # def lookup_language(val):
     # loc = unicode(val).strip()
-    
-
-=======
->>>>>>> ab261db53bd37ac3c62018ea5fd7fbb26920b515
 
 
 #------------------
