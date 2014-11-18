@@ -41,7 +41,8 @@ def map(key, dims, value, context):
         # Rearrange.
         
         # Keep only geo code from info.
-        r['country'] = r['info']['geoCountry']
+        if 'geoCountry' in r['info']:
+            r['country'] = r['info']['geoCountry']
         del r['info']
         
         # Strip deviceinfo prefix when it occurs. 
