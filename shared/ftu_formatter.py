@@ -44,6 +44,11 @@ def load_country_names():
         [ v['name'] for v in lookup['countrycodes'].itervalues() ])
     lookup['countrynames'] = country_names
 
+# Loading for locale codes. 
+def load_language_table():
+    with open(os.path.join(lookup_dir, 'language-codes.json')) as table_file:
+        table = json.load(table_file)
+    lookup['langcodes'] = table
 
 # Loading for mobile codes. 
 def load_operator_table():
@@ -269,7 +274,15 @@ def get_country(val):
 
 # Linguistic locale
 
-
+def lookup_language(val):
+    if 'langcodes' not in lookup:
+        load_language_table()
+    
+    loc = unicode(val).strip()
+    loc = fmt.locale_base_code['regex'].sub(
+        fmt.locale_base_code['repl'], loc)
+    
+    return lookup['langcodes'].get(loc)
 
 
 #------------------

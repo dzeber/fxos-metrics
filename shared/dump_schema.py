@@ -15,30 +15,31 @@ final_keys = [
     'product_model',
     # 5 
     'locale',
+    'language',
     'update_channel', 
     # 'app.update.channel',
     'update_channel_standardized',
     'platform_version', 
-    'platform_build_id',
     # 10
+    'platform_build_id',
     'icc.mcc', 
     'icc.mnc',
     'icc.country', 
     'icc.network', 
-    'icc.name',
     # 15
+    'icc.name',
     'network.mcc', 
     'network.mnc',
     'network.country', 
     'network.network', 
-    'network.name',
     # 20
+    'network.name',
     'screenWidth', 
     'screenHeight', 
     'devicePixelRatio',
     'software', 
-    'hardware', 
     # 25
+    'hardware', 
     'firmware_revision', 
     'activationDate'
 ]
@@ -51,30 +52,31 @@ dump_csv_headers = [
     'device',
     # 5
     'locale',
+    'language',
     'update_channel', 
     # 'update_channel_other',
     'update_channel_standardized',
     'platform_version', 
-    'platform_build_id',
     # 10
+    'platform_build_id',
     'sim_mcc', 
     'sim_mnc',
     'sim_mcc_country', 
     'sim_mnc_network', 
-    'sim_network_name',
     # 15
+    'sim_network_name',
     'network_mcc', 
     'network_mnc',
     'network_mcc_country', 
     'network_mnc_network', 
-    'network_network_name',
     # 20
+    'network_network_name',
     'screen_width', 
     'screen_height', 
     'device_pixel_ratio',
     'software', 
-    'hardware', 
     # 25
+    'hardware', 
     'firmware_revision', 
     'activation_date',
     'count'
@@ -83,7 +85,8 @@ dump_csv_headers = [
 dashboard_csv_headers = [
     'date', 
     'os', 
-    'country', 
+    'country',
+    # 'language',
     'device', 
     'operator', 
     'activations'

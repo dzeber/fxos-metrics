@@ -11,6 +11,11 @@ def add_suffix(name, suffix):
         return name + ' ' + suffix
     return name
 
+    
+#------------------
+
+# Formatting functions. 
+
 # Special formatting for Tarako devices. 
 def format_tarako(datum):    
     if datum['product_model'].startswith(
@@ -35,12 +40,25 @@ def general_formatting(datum):
     # 'latest': (date.today() - timedelta(days = 1)).isoformat()
 # }
 
+
+#------------------
+
+# Regexes.
+
+
 # Form of valid OS string. 
 # 1.3, 1.4, or else 2.x.
 valid_os = re.compile('^(1\.[34]|2\.[0-9])(T|\s\(pre-release\))?$')
 
 # Standard channels to search for in channel string.
 standard_channels = re.compile('release|beta|aurora|nightly|default')
+
+# Strip country identifier from locale code. 
+locale_base_code = { 
+    'regex': re.compile('-.+$')
+    'repl': ''
+}
+
 
 
 # Regexes for substitutions.

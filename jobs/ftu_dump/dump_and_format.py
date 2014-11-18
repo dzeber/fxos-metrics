@@ -126,7 +126,8 @@ def map(key, dims, value, context):
                 
         # Convert locale code to language name.
         # Keep original locale code for reference.
-        # if 'locale' in r:
+        if 'locale' in r:
+            r['language'] = ftu.lookup_language(r['locale'])
         
         
         # Keep original network codes, but try looking them up.
