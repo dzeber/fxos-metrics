@@ -55,7 +55,7 @@ standard_channels = re.compile('release|beta|aurora|nightly|default')
 
 # Strip country identifier from locale code. 
 locale_base_code = { 
-    'regex': re.compile('-.+$')
+    'regex': re.compile('-.+$'),
     'repl': ''
 }
 
