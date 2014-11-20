@@ -331,7 +331,7 @@ def lookup_operator_from_field(fields, key):
     if operator is None:
         return None
         
-    operator = str(operator).strip()
+    operator = unicode(operator).strip()
     if len(operator) == 0:
         return None
     

@@ -38,8 +38,11 @@ earliest_for_dump = (date.today() - timedelta(days = 90)).isoformat()
 
 # Encode explicitly to try to avoid errors.
 def encode_for_csv(val):
-    return unicode(val).encode('utf-8', 'replace')
+    return unicode(val).encode('utf-8', 'backslashreplace')
 
+# Write CSV rows encoded as UTF-8.
+def write_unicode_row(writer, row):
+    writer.writerow([encode_for_csv(v) for v in row])
 
 # Convert raw row to datum for inclusion in dashboard dataset. 
 # Accumulate counts.
@@ -50,21 +53,33 @@ def accumulate_dashboard_row(dataset, raw_row):
     # Add date first. 
     new_row.append(raw_row[field_index['submissionDate']])
     # OS
-    new_row.append(encode_for_csv(
-        ftu.summarize_os(raw_row[field_index['os']])))
+    new_row.append(
+        # encode_for_csv(
+        ftu.summarize_os(raw_row[field_index['os']])
+        # )
+        )
     # Country name.
-    new_row.append(encode_for_csv(
-        ftu.summarize_country(raw_row[field_index['country']])))
+    new_row.append(
+        # encode_for_csv(
+        ftu.summarize_country(raw_row[field_index['country']])
+        # )
+        )
     # Device name.
-    new_row.append(encode_for_csv(
-        ftu.summarize_device(raw_row[field_index['product_model']])))
+    new_row.append(
+        # encode_for_csv(
+        ftu.summarize_device(raw_row[field_index['product_model']])
+        # )
+        )
     # Operator name. 
-    new_row.append(encode_for_csv(
+    new_row.append(
+        # encode_for_csv(
         ftu.summarize_operator(
             raw_row[field_index['icc.network']], 
             raw_row[field_index['icc.name']], 
             raw_row[field_index['network.network']], 
-            raw_row[field_index['network.name']])))
+            raw_row[field_index['network.name']])
+        # )
+        )
     
     new_row = tuple(new_row)
     count = raw_row[-1]
@@ -130,16 +145,17 @@ with open(dashboard_csv, 'w') as outfile:
     for r in dash_rows:
         next_row = list(r)
         next_row.append(dash_rows[r])
-        writer.writerow(next_row)
-        
+        write_unicode_row(writer, next_row)
+
 print('Wrote dashboard CSV: %s rows\n' % len(dash_rows))
 
 headers = schema.dump_csv_headers
 with open(dump_csv, 'w') as outfile:
     writer = csv.writer(outfile)
     writer.writerow(headers)
-    writer.writerows(dump_rows)
-    
+    for r in dump_rows:
+        write_unicode_row(writer, r)
+
 print('Wrote dump CSV: %s rows\n' % len(dump_rows))
 
 # Output counters and diagnostics.
