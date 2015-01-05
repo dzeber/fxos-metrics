@@ -121,6 +121,10 @@ device_subs = [
         # Zen U105.
         'regex': re.compile('^.*u105.*$', re.I),
         'repl': 'Zen U105'
+    },{
+        # Fx0.
+        'regex': re.compile('^lgl25.*$', re.I),
+        'repl': 'Fx0'
     }
     # ,{
         # # GoFox.
