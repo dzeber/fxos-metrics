@@ -137,6 +137,10 @@ ssh $APP1 ". .bash_profile; \
     rm new_data.tar.gz"
 rm new_data.tar.gz
 
+echo "Pushing to s3."
+aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
+aws --profile metricsprogram s3 cp $DUMP_CSV_PATH "$S3_DASHBOARD/$DUMP_CSV"
+
 echo "Done: `date`."
 exit 0
 
