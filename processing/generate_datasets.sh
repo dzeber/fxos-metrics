@@ -140,6 +140,7 @@ rm new_data.tar.gz
 echo "Pushing to s3."
 aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
 aws --profile metricsprogram s3 cp $DUMP_CSV_PATH "$S3_DASHBOARD/$DUMP_CSV"
+aws --profile metricsprogram s3 cp $LAST_UPDATED_PATH "$S3_DASHBOARD/$UPDATED_TIME_FILE"
 
 echo "Done: `date`."
 exit 0
