@@ -125,6 +125,18 @@ device_subs = [
         # Fx0.
         'regex': re.compile('^lgl25.*$', re.I),
         'repl': 'Fx0'
+    },{
+        # Pixi 3.
+        'regex': re.compile('^.*pixi\\s*3(\\s+\\(?|\\()3\\.5\\)?.*$', re.I),
+        'repl': 'Pixi 3 (3.5)'
+    },{
+        # Orange Klif.
+        'regex': re.compile('^.*klif.*$', re.I),
+        'repl': 'Orange Klif'
+    },{
+        # Panasonic TV.
+        'regex': re.compile('^ptv-.*$', re.I),
+        'repl': 'Panasonic TV'
     }
     # ,{
         # # GoFox.
