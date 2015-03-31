@@ -11,14 +11,14 @@ mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
 
 # Create directory structure. 
-cp $BASE_DIR/jobs/ftu_dump/dump_and_format.py .
+cp $BASE_DIR/jobs/dump_and_format.py .
 cp $BASE_DIR/shared/ftu_formatter.py .
 cp $BASE_DIR/shared/mapred.py .
 cp $BASE_DIR/shared/formatting_rules.py .
 cp $BASE_DIR/shared/dump_schema.py .
 cp $BASE_DIR/lookup/* .
 cp $BASE_DIR/filters/all_fxos_date.json .
-cp $BASE_DIR/jobs/ftu_dump/dump_records.sh .
+cp $BASE_DIR/jobs/dump_records.sh .
 cp $BASE_DIR/settings.env .
 # Permissions. 
 chmod -R 755 dump_records.sh
