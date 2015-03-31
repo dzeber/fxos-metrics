@@ -18,7 +18,7 @@ cp $BASE_DIR/shared/formatting_rules.py .
 cp $BASE_DIR/shared/dump_schema.py .
 cp $BASE_DIR/lookup/* .
 cp $BASE_DIR/filters/all_fxos_date.json .
-cp $BASE_DIR/jobs/dump_records.sh .
+cp $BASE_DIR/dump_records.sh .
 cp $BASE_DIR/settings.env .
 # Permissions. 
 chmod -R 755 dump_records.sh

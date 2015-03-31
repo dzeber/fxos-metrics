@@ -11,7 +11,7 @@ mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
 
 # Create directory structure. 
-cp $BASE_DIR/processing/generate_datasets.sh .
+cp $BASE_DIR/generate_datasets.sh .
 cp $BASE_DIR/settings.env .
 cp $BASE_DIR/processing/generate_datasets.py .
 cp $BASE_DIR/shared/mapred.py .
