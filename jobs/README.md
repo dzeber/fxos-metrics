@@ -2,7 +2,7 @@ Job scripts to run using telemetry-server. Python files contain the map and redu
 
 * **dump_all.py** 
     Dump all records matching the filter
-* **dump_and_format.py** 
+* **dump_format_ftu.py** 
     Extract necessary information from each FTU record as a dict of cleansed 
     values. Reducer counts occurrences of records with identical summaries.
 * **count_records.py**

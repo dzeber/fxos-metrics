@@ -11,9 +11,9 @@ mkdir -p $PACKAGE_DIR
 cd $PACKAGE_DIR
 
 # Create directory structure. 
-cp $BASE_DIR/generate_datasets.sh .
+cp $BASE_DIR/update_ftu_dashboard_data.sh .
 cp $BASE_DIR/settings.env .
-cp $BASE_DIR/processing/generate_datasets.py .
+cp $BASE_DIR/processing/ftu_dashboard_datasets.py .
 cp $BASE_DIR/shared/mapred.py .
 cp $BASE_DIR/shared/ftu_formatter.py .
 cp $BASE_DIR/shared/dump_schema.py .
@@ -21,7 +21,7 @@ cp $BASE_DIR/shared/formatting_rules.py .
 cp $BASE_DIR/lookup/* .
 
 # Permissions. 
-chmod -R 755 generate_datasets.sh
+chmod -R 755 update_ftu_dashboard_data.sh 
 
 # Package. 
 cd ..
