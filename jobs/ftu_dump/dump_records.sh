@@ -39,9 +39,8 @@ fi
 JOB_FILE=$THIS_DIR/dump_and_format.py
 FILTER=$THIS_DIR/filter.json
 
-# Set up dates to capture a three-week window leading up to today.
-# START_DATE=`date +%Y%m%d -d "-3 months"`
-START_DATE=20140401
+START_DATE=`date +%Y%m%d -d "-9 months"`
+# START_DATE=20140401
 DATE_STRING="\"min\": \""$START_DATE"\""
 sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
 
