@@ -121,25 +121,25 @@ fi
 # Copy new data to web server.
 echo "Copying data files to web server."
 # Append underscore to existing data files names on server. 
-UNDERSCORE_CMD="ssh \$APP1 \". .bash_profile; cd \\\$FTU/data; rm -f *_;"
-UNDERSCORE_CMD="$UNDERSCORE_CMD mv $CSV_FILE ${CSV_FILE}_;" 
-UNDERSCORE_CMD="$UNDERSCORE_CMD mv $DUMP_CSV ${DUMP_CSV}_"
-UNDERSCORE_CMD="$UNDERSCORE_CMD\""
-eval $UNDERSCORE_CMD
+# UNDERSCORE_CMD="ssh \$APP1 \". .bash_profile; cd \\\$FTU/data; rm -f *_;"
+# UNDERSCORE_CMD="$UNDERSCORE_CMD mv $CSV_FILE ${CSV_FILE}_;" 
+# UNDERSCORE_CMD="$UNDERSCORE_CMD mv $DUMP_CSV ${DUMP_CSV}_"
+# UNDERSCORE_CMD="$UNDERSCORE_CMD\""
+# eval $UNDERSCORE_CMD
 
-cd $DATA_DIR
-tar czf $WORK_DIR/new_data.tar.gz $CSV_FILE $DUMP_CSV $UPDATED_TIME_FILE
-cd $WORK_DIR
-scp new_data.tar.gz "$APP1:\$HOME"
-ssh $APP1 ". .bash_profile; \
-    tar xzf new_data.tar.gz -C \$FTU/data; \
-    chmod o+r \$FTU/data/*; \
-    rm new_data.tar.gz"
-rm new_data.tar.gz
+# cd $DATA_DIR
+# tar czf $WORK_DIR/new_data.tar.gz $CSV_FILE $DUMP_CSV $UPDATED_TIME_FILE
+# cd $WORK_DIR
+# scp new_data.tar.gz "$APP1:\$HOME"
+# ssh $APP1 ". .bash_profile; \
+    # tar xzf new_data.tar.gz -C \$FTU/data; \
+    # chmod o+r \$FTU/data/*; \
+    # rm new_data.tar.gz"
+# rm new_data.tar.gz
 
 echo "Pushing to s3."
 aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
-aws --profile metricsprogram s3 cp $DUMP_CSV_PATH "$S3_DASHBOARD/$DUMP_CSV"
+# aws --profile metricsprogram s3 cp $DUMP_CSV_PATH "$S3_DASHBOARD/$DUMP_CSV"
 aws --profile metricsprogram s3 cp $LAST_UPDATED_PATH "$S3_DASHBOARD/$UPDATED_TIME_FILE"
 
 echo "Done: `date`."
