@@ -120,6 +120,8 @@ fi
         
 # Copy new data to web server.
 echo "Copying data files to web server."
+scp $DUMP_CSV_PATH "$WWW:$(ssh $WWW ". .bash_profile; echo \$FTU_DUMP")"
+ssh $WWW ". .bash_profile; chmod 644 \"\$FTU_DUMP/$DUMP_CSV\""
 # Append underscore to existing data files names on server. 
 # UNDERSCORE_CMD="ssh \$APP1 \". .bash_profile; cd \\\$FTU/data; rm -f *_;"
 # UNDERSCORE_CMD="$UNDERSCORE_CMD mv $CSV_FILE ${CSV_FILE}_;" 
