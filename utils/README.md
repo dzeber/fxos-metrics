@@ -1,7 +1,7 @@
 Common functions used in both AWS jobs and postprocessing scripts. 
-
 The main component of these is formatting functions for sanitizing the raw 
 data values. 
+
 
 lookup
 ------
