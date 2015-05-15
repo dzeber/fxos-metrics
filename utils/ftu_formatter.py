@@ -11,9 +11,7 @@ import formatting_rules as fmt
 # Lookup table handling.
 
 # The directory containing the lookup tables. 
-# lookup_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "lookup")
-# Expects to find lookup tables in same dir. 
-lookup_dir = os.path.dirname(__file__)
+lookup_dir = os.path.join(os.path.dirname(__file__), 'lookup')
 
 # Container for the lookup tables, to be loaded as necessary.
 lookup = {}

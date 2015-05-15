@@ -5,9 +5,9 @@
 import json
 from datetime import datetime
 
-import ftu_formatter as formatter
-import mapred
-# import dump_schema as schema
+import utils.ftu_formatter as formatter
+import utils.mapred as mapred
+# import utils.dump_schema as schema
 
 # Simple sanity check. 
 # Payloads should have a field called 'info' with preset 'reason' and 'appName'.
