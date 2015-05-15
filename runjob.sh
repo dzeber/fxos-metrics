@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Pass as arguments jobscript filename (relative to jobs dir), 
+# Pass as arguments jobscript filename (relative to awsjobs dir), 
 # output filename, 
 # and optionally filter filename relative to filter dir
 # (default is no filter). 
@@ -20,7 +20,7 @@ FILTER_TEMPLATE="all_fxos_date.json"
 
 if [ $# -lt 2 ]; then
     echo "Usage: `basename $0` <opts> jobscript_name output_filename"
-    echo "  (jobscript_name is relative to fxos-metrics/jobs dir)"
+    echo "  (jobscript_name is relative to fxos-metrics/awsjobs dir)"
     echo "    --filter <filename> : use custom filter file in filters dir"
     echo "    --local : use local data, if any"
     echo "    --since <yyyy-mm-dd> : earliest date to include"
@@ -79,17 +79,12 @@ else
     # End date will either be specified as an arg, or unset.
 fi
 
-# if [ "$1" == "-l" -o "$1" == "--local" ]; then
-    # LOCAL="--local-only"
-    # shift
-# fi
-
-BASE=$(pwd)
-THIS_DIR=$(cd "`dirname "$0"`"; pwd)
+CURRENT_DIR=$(pwd)
+SRC_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
-FILTER_TEMPLATE=$THIS_DIR/filters/$FILTER_TEMPLATE
+FILTER_TEMPLATE=$SRC_DIR/awsjobs/filters/$FILTER_TEMPLATE
 
-WORK_DIR=$BASE/work
+WORK_DIR=$CURRENT_DIR/work
 DATA_CACHE=$WORK_DIR/cache
 
 if [ ! -d "$WORK_DIR" ]; then
@@ -100,9 +95,9 @@ if [ ! -d "$DATA_CACHE" ]; then
     mkdir "$DATA_CACHE"
 fi
 
-JOB_FILE=$THIS_DIR/jobs/$1
-OUTPUT_FILE=$BASE/$2
-FILTER=$THIS_DIR/filters/${FILTER_FILE:-_date_filter.json}  
+JOB_FILE=$SRC_DIR/awsjobs/$1
+OUTPUT_FILE=$CURRENT_DIR/$2
+FILTER=$SRC_DIR/awsjobs/filters/${FILTER_FILE:-_date_filter.json}  
 
 # If filter file was not specified, set up filter with date range.
 if [ -z "$FILTER_FILE" ]; then

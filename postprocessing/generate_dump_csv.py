@@ -7,10 +7,10 @@ import sys
 import csv
 
 # Hack to be able to import from required directory. 
-sys.path.append(os.path.join(os.path.dirname(sys.path[0]), 'shared'))
+# sys.path.append(os.path.join(os.path.dirname(sys.path[0]), 'shared'))
 
-import mapred
-import dump_schema as schema
+import utils.mapred as mapred
+import utils.dump_schema as schema
 from datetime import date, timedelta
 
 job_output = sys.argv[1]

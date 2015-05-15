@@ -11,9 +11,9 @@ import sys
 import csv
 from datetime import date, timedelta
 
-import mapred
-import ftu_formatter as ftu
-import dump_schema as schema
+import utils.mapred as mapred
+import utils.ftu_formatter as ftu
+import utils.dump_schema as schema
 
 job_output = sys.argv[1]
 dashboard_csv = sys.argv[2]
