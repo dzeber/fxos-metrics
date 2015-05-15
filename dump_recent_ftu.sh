@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# Dump all FxOS records dated within the last 3 months of today.
+# Dump all FxOS FTU records from the start date to the present.
+START_DATE=`date +%Y%m%d -d "-9 months"`
+# START_DATE=20140401
 
 BASE=$(pwd)
 THIS_DIR=$(cd "`dirname "$0"`"; pwd)
@@ -39,8 +41,6 @@ fi
 JOB_FILE=$THIS_DIR/dump_format_ftu.py
 FILTER=$THIS_DIR/filter.json
 
-START_DATE=`date +%Y%m%d -d "-9 months"`
-# START_DATE=20140401
 DATE_STRING="\"min\": \""$START_DATE"\""
 sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
 
@@ -49,7 +49,6 @@ echo "Updating boto."
 
 ## Fix for BOTO.
 sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
-# exec >> $LOG_FILE
 echo "boto install complete."
 
 echo "Running job." 

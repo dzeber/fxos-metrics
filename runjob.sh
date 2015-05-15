@@ -99,6 +99,12 @@ JOB_FILE=$SRC_DIR/awsjobs/$1
 OUTPUT_FILE=$CURRENT_DIR/$2
 FILTER=$SRC_DIR/awsjobs/filters/${FILTER_FILE:-_date_filter.json}  
 
+# Symlink utils dir into jobs dir so that telemetry-server job runner
+# can see them. 
+if [ ! -e $SRC_DIR/awsjobs/utils ]; then
+    ln -s $SRC_DIR/utils $SRC_DIR/awsjobs/utils
+fi
+
 # If filter file was not specified, set up filter with date range.
 if [ -z "$FILTER_FILE" ]; then
     # Use modified default filter.

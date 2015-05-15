@@ -13,18 +13,25 @@ cd $BASE_DIR
 # Make sure runner has permissions. 
 # chmod 755 dump_recent_ftu.sh
 
-tar cvfz "$TARGET_DIR/${1:-fxosping-dump-0.1.tar.gz}" \
-    # the job script
-    awsjobs/dump_format_ftu.py \
-    awsjobs/__init__.py \
-    # the telemetry filter
-    awsjobs/filters/all_fxos_date.json \
-    # utils
-    utils/*.py \
-    # env variables
+# Run AWS job from a flatter configuration. 
+# Add symlinks to flatten structure when archiving.
+ln -s $BASE_DIR/awsjobs/dump_format_ftu.py $BASE_DIR/dump_format_ftu.py
+ln -s $BASE_DIR/awsjobs/filters/all_fxos_date.json $BASE_DIR/all_fxos_date.json
+
+# The utils dir needs to be inside the jobs dir to the job to run correctly.
+# Create a symlink to be followed when archiving.
+#ln -s $BASE_DIR/utils $BASE_DIR/awsjobs/utils
+
+tar cvfz "$TARGET_DIR/${1:-fxosping-dump-0.1.tar.gz}" -h \
+    dump_format_ftu.py \
+    all_fxos_date.json \
+    utils \
     settings.env \
-    # runner script
     dump_recent_ftu.sh
+    
+# Remove symlink. 
+unlink $BASE_DIR/dump_format_ftu.py
+unlink $BASE_DIR/all_fxos_date.json
 
 exit 0
 

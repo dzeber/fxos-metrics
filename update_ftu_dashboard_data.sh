@@ -10,9 +10,9 @@
 . ~/.bash_profile
 . /etc/profile.d/mozilla.sh
 
-THIS_DIR=$(cd "`dirname "$0"`"; pwd)
+SRC_DIR=$(cd "`dirname "$0"`"; pwd)
 
-. $THIS_DIR/settings.env
+. $SRC_DIR/settings.env
 
 # The base dir for the processing script. 
 # Also the working dir for the dashboard data.
@@ -27,7 +27,7 @@ JOB_OUTPUT=$DUMP_WORK_DIR/$OUTPUT_DIR_NAME
 OUTPUT_DATA=$JOB_OUTPUT/$DUMP_FILE
 OUTPUT_LOG=$JOB_OUTPUT/$JOB_LOG_FILE
 
-PYTHON_SCRIPT=$THIS_DIR/ftu_dashboard_datasets.py
+PYTHON_MODULE=postprocessing.ftu_dashboard_datasets
 LOG_FILE=$WORK_DIR/$PROCESSING_LOG_FILE
 LAST_UPDATED_PATH=$DATA_DIR/$UPDATED_TIME_FILE
 DASHBOARD_CSV_PATH=$DATA_DIR/$CSV_FILE
@@ -93,7 +93,8 @@ fi
 
 # At this point we should have the latest data. 
 echo "Processing data..."
-python $PYTHON_SCRIPT $OUTPUT_DATA $DASHBOARD_CSV_PATH $DUMP_CSV_PATH
+cd $SRC_DIR
+python -m $PYTHON_MODULE $OUTPUT_DATA $DASHBOARD_CSV_PATH $DUMP_CSV_PATH
     
 if [ ! -e "$DASHBOARD_CSV_PATH" ]; then
     echo "Something went wrong - no dashboard CSV file generated."
@@ -122,22 +123,6 @@ fi
 echo "Copying data files to web server."
 scp $DUMP_CSV_PATH "$WWW:$(ssh $WWW ". .bash_profile; echo \$FTU_DUMP")"
 ssh $WWW ". .bash_profile; chmod 644 \"\$FTU_DUMP/$DUMP_CSV\""
-# Append underscore to existing data files names on server. 
-# UNDERSCORE_CMD="ssh \$APP1 \". .bash_profile; cd \\\$FTU/data; rm -f *_;"
-# UNDERSCORE_CMD="$UNDERSCORE_CMD mv $CSV_FILE ${CSV_FILE}_;" 
-# UNDERSCORE_CMD="$UNDERSCORE_CMD mv $DUMP_CSV ${DUMP_CSV}_"
-# UNDERSCORE_CMD="$UNDERSCORE_CMD\""
-# eval $UNDERSCORE_CMD
-
-# cd $DATA_DIR
-# tar czf $WORK_DIR/new_data.tar.gz $CSV_FILE $DUMP_CSV $UPDATED_TIME_FILE
-# cd $WORK_DIR
-# scp new_data.tar.gz "$APP1:\$HOME"
-# ssh $APP1 ". .bash_profile; \
-    # tar xzf new_data.tar.gz -C \$FTU/data; \
-    # chmod o+r \$FTU/data/*; \
-    # rm new_data.tar.gz"
-# rm new_data.tar.gz
 
 echo "Pushing to s3."
 aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
