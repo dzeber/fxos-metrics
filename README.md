@@ -9,44 +9,25 @@ Some of these scripts can be run on an adhoc basis, and others will be scheduled
 crons.
 
 
-filters
+awsjobs
 -------
-
-Specifications for which FxOS records to include when running a mapreduce job. 
-These are JSON files which follow a schema prescribed in `telemetry-server`.
-
-
-jobs
-----
 
 Mapreduce jobs to be run using `telemetry-server`. These are python scripts
 containing `map` and `reduce` functions.
 
 
-processing
+postprocessing
 ----------
 
-Python scripts that apply postprocessing to the output of the mapreduce jobs, 
-for example packaging the output records as CSV rows.
+Scripts to package extracted raw data into CSVs for powering dashboards and 
+adhoc analysis.
 
 
-shared
-------
+utils
+-----
 
-Common functions that are used across several mapreduce job and processing 
-scripts. The main focus of these is formatting data values and organizing 
-output. 
+Common functions used in both AWS jobs and postprocessing scripts. 
 
-
-lookup
-------
-
-Lookup tables for converting coded fields (eg. country codes or mobile/ICC codes
-to human-readable values), stored in JSON format. 
-
-The file `ftu-fields.json` functions as a whitelist to determine which 
-individual values get retained for display in the dashboard for various fields. 
-The whitelists function either by full or prefix matching depending on the 
-field. Values that are not matched by the whitelist get grouped as "Other" in 
-the dashboard dropdowns.
+The main component of these is formatting functions for sanitizing the raw 
+data values. 
 
