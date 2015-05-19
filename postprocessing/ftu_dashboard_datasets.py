@@ -1,10 +1,22 @@
-# Extract datasets from the data source (output of the dump job).
-# This script will generate a CSV to power the daily activation dashboard,
-# as well as a CSV of recent dump data.
+"""
+Load the data outputted by the map-reduce job, and store as CSVs to be passed 
+to the dashboards.
 
-# Arguments supplied should be the input data file,
-# the dashboard CSV to output to, and the dump CSV to output to,
-# in that order.
+The rows of data are loaded from the map-reduce output. Rows submitted within 
+the last three months are written as-is to the dump CSV, and rows submitted
+within the last six months are summarized and written to the CSV powering the
+dashboard.
+
+The dashboard dataset only retains a small subset of the original columns, and
+values that are not considered relevant (eg. countries that have not had a 
+launch, or non-standard devices) are replaced by 'Other'. The reduced dataset
+then gets reaggregated and written to CSV. 
+
+The script expects the following command-line args:
+- the path to the map-reduce output file, which is the input to this script
+- the path to the dashboard CSV to be generated
+- the path to the dump CSV to be generated.
+"""
 
 import os.path
 import sys
@@ -36,17 +48,24 @@ earliest_date = (date.today() - timedelta(days = 180)).isoformat()
 earliest_for_dump = (date.today() - timedelta(days = 90)).isoformat()
 
 
-# Encode explicitly to try to avoid errors.
 def encode_for_csv(val):
+    """Encode a value as UTF-8."""
     return unicode(val).encode('utf-8', 'backslashreplace')
 
-# Write CSV rows encoded as UTF-8.
 def write_unicode_row(writer, row):
+    """Write CSV row after encoding values explicity (to avoid errors)."""
     writer.writerow([encode_for_csv(v) for v in row])
 
 # Convert raw row to datum for inclusion in dashboard dataset. 
 # Accumulate counts.
 def accumulate_dashboard_row(dataset, raw_row):
+    """Convert a raw datum to a row for the dashboard CSV, and add to dataset.
+    
+    The relevant values for the dashboard CSV are extracted from raw_row and 
+    summarized if necessary. The reduced data row is then added to dataset,
+    a dict mapping rows to occurrence counts, and the count is updated if
+    necessary.     
+    """
     new_row = []
     # Extract relevant fields, and check them against lookup tables.
     # See dump_schema.py for list indices.
