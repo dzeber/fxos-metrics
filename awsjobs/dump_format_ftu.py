@@ -1,5 +1,15 @@
+"""
+Map-reduce job to download recent FxOS records, sanitize and reformat field
+values, and count occurrences of unique combinations.
 
-# Download recent FxOS records, sanitize values, and aggregate occurences.
+For each record, the mapper parses the record and stores relevant values in a
+dict, after reformatting and sanity-checking. The reducer then counts 
+occurrences of unique sets of field/value combinations.
+
+The output from the job can be thought of as rows, each row representing
+a unique segment defined by its field values, together with a column of counts
+indicating how many records were found belonging to the segment.
+"""
 
 import json
 from datetime import datetime, date
@@ -8,11 +18,14 @@ import utils.ftu_formatter as ftu
 import utils.mapred as mapred
 import utils.dump_schema as schema
 
-# Simple sanity check. 
-# Payloads should have a field called 'info' with preset 'reason' and 'appName'.
-# Other elements of 'info' should have been populated automatically 
-# and should match corresponding payload fields.
+
 def consistent_ftu(r):
+    """Simple sanity check.
+    
+    Check that the payloads have correct 'reason' ('ftu') and 'appName' 
+    ('FirefoxOS'), and check that the other 'info' fields are consistent with 
+    those prefixed with 'deviceinfo'.
+    """
     if 'info' not in r:
         return False
     info = r['info']
@@ -26,6 +39,14 @@ def consistent_ftu(r):
 
 
 def map(key, dims, value, context):
+    """Parse the raw JSON payloads, reformat values, and output.
+    
+    After parsing, the field values in the payload are flattened and 
+    stored as a dict. Various formatting is applied to the values, and short
+    codes are converted to readable string values. The dict is then represented
+    as an ordered tuple using the functions in utils/mapred.py, and passed
+    to the reducer for counting.
+    """    
     mapred.increment_counter_tuple(context, 'nrecords')
     
     try:

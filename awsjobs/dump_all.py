@@ -1,11 +1,12 @@
+"""
+Simple job to download all raw records as unparsed JSON strings.
 
-# A simple job to download all records.
+No reducer is necessary.
+"""
 
 def map(key, dims, value, context):
-    # Add submission date to raw JSON, if available.
+    """Emit raw JSON records, appending server-side submission date.""" 
     if len(dims) == 6:
         value = value.rstrip('}')
         value = value + ',"submissionDate":"' + dims[5] + '"}'
-    # else:
-        # write_condition(context, 'Irregular dims: ' + str(dims))
     context.write(key, value)
