@@ -33,8 +33,9 @@ from datetime import datetime, date
 import formatting_rules as fmt
 
 
+# Lookup table handling
+# ---------------------
 
-# Lookup table handling.
 
 # The directory containing the lookup tables. 
 lookup_dir = os.path.join(os.path.dirname(__file__), 'lookup')
@@ -53,11 +54,13 @@ def load_whitelist():
     # Operator table will be a set.
     lookup['operatorlist'] = set(tables['operator'])
 
+
 def load_country_table():
     """Load the lookup table for country codes."""
     with open(os.path.join(lookup_dir, 'countrycodes.json')) as table_file:
         table = json.load(table_file)
     lookup['countrycodes'] = table
+
 
 def load_country_names():
     """Load the table of recognized country names from the country code list."""
@@ -67,11 +70,13 @@ def load_country_names():
         [ v['name'] for v in lookup['countrycodes'].itervalues() ])
     lookup['countrynames'] = country_names
 
+
 def load_language_table():
     """Load the lookup table for locale codes."""
     with open(os.path.join(lookup_dir, 'language-codes.json')) as table_file:
         table = json.load(table_file)
     lookup['langcodes'] = table
+
 
 def load_operator_table():
     """Load the lookup table for mobile codes."""
@@ -80,9 +85,11 @@ def load_operator_table():
     lookup['mobilecodes'] = table
 
 
-#--------------------
+#==============================================================
 
-# General utility functions.
+# General utility functions
+# -------------------------
+
 
 def make_all_subs(value, sub_list):
     """Apply all substitutions in the sequence sub_list to a value.
@@ -112,7 +119,7 @@ def ms_timestamp_to_date(val):
     val = int(val) / 1000
     return datetime.utcfromtimestamp(val).date()
 
-    
+
 def remove_leading_zeros(val):
     """Remove any leading zeros from a string of digits. 
     
@@ -126,42 +133,12 @@ def remove_leading_zeros(val):
         return '0'
     return val
 
-    
-#--------------------
 
-# Processing for each individual field. 
+#==============================================================
 
-# Convert the pingTime timestamp to a date.
-# If an invalid condition occurs, throws ValueError with a custom message.
-# def get_ping_date(val):
-    # if val is None:
-        # raise ValueError('no ping time')
-    
-    # try: 
-        # # pingTime is millisecond-resolution timestamp.
-        # pingdate = ms_timestamp_to_date(val)
-    # except Exception:
-        # raise ValueError('invalid ping time')
-    
-    # # Enforce date range.
-    # if (pingdate < fmt.valid_dates['earliest'] or 
-            # pingdate > fmt.valid_dates['latest']):
-        # raise ValueError('outside date range')
-    
-    # return pingdate.isoformat()
+# Formatting to be applied in the map-reduce job
+# ----------------------------------------------
 
-# Determine whether or not to keep an FTU record based on its date.
-
-# def relevant_date(rdate):
-    # if date == '':
-        # return False    
-    
-    # return (rdate >= fmt.valid_dates['earliest'] and
-        # rdate <= fmt.valid_dates['latest'])
-
-#------------------
-
-# Update channel
 
 def get_standard_channel(val):
     """Map custom channel strings to one of the standard channels."""
@@ -170,21 +147,105 @@ def get_standard_channel(val):
         return 'other'
     return std.group()
 
-#------------------
 
-# Language/locale.
-
-# def lookup_language(val):
-    # loc = unicode(val).strip()
-
-
-#------------------
-    
-# OS version
-    
 def format_os_string(val):
     """Reformat OS string using regexes."""
     return make_all_subs(unicode(val), fmt.os_subs)
+
+
+def format_device_string(val):
+    """Reformat device name string based on regexes."""
+    return make_one_sub(unicode(val), fmt.device_subs)
+
+
+def lookup_country_code(val):
+    """Convert country codes to recognizable names."""
+    if 'countrycodes' not in lookup:
+        load_country_table()
+    
+    geo = unicode(val).strip()
+    if geo not in lookup['countrycodes']: 
+        return None
+    return lookup['countrycodes'][geo]['name']
+
+
+def lookup_language(val):
+    """Convert locale code to a recognizable language name.
+    
+    The locale code is standardized using regexes, and then looked up in 
+    a table.
+    """
+    if 'langcodes' not in lookup:
+        load_language_table()
+    
+    loc = unicode(val).strip()
+    loc = fmt.locale_base_code['regex'].sub(
+        fmt.locale_base_code['repl'], loc)
+    
+    return lookup['langcodes'].get(loc)
+
+
+def format_operator_string(val):
+    """Reformat operator name string using regexes."""
+    return make_one_sub(val, fmt.operator_subs)
+
+
+def lookup_mcc(mcc):
+    """Look up the mobile country code in the lookup table.
+    
+    Return the country associated with the code, or None if the code did not 
+    appear in the list.
+    """
+    if 'mobilecodes' not in lookup:
+        load_operator_table()
+    
+    mcc = remove_leading_zeros(mcc)    
+    if mcc not in lookup['mobilecodes']:
+        return None
+        
+    return lookup['mobilecodes'][mcc]['country']
+
+
+def lookup_mnc(mcc, mnc):
+    """Look up mobile network code in the lookup table.
+    
+    Return the operator associated with the code, or None if the code did not 
+    appear in the list. Note that looking up the network code requires both 
+    the network code and the country code. 
+    """
+    if 'mobilecodes' not in lookup:
+        load_operator_table()
+    
+    mcc = remove_leading_zeros(mcc)
+    mnc = remove_leading_zeros(mnc)
+    if mcc not in lookup['mobilecodes']:
+        return None
+        
+    return lookup['mobilecodes'][mcc]['operators'].get(mnc)
+
+
+def apply_general_formatting(datum):
+    """Apply miscellaneous formatting rules to the payload values.
+    
+    This is intended to be applied during the map-reduce job. The input is
+    the entire data record represented as a dict, after all the other specific 
+    formatting has been applied. The formatting rules applied here can thus 
+    depend on combinations of data values, and can be used to correct errors
+    in the recorded data on a case-by-case basis.
+    
+    Currently the main effect of the formatting done here is to correctly
+    identify Tarako builds.
+    """
+    datum = fmt.format_tarako(datum)
+    datum = fmt.general_formatting(datum)
+    return datum
+
+
+#==============================================================
+
+# Summarization to be applied in the postprocessing step
+# ------------------------------------------------------
+
 
 def summarize_os(val):
     """Convert formatted OS string to value that can be used in dashboard.
@@ -197,28 +258,6 @@ def summarize_os(val):
     
     return val
 
-
-# Parse OS version. 
-# If an invalid condition occurs, throws ValueError with a custom message.
-# If OS value is not recognized, class as "Other".
-# def get_os_version(val):    
-    # if val is None:
-        # raise ValueError('no os version')
-    # # Reformat to be more readable. 
-    # os = format_os_string(val)
-    # # Check OS against format regex. If not matching, class as 'Other'.
-    # os = summarize_os(os)
-    
-    # return os
-
-
-#------------------
-
-# Device name
-    
-def format_device_string(val):
-    """Reformat device name string based on regexes."""
-    return make_one_sub(unicode(val), fmt.device_subs)
 
 def summarize_device(val):
     """Convert formatted device name to a value to be displayed in dashboard.
@@ -240,34 +279,6 @@ def summarize_device(val):
         
     return val
 
-
-# Format device name. 
-# Only record distinct counts for certain recognized device names.
-# List of recognized devices is expected to be a tuple. 
-# def get_device_name(val):
-    # if val is None:
-        # return 'Unknown'
-    # device = format_device_string(val)
-    # # Don't keep distinct name if does not start with recognized prefix.
-    # device = summarize_device(device)
-    
-    # return device
-
-
-
-#------------------
-
-# Country name
-    
-def lookup_country_code(val):
-    """Convert country codes to recognizable names."""
-    if 'countrycodes' not in lookup:
-        load_country_table()
-    
-    geo = unicode(val).strip()
-    if geo not in lookup['countrycodes']: 
-        return None
-    return lookup['countrycodes'][geo]['name']
 
 def summarize_country(val):
     """Convert country name to a value to be displayed in dashboard. 
@@ -295,142 +306,7 @@ def summarize_country(val):
         return 'Other'
         
     return val
-    
-    
-# Look up country name from 2-letter code. 
-# Only record counts for recognized countries. 
-# List of recognized countries is expected to be a set.
-# def get_country(val):
-    # if val is None:
-        # return 'Unknown'
-    # geo = lookup_country_code(val)
-    # if geo is None:
-        # return 'Unknown'
-    # geo = summarize_country(geo)
-        
-    # return geo
 
-
-#------------------
-
-# Linguistic locale
-
-def lookup_language(val):
-    """Convert locale code to a recognizable language name.
-    
-    The locale code is standardized using regexes, and then looked up in 
-    a table.
-    """
-    if 'langcodes' not in lookup:
-        load_language_table()
-    
-    loc = unicode(val).strip()
-    loc = fmt.locale_base_code['regex'].sub(
-        fmt.locale_base_code['repl'], loc)
-    
-    return lookup['langcodes'].get(loc)
-
-
-#------------------
-
-# Operator name
-
-def lookup_mcc(mcc):
-    """Look up the mobile country code in the lookup table.
-    
-    Return the country associated with the code, or None if the code did not 
-    appear in the list.
-    """
-    if 'mobilecodes' not in lookup:
-        load_operator_table()
-    
-    mcc = remove_leading_zeros(mcc)    
-    if mcc not in lookup['mobilecodes']:
-        return None
-        
-    return lookup['mobilecodes'][mcc]['country']
-
-def lookup_mnc(mcc, mnc):
-    """Look up mobile network code in the lookup table.
-    
-    Return the operator associated with the code, or None if the code did not 
-    appear in the list. Note that looking up the network code requires both 
-    the network code and the country code. 
-    """
-    if 'mobilecodes' not in lookup:
-        load_operator_table()
-    
-    mcc = remove_leading_zeros(mcc)
-    mnc = remove_leading_zeros(mnc)
-    if mcc not in lookup['mobilecodes']:
-        return None
-        
-    return lookup['mobilecodes'][mcc]['operators'].get(mnc)
-
-def lookup_operator_from_codes(fields):
-    """Look up mobile operator using mobile codes represented as a dict."""
-    if 'mcc' not in fields or 'mnc' not in fields:
-        # Missing codes. 
-        return None
-    
-    return lookup_mnc(fields['mcc'], fields['mnc'])
-
-def lookup_operator_from_field(fields, key):
-    """Read the mobile operator name from the name string in the payload."""
-    operator = fields.get(key)
-    if operator is None:
-        return None
-        
-    operator = unicode(operator).strip()
-    if len(operator) == 0:
-        return None
-    
-    return operator
-    
-
-def lookup_operator(icc_fields, network_fields):
-    """Identify the mobile operator name from the payload.
-    
-    Try looking up operator from the SIM/ICC codes, if available. If that fails, 
-    try using SIM SPN (network name). 
-    
-    If no SIM is present, look up operator from the network codes. If that 
-    fails, try reading network operator name field. 
-    
-    If none of these are present, operator is 'Unknown'.
-    """
-    if icc_fields is not None:
-        # SIM is present. 
-        operator = lookup_operator_from_codes(icc_fields)
-        if operator is not None:
-            return operator
-        
-        # At this point, we were not able to resolve the operator 
-        # from the codes.
-        # Try the name string instead.
-        operator = lookup_operator_from_field(icc_fields, 'spn')
-        if operator is not None:
-            return operator
-    
-    # Lookup using SIM card info failed.
-    # Try using network info instead. 
-    if network_fields is not None:
-        operator = lookup_operator_from_codes(network_fields)
-        if operator is not None:
-            return operator
-        
-        # Otherwise, try the name string instead.
-        operator = lookup_operator_from_field(network_fields, 'operator')
-        if operator is not None:
-            return operator
-    
-    # Lookup failed - no operator information in payload.
-    return None
-
-
-def format_operator_string(val):
-    """Reformat operator name string using regexes."""
-    return make_one_sub(val, fmt.operator_subs)
 
 def summarize_operator(icc_network, icc_name, network_network, network_name):
     """Convert operator name to a value to be displayed in dashboard.
@@ -467,29 +343,68 @@ def summarize_operator(icc_network, icc_name, network_network, network_name):
     return operator
 
 
-# Format operator name. 
-# Only record counts for recognized operators.
-# List of recognized operators is expected to be a set.
-# def get_operator(icc_fields, network_fields):
-    # if 'operatorlist' not in lookup:
-        # load_whitelist()
+#==============================================================
+
+
+# def lookup_operator_from_codes(fields):
+    # """Look up mobile operator using mobile codes represented as a dict."""
+    # if 'mcc' not in fields or 'mnc' not in fields:
+        # # Missing codes. 
+        # return None
     
-    # # Look up operator name either using mobile codes 
-    # # or from name listed in the data.
-    # operator = lookup_operator(icc_fields, network_fields)
-    # if operator is None or len(operator) == 0:
-        # return 'Unknown'
-    # operator = format_operator_string(operator)
-    # # Don't keep name if not in recognized list. 
-    # if operator not in lookup['operatorlist']: 
-        # return 'Other'
+    # return lookup_mnc(fields['mcc'], fields['mnc'])
+
+# def lookup_operator_from_field(fields, key):
+    # """Read the mobile operator name from the name string in the payload."""
+    # operator = fields.get(key)
+    # if operator is None:
+        # return None
+        
+    # operator = unicode(operator).strip()
+    # if len(operator) == 0:
+        # return None
     
     # return operator
 
+# def lookup_operator(icc_fields, network_fields):
+    # """Identify the mobile operator name from the payload.
+    
+    # Try looking up operator from the SIM/ICC codes, if available. If that fails, 
+    # try using SIM SPN (network name). 
+    
+    # If no SIM is present, look up operator from the network codes. If that 
+    # fails, try reading network operator name field. 
+    
+    # If none of these are present, operator is 'Unknown'.
+    # """
+    # if icc_fields is not None:
+        # # SIM is present. 
+        # operator = lookup_operator_from_codes(icc_fields)
+        # if operator is not None:
+            # return operator
+        
+        # # At this point, we were not able to resolve the operator 
+        # # from the codes.
+        # # Try the name string instead.
+        # operator = lookup_operator_from_field(icc_fields, 'spn')
+        # if operator is not None:
+            # return operator
+    
+    # # Lookup using SIM card info failed.
+    # # Try using network info instead. 
+    # if network_fields is not None:
+        # operator = lookup_operator_from_codes(network_fields)
+        # if operator is not None:
+            # return operator
+        
+        # # Otherwise, try the name string instead.
+        # operator = lookup_operator_from_field(network_fields, 'operator')
+        # if operator is not None:
+            # return operator
+    
+    # # Lookup failed - no operator information in payload.
+    # return None
 
-#--------------------
-
-# Additional formatting to cover special cases. 
 
 # def format_values(clean_values, payload):
     # """Apply other miscellaneous formatting rules.
@@ -508,19 +423,4 @@ def summarize_operator(icc_network, icc_name, network_network, network_name):
     # return data_row
 
 
-def apply_general_formatting(datum):
-    """Apply miscellaneous formatting rules to the payload values.
-    
-    This is intended to be applied during the map-reduce job. The input is
-    the entire data record represented as a dict, after all the other specific 
-    formatting has been applied. The formatting rules applied here can thus 
-    depend on combinations of data values, and can be used to correct errors
-    in the recorded data on a case-by-case basis.
-    
-    Currently the main effect of the formatting done here is to correctly
-    identify Tarako builds.
-    """
-    datum = fmt.format_tarako(datum)
-    datum = fmt.general_formatting(datum)
-    return datum
 

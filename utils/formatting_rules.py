@@ -28,10 +28,12 @@ def add_suffix(name, suffix):
         return name + ' ' + suffix
     return name
 
-    
-#------------------
 
-# Formatting functions. 
+#==============================================================
+
+# Formatting functions
+# --------------------
+
 
 def format_tarako(datum):    
     """Special formatting for Tarako devices. 
@@ -57,18 +59,10 @@ def general_formatting(datum):
     return datum
 
 
-# Date range for ping dates to be considered valid.
-# Keep pings from the past 6 months.
-# valid_dates = {
-    # 'earliest': (date.today() - timedelta(days = 180)).isoformat(),
-    # # Latest: yesterday.
-    # 'latest': (date.today() - timedelta(days = 1)).isoformat()
-# }
+#==============================================================
 
-
-#------------------
-
-# Regexes.
+# Regexes
+# -------
 
 
 # Form of valid OS string. 
@@ -83,7 +77,6 @@ locale_base_code = {
     'regex': re.compile('-.+$'),
     'repl': ''
 }
-
 
 
 # Regexes for substitutions.

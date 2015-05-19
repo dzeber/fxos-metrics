@@ -26,48 +26,7 @@ def summing_reducer(key, values, context):
     context.write(key, sum(values))
 
 
-#-------------------------------------
-    
-# JSON-based map output for dicts.
-# Dicts are converted to JSON strings with named fields.
-# These JSON-based outputs are not currently used in the fxos-metrics jobs.
-
-
-def dict_to_key(d):
-    """Convert a dict to a format that can be used as a map-reduce key.
-    
-    Convert to JSON format (as a string). The items in the dict will be sorted
-    alphabetically by field_name to ensure that dicts containing the same keys 
-    are recorded as the same. 
-    """
-    return json.dumps(d, sort_keys=True)
-
-def write_fieldvals(context, d): 
-    """Write a dict of field names mapping to values as a key mapping to 1,
-    in order to count occurrences. 
-    """
-    context.write(dict_to_key(d), 1)
-
-def increment_counter(context, name, group='', n=1):
-    """Increment a map-reduce counter by a specified value. 
-    
-    The name can optionally be contained in a group. The key is of the form 
-    {'counter': name, 'group': group}, with group omitted if not specified. 
-    """
-    k = {'counter': name}
-    if len(group) > 0: 
-        k['group'] = group
-    context.write(dict_to_key(k), n)
-
-def write_condition(context, condition):
-    """Count occurrences of end conditions. 
-    
-    Key is of the form {'condition': condition}. 
-    """
-    context.write(dict_to_key({'condition': condition}), 1)
-
-
-#-------------------------------------  
+#==============================================================
 
 # Tuple-based output for dicts.
 # Dicts are converted to tuples according to the ordering 
@@ -97,6 +56,7 @@ def write_fieldvals_tuple(context, d, schema):
     
     context.write(tuple(vals), 1)
 
+
 def increment_counter_tuple(context, name, group=None, n=1):
     """Increment a map-reduce counter by a specified value. 
     
@@ -108,6 +68,7 @@ def increment_counter_tuple(context, name, group=None, n=1):
         d.append(group)
     context.write(tuple(d), n)
 
+
 def write_condition_tuple(context, condition):
     """Count occurrences of end conditions. 
     
@@ -115,12 +76,9 @@ def write_condition_tuple(context, condition):
     """    
     context.write(('condition', condition), 1)
 
- 
-#-------------------------------------
-
 
 def parse_output_tuple(output_file):
-    """Process the output of a map-reduce job which uses tuples for output.
+    """Parse back the output of a map-reduce job recorded using tuples.
 
     Read in output file containing one output record per line. 
     Separate records, conditions and counters.
@@ -171,3 +129,49 @@ def parse_output_tuple(output_file):
         data['records'].append(vals)
     
     return data
+
+
+#==============================================================
+
+# JSON-based map output for dicts.
+# Dicts are converted to JSON strings with named fields.
+# These JSON-based outputs are not currently used in the fxos-metrics jobs.
+
+
+def dict_to_key(d):
+    """Convert a dict to a format that can be used as a map-reduce key.
+    
+    Convert to JSON format (as a string). The items in the dict will be sorted
+    alphabetically by field_name to ensure that dicts containing the same keys 
+    are recorded as the same. 
+    """
+    return json.dumps(d, sort_keys=True)
+
+
+def write_fieldvals(context, d): 
+    """Write a dict of field names mapping to values as a key mapping to 1,
+    in order to count occurrences. 
+    """
+    context.write(dict_to_key(d), 1)
+
+
+def increment_counter(context, name, group='', n=1):
+    """Increment a map-reduce counter by a specified value. 
+    
+    The name can optionally be contained in a group. The key is of the form 
+    {'counter': name, 'group': group}, with group omitted if not specified. 
+    """
+    k = {'counter': name}
+    if len(group) > 0: 
+        k['group'] = group
+    context.write(dict_to_key(k), n)
+
+
+def write_condition(context, condition):
+    """Count occurrences of end conditions. 
+    
+    Key is of the form {'condition': condition}. 
+    """
+    context.write(dict_to_key({'condition': condition}), 1)
+
+
