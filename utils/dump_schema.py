@@ -1,11 +1,14 @@
+"""
+Schemas (lists of keys) to be used for the output of FTU dump job.
 
-# Schema to be shared by modules working with output of FTU dump job.
+The list 'final_keys' is the final set of keys that should be outputted from 
+the restructured and formatted FTU payload. Any of these that are missing will 
+be added as None. Extraneous keys will be removed. Final values will be 
+combined into a tuple in the order given here.
 
-# The final set of keys that should be outputted 
-# from the restructured and formatted FTU payload.
-# Any of these that are missing will be added as None.
-# Extraneous keys will be removed.
-# Final values will be combined into a tuple in the order given here.
+The lists 'dump_csv_headers' and 'dashboard_csv_headers' give the column
+names and ordering to be used in the CSV generated in the postprocessing step.
+"""
 
 final_keys = [
     'pingDate', 

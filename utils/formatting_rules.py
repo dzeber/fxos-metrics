@@ -1,12 +1,29 @@
-# This module is to contain the regexes and rules that are used to 
-# establish validity and reformat payload field values. 
+"""
+This module contains the regexes and rules used in validity checking and
+reformatting of FxOS payload field values. 
+
+This includes regexes for converting to standardized device and operator names
+from the various versions that appear across the raw dataset. This ensures that
+payloads get assigned to the same segments, eg. based on device or operator, 
+even if the strings used in the payloads have small differences. The standard 
+names are intended to be relatively concise for use in the dashboards.
+
+There are also formatting utilities for standardizing and summarizing the
+OS version numbers. In particular, Tarako (1.3T) builds do not have a standard
+version identifier, and must be identified on a case-by-case basis. For these,
+the OS version is changed to '1.3T'.
+
+The function general_formatting() is intended for miscellaneous reformatting
+not covered by the other regexes (ie. correcting a field misspecified by a 
+partner) for specific cases.
+"""
 
 import re
 from datetime import date, timedelta
 
 
-# Add suffix to name separated by a space, if suffix is non-empty.
 def add_suffix(name, suffix):
+    """Add suffix to name separated by a space, if suffix is non-empty."""
     if len(suffix) > 0:
         return name + ' ' + suffix
     return name
@@ -16,16 +33,24 @@ def add_suffix(name, suffix):
 
 # Formatting functions. 
 
-# Special formatting for Tarako devices. 
 def format_tarako(datum):    
+    """Special formatting for Tarako devices. 
+    
+    Set the OS version number to '1.3T' for devices identified as Tarako 
+    based on the device name.
+    """
     if datum['product_model'].startswith(
             ('Intex', 'Spice', 'Ace', 'Zen')):
         datum['os'] = '1.3T'
     return datum
 
 
-# General formatting based on entire record.    
 def general_formatting(datum):
+    """General formatting based on entire record.
+    
+    This is intended for special cases not covered by the other regexes,
+    in particular for rules depeding on multiple field values.
+    """
     # OS should be 1.4 for GoFox devices. 
     if datum['product_model'].startswith('GoFox'):
         datum['os'] = '1.4'
