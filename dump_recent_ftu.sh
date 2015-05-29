@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 # Dump all FxOS FTU records from the start date to the present.
 START_DATE=`date +%Y%m%d -d "-9 months"`
 # START_DATE=20140401
@@ -45,11 +46,11 @@ DATE_STRING="\"min\": \""$START_DATE"\""
 sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
 
 echo "Job setup complete."
-echo "Updating boto."
+#echo "Updating boto."
 
 ## Fix for BOTO.
-sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
-echo "boto install complete."
+#sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
+#echo "boto install complete."
 
 echo "Running job." 
 
