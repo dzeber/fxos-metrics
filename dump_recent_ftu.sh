@@ -63,6 +63,7 @@ echo "Running job."
 
 cd "$TELEMETRY_SERVER_DIR"
 
+# Switch logging to separate file for job output.
 $LOG_TO_FILE && exec > $JOB_LOG 2>&1
 python -m mapreduce.job "$JOB_FILE" \
    --input-filter "$FILTER" \
@@ -73,9 +74,11 @@ python -m mapreduce.job "$JOB_FILE" \
    --output "$OUTPUT_FILE" \
    --bucket "telemetry-published-v2" \
    --verbose
+JOB_EXIT_CODE=$?
 
+# Back to main log file.
 $LOG_TO_FILE && exec > $LOG_FILE 2>&1
-echo "Mapreduce job exited with code: $?"
+echo "Mapreduce job exited with code: $JOB_EXIT_CODE"
 echo "It is now `date`"
 echo "Packaging output..."
 
