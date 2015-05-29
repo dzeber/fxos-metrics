@@ -84,7 +84,7 @@ SRC_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
 FILTER_TEMPLATE=$SRC_DIR/awsjobs/filters/$FILTER_TEMPLATE
 
-WORK_DIR=$CURRENT_DIR/work
+WORK_DIR=/mnt/telemetry/work
 DATA_CACHE=$WORK_DIR/cache
 
 if [ ! -d "$WORK_DIR" ]; then
