@@ -34,7 +34,8 @@ def consistent_ftu(r):
         info.get('reason') == 'ftu' and
         ('deviceinfo.update_channel' not in r or
             info.get('appUpdateChannel') == r['deviceinfo.update_channel']) and
-        info.get('appVersion') == r['deviceinfo.platform_version'] and
+        ('deviceinfo.platform_version' not in r or
+            info.get('appVersion') == r['deviceinfo.platform_version']) and
         info.get('appBuildID') == r['deviceinfo.platform_build_id'])
 
 

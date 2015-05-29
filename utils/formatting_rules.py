@@ -41,8 +41,8 @@ def format_tarako(datum):
     Set the OS version number to '1.3T' for devices identified as Tarako 
     based on the device name.
     """
-    if datum['product_model'].startswith(
-            ('Intex', 'Spice', 'Ace', 'Zen')):
+    if ('product_model' in datum and datum['product_model'].startswith(
+            ('Intex', 'Spice', 'Ace', 'Zen'))):
         datum['os'] = '1.3T'
     return datum
 
@@ -54,7 +54,7 @@ def general_formatting(datum):
     in particular for rules depeding on multiple field values.
     """
     # OS should be 1.4 for GoFox devices. 
-    if datum['product_model'].startswith('GoFox'):
+    if 'product_model' in datum and datum['product_model'].startswith('GoFox'):
         datum['os'] = '1.4'
     return datum
 
