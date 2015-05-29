@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Pass option '--nolog' to print all messages to stdout rather than log files. 
+# This is mainly for testing.
+LOG_TO_FILE=true
+if [ $# -gt 0 ] && [ "$1" = "--nolog" ]; then
+    LOG_TO_FILE=false
+fi
+
+
 # Dump all FxOS FTU records from the start date to the present.
 START_DATE=`date +%Y%m%d -d "-9 months"`
 # START_DATE=20140401
@@ -21,8 +29,8 @@ if [ ! -d "$OUTPUT_DIR" ]; then
     mkdir "$OUTPUT_DIR"
 fi
 
-# Write output to log for debugging. 
-exec > $LOG_FILE 2>&1
+# Write output to log for debugging.
+$LOG_TO_FILE && exec > $LOG_FILE 2>&1
 
 echo "It is now `date`"
 echo "Preparing job..."
@@ -45,16 +53,17 @@ DATE_STRING="\"min\": \""$START_DATE"\""
 sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
 
 echo "Job setup complete."
-echo "Updating boto."
+#echo "Updating boto."
 
 ## Fix for BOTO.
-sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
-echo "boto install complete."
+#sudo pip install -Iv boto==2.25.0 > $BOTO_LOG
+#echo "boto install complete."
 
 echo "Running job." 
 
 cd "$TELEMETRY_SERVER_DIR"
 
+$LOG_TO_FILE && exec > $JOB_LOG 2>&1
 python -m mapreduce.job "$JOB_FILE" \
    --input-filter "$FILTER" \
    --num-mappers 16 \
@@ -63,8 +72,9 @@ python -m mapreduce.job "$JOB_FILE" \
    --data-dir "$DATA_DIR" \
    --output "$OUTPUT_FILE" \
    --bucket "telemetry-published-v2" \
-   --verbose > $JOB_LOG
+   --verbose
 
+$LOG_TO_FILE && exec > $LOG_FILE 2>&1
 echo "Mapreduce job exited with code: $?"
 echo "It is now `date`"
 echo "Packaging output..."

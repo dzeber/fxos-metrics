@@ -103,18 +103,23 @@ device_subs = [
         'repl': lambda match: add_suffix('One Touch Fire', 
             match.group('suffix').upper())
     },{
-       # Open.
+       # Open 2/C.
         'regex': re.compile(
             '^.*open\s*(?P<suffix>[2c])(?:\\s+\\S*)?$', re.I),
         'repl': lambda match: 'ZTE Open ' + match.group('suffix').upper()
+    },{
+        # Open.
+        'regex': re.compile('^.*open\s*$', re.I),
+        'repl': 'ZTE Open'
     },{
         # Flame.
         'regex': re.compile('^.*flame.*$', re.I),
         'repl': 'Flame'
     },{ 
         # Geeksphone.
-        'regex': re.compile('^.*(keon|peak).*$', re.I),
-        'repl': lambda match: 'Geeksphone ' + match.group(1).capitalize()
+        'regex': re.compile('^.*(keon|peak|revolution).*$', re.I),
+        # 'repl': lambda match: 'Geeksphone ' + match.group(1).capitalize()
+        'repl': 'Geeksphone'
     },{
         # Emulators/dev devices
         'regex': re.compile('^.*(android|aosp).*$', re.I),
@@ -125,8 +130,9 @@ device_subs = [
         'repl': 'Intex Cloud FX'
     },{
         # Tarako - Spice.
-        'regex': re.compile('^.*spice(\\s*|_)mifx1.*$', re.I),
-        'repl': 'Spice MIFX1'
+        'regex': re.compile('^.*spice(\\s*|_)mi-?fx(?P<ver>[12]).*$', re.I),
+        'repl': lambda match: 'Spice MIFX' + match.group('ver')
+        # 'repl': 'Spice MIFX1'
     },{
         # Tarako - Cherry Ace.
         'regex': re.compile('^ace\\s*f100.*$', re.I),
@@ -162,7 +168,7 @@ device_subs = [
         # 'repl': 'GoFox F15'
     # }
 ]
-    
+
 operator_subs = [
     # Filtering based on prefixes.
     {
