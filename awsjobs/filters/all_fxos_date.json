@@ -3,7 +3,7 @@
   "dimensions": [
     {
       "field_name": "reason",
-      "allowed_values": ["ftu"]
+      "allowed_values": ["__REASON__"]
     },
     {
       "field_name": "appName",
