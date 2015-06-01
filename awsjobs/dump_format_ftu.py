@@ -1,5 +1,5 @@
 """
-Map-reduce job to download recent FxOS records, sanitize and reformat field
+Map-reduce job to download recent FxOS FTU records, sanitize and reformat field
 values, and count occurrences of unique combinations.
 
 For each record, the mapper parses the record and stores relevant values in a
