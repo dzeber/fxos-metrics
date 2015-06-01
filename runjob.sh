@@ -110,10 +110,11 @@ FILTER_TEMPLATE=$SRC_DIR/awsjobs/filters/$FILTER_TEMPLATE
 # either a custom file or one generated from the template.
 FILTER=$SRC_DIR/awsjobs/filters/${FILTER_FILE:-_date_filter.json}  
 
-# Symlink utils dir into jobs dir so that telemetry-server job runner
+# Symlink utils dir into job dir so that telemetry-server job runner
 # can see them. 
-if [ ! -e $SRC_DIR/awsjobs/utils ]; then
-    ln -s $SRC_DIR/utils $SRC_DIR/awsjobs/utils
+UTILS_LINK="$(dirname $JOB_FILE)/utils"
+if [ ! -e $UTILS_LINK ]; then
+    ln -s $SRC_DIR/utils $UTILS_LINK
 fi
 
 # Generate a filter file from the template, if required.
