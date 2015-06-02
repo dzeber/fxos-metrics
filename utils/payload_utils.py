@@ -72,15 +72,6 @@ def search_nested_dict(obj, storage, keypath = '', exclude = (), sep = '|',
             storage[keypath] = obj
 
 
-# keys = list()
-keys = {}
-search_nested_dict(aa, keys,
-    # keysonly = True)
-    keysonly = False)
-# for k in keys: print(k)
-for i in keys.items(): print(i)
-
-
 def get_keypaths(adict, exclude = (), sep = '|'):
     """ Recursively follow paths down to the terminal data values of a 
     hierarchical structure of nested dicts (leaf nodes in a tree).
