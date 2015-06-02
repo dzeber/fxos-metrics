@@ -12,31 +12,21 @@ indicating how many records were found belonging to the segment.
 """
 
 import json
-from datetime import datetime, date
+from datetime import datetime
 
-import utils.ftu_formatter as ftu
+import utils.ftu_formatter as fmt
 import utils.mapred as mapred
 import utils.dump_schema as schema
+import utils.payload_utils as payload
 
 
-def consistent_ftu(r):
+def consistent_au(r):
     """Simple sanity check.
     
-    Check that the payloads have correct 'reason' ('ftu') and 'appName' 
-    ('FirefoxOS'), and check that the other 'info' fields are consistent with 
-    those prefixed with 'deviceinfo'.
+    Check that the payloads have correct 'reason' ('appusage') and 'appName' 
+    ('FirefoxOS').
     """
-    if 'info' not in r:
-        return False
-    info = r['info']
-    
-    return (info.get('appName') == 'FirefoxOS' and
-        info.get('reason') == 'ftu' and
-        ('deviceinfo.update_channel' not in r or
-            info.get('appUpdateChannel') == r['deviceinfo.update_channel']) and
-        ('deviceinfo.platform_version' not in r or
-            info.get('appVersion') == r['deviceinfo.platform_version']) and
-        info.get('appBuildID') == r['deviceinfo.platform_build_id'])
+    return r.get('appName') == 'FirefoxOS' and r.get('reason') == 'appusage'
 
 
 def map(key, dims, value, context):
@@ -54,58 +44,78 @@ def map(key, dims, value, context):
         r = json.loads(value)
         
         # Check basic consistency. 
-        if not consistent_ftu(r):
+        if 'info' not in r:
+            # All the data is inside the info object.
+            mapred.write_condition_tuple(context, 'noinfo')
+            # return
+        r = r['info']
+        if not consistent_au(r):
             mapred.write_condition_tuple(context, 'inconsistent')
-            return
+            # return
         
         #-----
         
         # Rearrange.
         
-        # Keep only geo code from info.
-        if 'geoCountry' in r['info']:
-            r['country'] = r['info']['geoCountry']
-        del r['info']
+        # Separate apps and searches from other fields.
+        apps = r.pop('apps', None)
+        searches = r.pop('searches', None)
         
-        # Strip deviceinfo prefix when it occurs. 
-        dikeys = [k for k in r if k.startswith('deviceinfo.')]
-        for k in dikeys:
-            v = r[k]
-            del r[k]
-            r[k[11:]] = v
+        # Remove telemetry-server fields.
+        for k in ['reason', 'appName', 'appVersion', 'appUpdateChannel',
+                    'appBuildID']:
+            if k in r:
+                del r[k]
         
-        # Flatten sub-dicts. 
-        dictvals = [(k,v) for (k,v) in r.iteritems() if isinstance(v, dict)]
-        for (k, dictval) in dictvals:
-            del r[k]
-            for (subkey, subval) in dictval.iteritems():
-                r[k + '.' + subkey] = subval
+        # Flatten deviceinfo subdict, stripping 'deviceinfo' prefix.
+        if 'deviceinfo' in r:
+            di = r.pop('deviceinfo')
+            for k in di:
+                newk = k[11:] if k.startswith('deviceinfo.') else k
+                r[newk] = di[k]
+        
+        # Flatten screen info subdict.
+        if 'screen' in r:
+            s = r.pop('screen')
+            for k in s:
+                newk = 'screenWidth' if k == 'width' else (
+                    'screenHeight' if k == 'height' else k)
+                r[newk] = s[k]
+        
+        # Flatten network info.
+        if 'simInfo' in r:
+            si = r.pop('simInfo')
+            for nw in 'icc', 'network':
+                if nw in si:
+                    for k in si[nw]:
+                        r[nw + '.' + k] = si[nw][k]            
         
         # There should not be more than 1 level.
         for (k,v) in r.iteritems():
             if isinstance(v, dict):
                 mapred.write_condition_tuple(context, 'multiple nesting')
                 return
-                
+        
         #-----
         
         # Format individual entries. 
-                
+        
         # Remove any null entries.
         nullval_keys = [k for (k,v) in r.iteritems() if v is None]
         for k in nullval_keys:
             del r[k]
         
         # Convert dates.
-        if 'activationTime' in r:
-            r['activationDate'] = (
-                ftu.ms_timestamp_to_date(r['activationTime']).isoformat())
-        if 'pingTime' in r:
-            r['pingDate'] = (
-                ftu.ms_timestamp_to_date(r['pingTime']).isoformat())
-        if len(dims) == 6:
+        if 'start' in r:
+            r['startDate'] = (
+                fmt.ms_timestamp_to_date(r['start']).isoformat())
+        if 'stop' in r:
+            r['stopDate'] = (
+                fmt.ms_timestamp_to_date(r['stop']).isoformat())
+        sdate = payload.get_submission_date(dims)
+        if sdate is not None:
             r['submissionDate'] = (
-                datetime.strptime(dims[5], '%Y%m%d').date().isoformat())
+                datetime.strptime(sdate, '%Y%m%d').date().isoformat())
         
         # Merge update channel fields. 
         # If both are present, note occurrence but don't replace.
@@ -118,8 +128,6 @@ def map(key, dims, value, context):
                         'multiple channels: ' + 
                         'update_channel = ' + r['update_channel'] +
                         ', app.update.channel = ' + r['app.update.channel'])
-                # else:
-                # del r['app.update.channel']    
             else:
                 # Only 'app.update.channel' is present.
                 # Save the value as 'update_channel'.
@@ -130,27 +138,26 @@ def map(key, dims, value, context):
         # Add simplified form of update channel - 
         # more useful for separating them.
         if 'update_channel' in r:
-            r['update_channel_standardized'] = ftu.get_standard_channel(
+            r['update_channel_standardized'] = fmt.get_standard_channel(
                 r['update_channel'])
         
         # Apply substitutions:
         if 'os' in r:
-            r['os'] = ftu.format_os_string(r['os'])
-            
-        if 'product_model' in r:
-            r['product_model'] = ftu.format_device_string(r['product_model'])
+            r['os'] = fmt.format_os_string(r['os'])
         
-        if 'country' in r:
-            country_name = ftu.lookup_country_code(r['country'])
+        if 'product_model' in r:
+            r['product_model'] = fmt.format_device_string(r['product_model'])
+        
+        if 'geoCountry' in r:
+            country_name = fmt.lookup_country_code(r['geoCountry'])
             # If lookup fails, keep original geo code.
-            if country_name is not None:
-                r['country'] = country_name
-                
+            r['country'] = (country_name if country_name is not None else
+                r['geoCountry'])
+        
         # Convert locale code to language name.
         # Keep original locale code for reference.
         if 'locale' in r:
-            r['language'] = ftu.lookup_language(r['locale'])
-        
+            r['language'] = fmt.lookup_language(r['locale'])
         
         # Keep original network codes, but try looking them up.
         for prefix in 'icc','network':
@@ -158,29 +165,54 @@ def map(key, dims, value, context):
             mnc_key = prefix + '.mnc'
             if mcc_key in r:
                 # Look up country code.
-                r[prefix + '.country'] = ftu.lookup_mcc(r[mcc_key])
+                r[prefix + '.country'] = fmt.lookup_mcc(r[mcc_key])
                 if mnc_key in r:
                     # Look up network code, and format string.
-                    nw = ftu.lookup_mnc(r[mcc_key], r[mnc_key])
+                    nw = fmt.lookup_mnc(r[mcc_key], r[mnc_key])
                     if nw is not None:
-                        nw = ftu.format_operator_string(nw)
+                        nw = fmt.format_operator_string(nw)
                     r[prefix + '.network'] = nw
         
         # Format network name strings. 
         if 'icc.spn' in r:
-            r['icc.name'] = ftu.format_operator_string(r['icc.spn'])
+            r['icc.name'] = fmt.format_operator_string(r['icc.spn'])
         if 'network.operator' in r:
-            r['network.name'] = ftu.format_operator_string(r['network.operator'])
+            r['network.name'] = fmt.format_operator_string(r['network.operator'])
         
         # Opportunity for general formatting rules 
         # based on combinations of values. 
         # In particular, setting OS to '1.3T' for Tarako devices.
-        r = ftu.apply_general_formatting(r)
+        r = fmt.apply_general_formatting(r)
         
         #-----
         
-        # Output specific keys.
-        mapred.write_fieldvals_tuple(context, r, schema.final_keys)
+        # Find the set of dates on which the device was active.
+        # First find the set of unique dates on which apps were used.
+        unique_dates = set()
+        for a in apps:
+            for d in apps[a]:
+                unique_dates.add(d)
+        # Format the dates.
+        active_dates = list()
+        for d in unique_dates:
+            try:
+                d = datetime.strptime(d, '%Y%m%d').date().isoformat()
+                active_dates.append(d)
+            except ValueError:
+                continue
+        
+        #----
+        
+        # Output one row per payload with top-level info.
+        info = r.copy()
+        info['type'] = 'info'
+        mapred.write_fieldvals_tuple(context, info, schema.au_info_keys)
+        # Output each active date associated with this device.
+        adates = { 'type': 'activedates', 'deviceID': r['deviceID'] }
+        for d in active_dates:
+            adates['date'] = d
+            mapred.write_fieldvals_tuple(context, adates, 
+                                                schema.au_active_date_keys)
     
     except Exception as e:
         mapred.write_condition_tuple(context, type(e).__name__ + ' ' + str(e))
