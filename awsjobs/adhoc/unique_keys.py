@@ -4,7 +4,7 @@ Find the list of keys that occur across the JSON payloads, counting occurrences.
 
 import json
 import utils.mapred as mapred
-import payload_utils as util
+import utils.payload_utils as payload
 
 
 def map(key, dims, value, context):
@@ -14,7 +14,7 @@ def map(key, dims, value, context):
     
     try:
         r = json.loads(value)
-        keys = util.get_keypaths(r, (['info','apps'], ['info','searches'],))
+        keys = payload.get_keypaths(r, (['info','apps'], ['info','searches'],))
         skeys = set(keys)
         if len(skeys) != len(keys):
             mapred.write_condition_tuple(context, 'nonunique')
