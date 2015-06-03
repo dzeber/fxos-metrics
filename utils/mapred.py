@@ -36,6 +36,44 @@ def summing_reducer(key, values, context):
 # as an identifier for the type of record being outputted.
 
 
+def dict_to_ordered_list(d, schema):
+    """Convert a dict to a list of values as determined by a schema.
+    
+    The schema should be a list of keys to look up in the dict. Each key in 
+    the schema is looked up in turn, and appended to a list. If a key is 
+    missing from the dict, a placeholder value of '' is appended in its place.
+    
+    The result is a list of dict values containing an item for each key in the
+    schema, in the order given by the schema. Dict entries which are not listed
+    in the schema are ignored.
+    
+    This is useful for converting a dataset stored as a dict to an object
+    that can be used as a map-reduce key. In order to use the output in this
+    way, it must first be converted to a tuple:
+        vals = dict_to_ordered_list(d, schema)
+        context.write(tuple(vals), ...)
+    """
+    vals = list()
+    for key in schema:
+        if key not in d or d[key] is None:
+            vals.append('')
+        else:
+            vals.append(d[key])
+    return vals
+
+
+def write_datum_tuple(context, vals):
+    """Write a list of values as a map key mapping to 1, in order to count
+    occurrences.
+    
+    The key will be written in the form (datum', ...). 
+    Map-reduce records written using this method can then be parsed back 
+    using parse_output_tuple().
+    """
+    vals.insert(0, 'datum')
+    context.write(tuple(vals), 1)
+
+
 def write_fieldvals_tuple(context, d, schema): 
     """Write a dict of field names mapping to values as a key mapping to 1, 
     in order to count occurrences. 
@@ -47,14 +85,8 @@ def write_fieldvals_tuple(context, d, schema):
     Any keys in the schema that are missing from the dict 
     are added with the value ''.
     """
-    vals = ['datum']
-    for key in schema:
-        if key not in d or d[key] is None:
-            vals.append('')
-        else:
-            vals.append(d[key])
-    
-    context.write(tuple(vals), 1)
+    vals = dict_to_ordered_list(d, schema)
+    write_datum_tuple(context, vals)
 
 
 def increment_counter_tuple(context, name, group=None, n=1):
@@ -83,6 +115,8 @@ def parse_output_tuple(output_file):
     Read in output file containing one output record per line. 
     Separate records, conditions and counters.
     Records will be returned as lists with the count appended at the end.
+    The ordering of the fields is determined by the schema that was used 
+    in writing the tuples.
     Output is a map with keys 'records', 'counters', 'conditions'.
     """
     # Initialize storage. 
