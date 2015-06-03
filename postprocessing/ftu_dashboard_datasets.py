@@ -37,7 +37,7 @@ field_index = dict(
 # The number of days before today the dashboard dataset should cover.
 dashboard_range = 180
 # The number of days before today the dump dataset should cover.
-dump_range = 90
+dump_range = 180
 
 # Cutoff dates for inclusion in datasets.
 # No later than yesterday. 
