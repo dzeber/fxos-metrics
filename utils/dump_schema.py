@@ -155,3 +155,45 @@ au_device_info_keys = [
     # 'deviceID',
     # 'date'
 # ]
+
+au_info_csv = [
+    'deviceID',
+    'start_timestamp',
+    'is_dogfood',
+    'submission_date',
+    'start_date',
+    'stop_date',
+    'os',
+    'country',
+    'device',
+    'locale',
+    'language',
+    'update_channel',
+    'update_channel_standardized',
+    'platform_version',
+    'platform_build_id',
+    'sim_mcc',
+    'sim_mnc',
+    'sim_mcc_country',
+    'sim_mnc_network',
+    'sim_network_name',
+    'network_mcc',
+    'network_mnc',
+    'network_mcc_country',
+    'network_mnc_network',
+    'network_network_name',
+    'screen_width',
+    'screen_height',
+    'device_pixel_ratio',
+    'software',
+    'hardware',
+    'developer_menu_enabled',
+    'count'
+]
+
+au_activity_csv = [
+    'deviceID',
+    'is_dogfood',
+    'activity_date'
+]
+    
