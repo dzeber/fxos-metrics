@@ -13,6 +13,7 @@ indicating how many records were found belonging to the segment.
 
 import json
 from datetime import datetime
+import re
 
 import utils.ftu_formatter as fmt
 import utils.mapred as mapred
@@ -28,6 +29,14 @@ def consistent_au(r):
     """
     return r.get('appName') == 'FirefoxOS' and r.get('reason') == 'appusage'
 
+def is_dogfood_device(r):
+    """Determine whether or not the payload comes from a dogfooding device.
+    
+    AU pings from dogfooding devices are those whose deviceID is a 15-digit
+    IMEI number rather than the usual UUID.
+    """
+    return ('deviceID' in r and 
+                re.match('^[0-9]{15}$', r['deviceID']) is not None)
 
 def map(key, dims, value, context):
     """Parse the raw JSON payloads, reformat values, and output.
@@ -39,19 +48,23 @@ def map(key, dims, value, context):
     to the reducer for counting.
     """    
     mapred.increment_counter_tuple(context, 'nrecords')
-    
     try:
         r = json.loads(value)
-        
         # Check basic consistency. 
         if 'info' not in r:
             # All the data is inside the info object.
             mapred.write_condition_tuple(context, 'noinfo')
-            # return
+            return
         r = r['info']
         if not consistent_au(r):
             mapred.write_condition_tuple(context, 'inconsistent')
-            # return
+            return
+        # Make sure payloads have necessary identifiers - device ID and 
+        # recording start time.
+        for k in 'deviceID', 'start':
+            if k not in r:
+            mapred.write_condition_tuple(context, 'missing' + k)
+            return
         
         #-----
         
@@ -62,8 +75,8 @@ def map(key, dims, value, context):
         searches = r.pop('searches', None)
         
         # Remove telemetry-server fields.
-        for k in ['reason', 'appName', 'appVersion', 'appUpdateChannel',
-                    'appBuildID']:
+        for k in ('reason', 'appName', 'appVersion', 'appUpdateChannel',
+                    'appBuildID'):
             if k in r:
                 del r[k]
         
@@ -184,6 +197,9 @@ def map(key, dims, value, context):
         # In particular, setting OS to '1.3T' for Tarako devices.
         r = fmt.apply_general_formatting(r)
         
+        # Is this a dogfooding device?
+        r['dogfood'] = is_dogfood_device(r)
+        
         #-----
         
         # Find the set of dates on which the device was active.
@@ -203,16 +219,43 @@ def map(key, dims, value, context):
         
         #----
         
+        # Identifier values for this payload.
+        payload_id = mapred.dict_to_ordered_list(r, 
+                                            schema.au_ping_identifier_keys)
+        
         # Output one row per payload with top-level info.
-        info = r.copy()
-        info['type'] = 'info'
-        mapred.write_fieldvals_tuple(context, info, schema.au_info_keys)
-        # Output each active date associated with this device.
-        adates = { 'type': 'activedates', 'deviceID': r['deviceID'] }
+        # Start with the record type identifier.
+        info = ['info']
+        # Add the payload identifier.
+        info.extend(payload_id)
+        # Add the date fields for the payload.
+        info.extend(mapred.dict_to_ordered_list(r, schema.au_ping_dates_keys))
+        # Add the rest of the device info.
+        info.extend(mapred.dict_to_ordered_list(r, schema.au_device_info_keys))
+        mapred.write_datum_tuple(context, info)
+        
+        # Output one row per date with recorded app activity.
+        # Record type identifier. 
+        active = ['activedates']
+        # Payload identifier.
+        active.extend(payload_id)
+        # For each date in turn, set it as the last element of 'active' and 
+        # output the record.
+        datepos = len(active)
+        active.append(None)
         for d in active_dates:
-            adates['date'] = d
-            mapred.write_fieldvals_tuple(context, adates, 
-                                                schema.au_active_date_keys)
+            active[datepos] = d
+            mapred.write_datum_tuple(context, active)
+        
+        # info = r.copy()
+        # info['type'] = 'info'
+        # mapred.write_fieldvals_tuple(context, info, schema.au_info_keys)
+        # Output each active date associated with this device.
+        # adates = { 'type': 'activedates', 'deviceID': r['deviceID'] }
+        # for d in active_dates:
+            # adates['date'] = d
+            # mapred.write_fieldvals_tuple(context, adates, 
+                                                # schema.au_active_date_keys)
     
     except Exception as e:
         mapred.write_condition_tuple(context, type(e).__name__ + ' ' + str(e))

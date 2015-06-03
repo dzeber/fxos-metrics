@@ -1,15 +1,13 @@
 """
-Schemas (lists of keys) to be used for the output of FTU dump job.
+Schemas (lists of keys) to be used for the outputs of MR jobs.
 
-The list 'final_keys' is the final set of keys that should be outputted from 
-the restructured and formatted FTU payload. Any of these that are missing will 
-be added as None. Extraneous keys will be removed. Final values will be 
-combined into a tuple in the order given here.
-
-The lists 'dump_csv_headers' and 'dashboard_csv_headers' give the column
-names and ordering to be used in the CSV generated in the postprocessing step.
+The schemas are intended to be used together with 
+utils.mapred.write_fieldvals_tuple(). Since the MR outputs contain the values 
+of these fields but not the keys, the schemas are maintained centrally for 
+transparency.
 """
 
+# The set of keys outputted from the restructured and formatted FTU payload.
 final_keys = [
     'pingDate',
     'submissionDate',
@@ -47,6 +45,8 @@ final_keys = [
     'activationDate'
 ]
 
+# The column names and ordering for the dump CSV generated from the FTU 
+# ping data.
 dump_csv_headers = [
     'ping_date',
     'submission_date',
@@ -85,6 +85,8 @@ dump_csv_headers = [
     'count'
 ]
 
+# The column names and ordering for the dashboard CSV generated from the FTU 
+# ping data.
 dashboard_csv_headers = [
     'date',
     'os',
@@ -95,37 +97,51 @@ dashboard_csv_headers = [
     'activations'
 ]
 
-au_info_keys = [
-    'type',
+#------------------------------------------------------------------------
+
+# AU pings should be identifiable using these fields.
+au_ping_identifier_keys = [
     'deviceID',
+    'start',
+    'dogfood'
+]
+
+# The dates covered by a AU ping.
+au_ping_dates_keys = [
     'submissionDate',
     'startDate',
-    'stopDate',
-    # 5
+    'stopDate'
+]
+
+# The top-level device information to be recorded for AU payloads.
+# This should generally remain constant across AU pings from the same device,
+# although some values may change (eg. network info or OS version).
+au_device_info_keys = [
+    # 'type',
+    # 'deviceID',
+    # 'submissionDate',
+    # 'startDate',
+    # 'stopDate',
     'os',
     'country',
     'product_model',
     'locale',
     'language',
-    # 10
     'update_channel',
     'update_channel_standardized',
     'platform_version',
     'platform_build_id',
     'icc.mcc',
-    # 15
     'icc.mnc',
     'icc.country',
     'icc.network',
     'icc.name',
     'network.mcc',
-    # 20
     'network.mnc',
     'network.country',
     'network.network',
     'network.name',
     'screenWidth',
-    # 25
     'screenHeight',
     'devicePixelRatio',
     'software',
@@ -134,8 +150,8 @@ au_info_keys = [
     'developer.menu.enabled'
 ]
 
-au_active_date_keys = [
-    'type',
-    'deviceID',
-    'date'
-]
+# au_active_date_keys = [
+    # 'type',
+    # 'deviceID',
+    # 'date'
+# ]
