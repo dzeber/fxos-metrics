@@ -26,7 +26,7 @@ from datetime import date, timedelta
 import utils.mapred as mapred
 import utils.ftu_formatter as ftu
 import utils.dump_schema as schema
-
+import output_utils as util
 
 # Each datum will now be a tuple whose order is determined by 
 # schema.final_keys, rather than a dict.
@@ -46,16 +46,6 @@ latest_date = (date.today() - timedelta(days = 1)).isoformat()
 earliest_date = (date.today() - timedelta(days = dashboard_range)).isoformat()
 # Cutoff date for inclusion in dump csv is 3 months before today.
 earliest_for_dump = (date.today() - timedelta(days = dump_range)).isoformat()
-
-
-def encode_for_csv(val):
-    """Encode a value as UTF-8."""
-    return unicode(val).encode('utf-8', 'backslashreplace')
-
-
-def write_unicode_row(writer, row):
-    """Write CSV row after encoding values explicity (to avoid errors)."""
-    writer.writerow([encode_for_csv(v) for v in row])
 
 
 def accumulate_dashboard_row(dataset, raw_row):
@@ -127,7 +117,7 @@ def main(job_output, dashboard_csv, dump_csv):
         for r in dash_rows:
             next_row = list(r)
             next_row.append(dash_rows[r])
-            write_unicode_row(writer, next_row)
+            util.write_unicode_row(writer, next_row)
     
     print('Wrote dashboard CSV: %s rows\n' % len(dash_rows))
     
@@ -136,24 +126,15 @@ def main(job_output, dashboard_csv, dump_csv):
         writer = csv.writer(outfile)
         writer.writerow(headers)
         for r in dump_rows:
-            write_unicode_row(writer, r)
+            util.write_unicode_row(writer, r)
     
     print('Wrote dump CSV: %s rows\n' % len(dump_rows))
     
     # Output counters and diagnostics.
     print('Counters:')
-    for name in data['counters']:
-        counter = data['counters'][name]
-        # If this is a group, print all subcounters.
-        if type(counter) is dict:
-            for cname in counter:
-                print(name + ' | ' + cname + ' :  ' + str(counter[cname]))
-        else:
-            print(name + ' :  ' + str(counter))
-    
+    util.print_counter_info(data['counters'])
     print('\nError conditions:')
-    for name in data['conditions']:
-        print(name + ' :  ' + str(data['conditions'][name]))
+    util.print_condition_info(data['conditions'])
 
 
 if __name__ == "__main__":
