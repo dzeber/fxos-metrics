@@ -70,8 +70,9 @@ def write_datum_tuple(context, vals):
     Map-reduce records written using this method can then be parsed back 
     using parse_output_tuple().
     """
-    vals.insert(0, 'datum')
-    context.write(tuple(vals), 1)
+    datum = ['datum']
+    datum.extend(vals)
+    context.write(tuple(datum), 1)
 
 
 def write_fieldvals_tuple(context, d, schema): 

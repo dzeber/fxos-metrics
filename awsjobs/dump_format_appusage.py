@@ -63,16 +63,16 @@ def map(key, dims, value, context):
         # recording start time.
         for k in 'deviceID', 'start':
             if k not in r:
-            mapred.write_condition_tuple(context, 'missing' + k)
-            return
+                mapred.write_condition_tuple(context, 'missing' + k)
+                return
         
         #-----
         
         # Rearrange.
         
         # Separate apps and searches from other fields.
-        apps = r.pop('apps', None)
-        searches = r.pop('searches', None)
+        apps = r.pop('apps', {})
+        searches = r.pop('searches', {})
         
         # Remove telemetry-server fields.
         for k in ('reason', 'appName', 'appVersion', 'appUpdateChannel',
@@ -99,8 +99,9 @@ def map(key, dims, value, context):
         if 'simInfo' in r:
             si = r.pop('simInfo')
             for nw in 'icc', 'network':
-                if nw in si:
-                    for k in si[nw]:
+                nwvals = si.get(nw)
+                if nwvals is not None:
+                    for k in nwvals:
                         r[nw + '.' + k] = si[nw][k]            
         
         # There should not be more than 1 level.
