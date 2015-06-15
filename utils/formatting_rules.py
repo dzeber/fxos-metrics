@@ -161,6 +161,10 @@ device_subs = [
         # Panasonic TV.
         'regex': re.compile('^ptv-.*$', re.I),
         'repl': 'Panasonic TV'
+    },{
+        # Sony Xperia Z3C.
+        'regex': re.compile('^.*xperia\s*z3\s*c(ompact)?(\W+.*)?$', re.I),
+        'repl': 'Xperia Z3C'
     }
     # ,{
         # # GoFox.
