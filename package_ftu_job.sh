@@ -25,7 +25,8 @@ ln -s $BASE_DIR/awsjobs/filters/all_fxos_date.json $BASE_DIR/all_fxos_date.json
 tar cvfz "$TARGET_DIR/${1:-fxosping-dump-0.1.tar.gz}" -h \
     dump_format_ftu.py \
     all_fxos_date.json \
-    utils \
+    utils/*.py \
+    utils/lookup \
     settings.env \
     dump_recent_ftu.sh
     
