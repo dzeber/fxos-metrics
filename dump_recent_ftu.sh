@@ -12,13 +12,13 @@ fi
 START_DATE=`date +%Y%m%d -d "-9 months"`
 # START_DATE=20140401
 
-BASE=$(pwd)
-THIS_DIR=$(cd "`dirname "$0"`"; pwd)
+CURRENT_DIR=$(pwd)
+SRC_DIR=$(cd "`dirname "$0"`"; pwd)
 TELEMETRY_SERVER_DIR=$HOME/telemetry-server
 
 . settings.env
 
-OUTPUT_DIR=$BASE/$OUTPUT_DIR_NAME
+OUTPUT_DIR=$CURRENT_DIR/$OUTPUT_DIR_NAME
 OUTPUT_FILE=$OUTPUT_DIR/$DUMP_FILE
 LOG_FILE=$OUTPUT_DIR/$JOB_LOG_FILE
 BOTO_LOG=$OUTPUT_DIR/$BOTO_LOG_FILE
@@ -35,8 +35,8 @@ $LOG_TO_FILE && exec > $LOG_FILE 2>&1
 echo "It is now `date`"
 echo "Preparing job..."
 
-WORK_DIR=$BASE/work
-DATA_DIR=$BASE/data
+WORK_DIR=$CURRENT_DIR/work
+DATA_DIR=$CURRENT_DIR/data
 
 if [ ! -d "$WORK_DIR" ]; then
     mkdir "$WORK_DIR"
@@ -46,11 +46,16 @@ if [ ! -d "$DATA_DIR" ]; then
     mkdir "$DATA_DIR"
 fi
 
-JOB_FILE=$THIS_DIR/dump_format_ftu.py
-FILTER=$THIS_DIR/filter.json
+JOB_FILE=$SRC_DIR/dump_format_ftu.py
+FILTER=$SRC_DIR/filter.json
 
+cp $SRC_DIR/$FILTER_TEMPLATE $FILTER
+# Set the reason string.
+sed -i'' "s/__REASON__/ftu/" $FILTER
+# Set the date range.
 DATE_STRING="\"min\": \""$START_DATE"\""
-sed "s/__DATES__/$DATE_STRING/" $THIS_DIR/$FILTER_TEMPLATE > $FILTER
+# sed "s/__DATES__/$DATE_STRING/" $SRC_DIR/$FILTER_TEMPLATE > $FILTER
+sed -i'' "s/__DATES__/$DATE_STRING/" $FILTER
 
 echo "Job setup complete."
 #echo "Updating boto."
@@ -82,7 +87,7 @@ echo "Mapreduce job exited with code: $JOB_EXIT_CODE"
 echo "It is now `date`"
 echo "Packaging output..."
 
-cd "$BASE"
+cd "$CURRENT_DIR"
 tar czf "$TARBALL" "`basename $OUTPUT_DIR`"
 rm -f $OUTPUT_DIR/*
 mv $TARBALL $OUTPUT_DIR
