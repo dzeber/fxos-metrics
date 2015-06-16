@@ -8,8 +8,8 @@ The script expects the following command-line args:
 """
 
 # import os.path
-# import sys
-# import csv
+import sys
+import csv
 # from datetime import date, timedelta
 
 import utils.mapred as mapred
