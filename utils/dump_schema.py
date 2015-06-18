@@ -151,6 +151,19 @@ au_device_info_keys = [
     'developer.menu.enabled'
 ]
 
+au_app_data_keys = [
+    'usageTime',
+    'invocations',
+    'installs',
+    'uninstalls',
+    'activities'
+]
+
+au_search_count_keys = [
+    'count'
+]
+    
+
 # au_active_date_keys = [
     # 'type',
     # 'deviceID',
@@ -193,9 +206,35 @@ au_info_csv = [
     'count'
 ]
 
+au_app_csv = [
+    'deviceID',
+    'start_timestamp',
+    'stop_timestamp',
+    'is_dogfood',
+    'app_url',
+    'date',
+    'usage_time',
+    'invocations',
+    'installs',
+    'uninstalls',
+    'activities',
+    'count'      
+]
+
+au_search_csv = [
+    'deviceID',
+    'start_timestamp',
+    'stop_timestamp',
+    'is_dogfood',
+    'provider',
+    'date',
+    'searches',
+    'count'
+]
+
 au_activity_csv = [
     'deviceID',
     'is_dogfood',
     'activity_date'
 ]
-    
+

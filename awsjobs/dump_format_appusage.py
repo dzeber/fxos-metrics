@@ -38,6 +38,7 @@ def is_dogfood_device(r):
     return ('deviceID' in r and 
                 re.match('^[0-9]{15}$', r['deviceID']) is not None)
 
+
 def map(key, dims, value, context):
     """Parse the raw JSON payloads, reformat values, and output.
     
@@ -159,7 +160,6 @@ def map(key, dims, value, context):
                 # Both values are present.
                 if r['appUpdateChannel'] != r['update_channel']:
                     mapred.write_condition_tuple(context, 'inconsistent channel')
-        
         # Same for platform version and build.
         if 'appVersion' in r:
             if 'platform_version' not in r:
@@ -183,21 +183,17 @@ def map(key, dims, value, context):
         # Apply substitutions:
         if 'os' in r:
             r['os'] = fmt.format_os_string(r['os'])
-        
         if 'product_model' in r:
             r['product_model'] = fmt.format_device_string(r['product_model'])
-        
         if 'geoCountry' in r:
             country_name = fmt.lookup_country_code(r['geoCountry'])
             # If lookup fails, keep original geo code.
             r['country'] = (country_name if country_name is not None else
                 r['geoCountry'])
-        
         # Convert locale code to language name.
         # Keep original locale code for reference.
         if 'locale' in r:
             r['language'] = fmt.lookup_language(r['locale'])
-        
         # Keep original network codes, but try looking them up.
         for prefix in 'icc','network':
             mcc_key = prefix + '.mcc'
@@ -211,7 +207,6 @@ def map(key, dims, value, context):
                     if nw is not None:
                         nw = fmt.format_operator_string(nw)
                     r[prefix + '.network'] = nw
-        
         # Format network name strings. 
         if 'icc.spn' in r:
             r['icc.name'] = fmt.format_operator_string(r['icc.spn'])
@@ -223,27 +218,9 @@ def map(key, dims, value, context):
         # In particular, setting OS to '1.3T' for Tarako devices.
         r = fmt.apply_general_formatting(r)
         
-        # Is this a dogfooding device?
-        # r['dogfood'] = is_dogfood_device(r)
-        
-        #-----
-        
-        # Find the set of dates on which the device was active.
-        # First find the set of unique dates on which apps were used.
-        # unique_dates = set()
-        # for a in apps:
-            # for d in apps[a]:
-                # unique_dates.add(d)
-        # # Format the dates.
-        # active_dates = list()
-        # for d in unique_dates:
-            # try:
-                # d = datetime.strptime(d, '%Y%m%d').date().isoformat()
-                # active_dates.append(d)
-            # except ValueError:
-                # continue
-        
         #----
+        
+        # Emit payload information in tabular format.
         
         # Identifier values for this payload.
         payload_id = mapred.dict_to_ordered_list(r, 
@@ -262,28 +239,62 @@ def map(key, dims, value, context):
         info.extend(mapred.dict_to_ordered_list(r, schema.au_device_info_keys))
         mapred.write_datum_tuple(context, info)
         
-        # Output one row per date with recorded app activity.
-        # Record type identifier. 
-        active = ['activedates']
-        # Payload identifier.
-        active.extend(payload_id)
-        # For each date in turn, set it as the last element of 'active' and 
-        # output the record.
-        datepos = len(active)
-        active.append(None)
-        for d in active_dates:
-            active[datepos] = d
-            mapred.write_datum_tuple(context, active)
+        # Output one row per app per date in the payload with usage details. 
+        appinfo_header = ['app']
+        appinfo_header.extend(payload_id)
+        for appurl in apps:
+            for date in apps[appurl]:
+                # For each app used and date it was used:
+                
+                # Format date of app usage.
+                # Skip app data if the date is bad.
+                try:
+                    isodate = (datetime.strptime(date, '%Y%m%d')
+                                        .strftime('%Y-%m-%d'))
+                except ValueError:
+                    continue
+                appdata = apps[appurl][date]
+                # Flatten list of activities.
+                if 'activities' in appdata:
+                    activities = appdata['activities']
+                    if len(activities) == 0:
+                        # If activities element is an empty dict, remove it
+                        # so that it gets recorded as missing.
+                        del appdata['activities']
+                    else:
+                        appdata['activities'] = ';'.join(
+                            [k + ':' + str(activities[k]) for k in activities])
+                # Header info - tag and payload_id.
+                appinfo = list(appinfo_header)
+                # App URL and usage date.
+                appinfo.extend([appurl, isodate])
+                # Usage details.
+                appinfo.extend(mapred.dict_to_ordered_list(appdata, 
+                    schema.au_app_data_keys))
+                mapred.write_datum_tuple(context, appinfo)
         
-        # info = r.copy()
-        # info['type'] = 'info'
-        # mapred.write_fieldvals_tuple(context, info, schema.au_info_keys)
-        # Output each active date associated with this device.
-        # adates = { 'type': 'activedates', 'deviceID': r['deviceID'] }
-        # for d in active_dates:
-            # adates['date'] = d
-            # mapred.write_fieldvals_tuple(context, adates, 
-                                                # schema.au_active_date_keys)
+        # Output one row per search count in the payload. 
+        search_header = ['search']
+        search_header.extend(payload_id)
+        for provider in searches:
+            for date in searches[provider]:
+                # For each search provider and date it was used:
+                
+                # Format date of search.
+                # Skip search counts if the date is bad.
+                try:
+                    isodate = (datetime.strptime(date, '%Y%m%d')
+                                        .strftime('%Y-%m-%d'))
+                except ValueError:
+                    continue
+                # Header info - tag and payload_id.
+                searchinfo = list(search_header)
+                # Search provider and date.
+                searchinfo.extend([provider, isodate])
+                # Search count.
+                searchinfo.extend(mapred.dict_to_ordered_list(
+                    searches[provider][date], schema.au_search_count_keys))
+                mapred.write_datum_tuple(context, searchinfo)
     
     except Exception as e:
         mapred.write_condition_tuple(context, type(e).__name__ + ' ' + str(e))
