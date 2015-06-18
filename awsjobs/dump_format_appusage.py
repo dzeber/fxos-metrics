@@ -1,6 +1,6 @@
 """
-Map-reduce job to download recent FxOS AU records, sanitize and reformat field
-values, and count occurrences of unique combinations.
+Map-reduce job to download recent FxOS AU records and dump into tables 
+after sanitizing and reformatting field values.
 
 For each record, the mapper parses the record and stores relevant values in a
 dict, after reformatting and sanity-checking. The reducer then counts 
@@ -60,9 +60,9 @@ def map(key, dims, value, context):
             mapred.write_condition_tuple(context, 'inconsistent')
             return
         # Make sure payloads have necessary identifiers - device ID and 
-        # recording start time.
-        for k in 'deviceID', 'start':
-            if k not in r:
+        # recording start and stop times.
+        for k in schema.au_ping_identifier_keys:
+            if r.get(k) is None:
                 mapred.write_condition_tuple(context, 'missing' + k)
                 return
         
@@ -75,10 +75,10 @@ def map(key, dims, value, context):
         searches = r.pop('searches', {})
         
         # Remove telemetry-server fields.
-        for k in ('reason', 'appName', 'appVersion', 'appUpdateChannel',
-                    'appBuildID'):
-            if k in r:
-                del r[k]
+        # for k in ('reason', 'appName', 'appVersion', 'appUpdateChannel',
+                    # 'appBuildID'):
+            # if k in r:
+                # del r[k]
         
         # Flatten deviceinfo subdict, stripping 'deviceinfo' prefix.
         if 'deviceinfo' in r:
@@ -149,6 +149,31 @@ def map(key, dims, value, context):
             # Keep 'update_channel'.
             del r['app.update.channel']
         
+        # If deviceinfo.update_channel is missing, try populating it 
+        # using the server-side value.
+        # Otherwise, check for consistency.
+        if 'appUpdateChannel' in r:
+            if 'update_channel' not in r:
+                r['update_channel'] = r['appUpdateChannel']
+            else:
+                # Both values are present.
+                if r['appUpdateChannel'] != r['update_channel']:
+                    mapred.write_condition_tuple(context, 'inconsistent channel')
+        
+        # Same for platform version and build.
+        if 'appVersion' in r:
+            if 'platform_version' not in r:
+                r['platform_version'] = r['appVersion']
+            else:
+                if r['appVersion'] != r['platform_version']:
+                    mapred.write_condition_tuple(context, 'inconsistent version')
+        if 'appBuildID' in r:
+            if 'platform_build_id' not in r:
+                r['platform_build_id'] = r['appBuildID']
+            else:
+                if r['appBuildID'] != r['platform_build_id']:
+                    mapred.write_condition_tuple(context, 'inconsistent buildID')
+        
         # Add simplified form of update channel - 
         # more useful for separating them.
         if 'update_channel' in r:
@@ -199,30 +224,32 @@ def map(key, dims, value, context):
         r = fmt.apply_general_formatting(r)
         
         # Is this a dogfooding device?
-        r['dogfood'] = is_dogfood_device(r)
+        # r['dogfood'] = is_dogfood_device(r)
         
         #-----
         
         # Find the set of dates on which the device was active.
         # First find the set of unique dates on which apps were used.
-        unique_dates = set()
-        for a in apps:
-            for d in apps[a]:
-                unique_dates.add(d)
-        # Format the dates.
-        active_dates = list()
-        for d in unique_dates:
-            try:
-                d = datetime.strptime(d, '%Y%m%d').date().isoformat()
-                active_dates.append(d)
-            except ValueError:
-                continue
+        # unique_dates = set()
+        # for a in apps:
+            # for d in apps[a]:
+                # unique_dates.add(d)
+        # # Format the dates.
+        # active_dates = list()
+        # for d in unique_dates:
+            # try:
+                # d = datetime.strptime(d, '%Y%m%d').date().isoformat()
+                # active_dates.append(d)
+            # except ValueError:
+                # continue
         
         #----
         
         # Identifier values for this payload.
         payload_id = mapred.dict_to_ordered_list(r, 
-                                            schema.au_ping_identifier_keys)
+            schema.au_ping_identifier_keys)
+        # Add flag for dogfooding devices.
+        payload_id.append(is_dogfood_device(r))        
         
         # Output one row per payload with top-level info.
         # Start with the record type identifier.

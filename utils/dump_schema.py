@@ -103,7 +103,8 @@ dashboard_csv_headers = [
 au_ping_identifier_keys = [
     'deviceID',
     'start',
-    'dogfood'
+    'stop'
+    # 'dogfood'
 ]
 
 # The dates covered by a AU ping.
@@ -159,6 +160,7 @@ au_device_info_keys = [
 au_info_csv = [
     'deviceID',
     'start_timestamp',
+    'stop_timestamp',
     'is_dogfood',
     'submission_date',
     'start_date',
