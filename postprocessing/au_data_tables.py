@@ -3,8 +3,9 @@ Load the AU data outputted by the map-reduce job, and convert to CSV.
 
 The script expects the following command-line args:
 - the path to the map-reduce output file, which is the input to this script
-- the path to the output CSV containing top-level device info
-- the path to the output CSV containing dates of activity
+- the path to the output CSV to contain top-level device info
+- the path to the output CSV to contain app usage data
+- the path to the output CSV to contain search counts
 """
 
 # import os.path
@@ -68,71 +69,52 @@ import output_utils as util
         # dataset[new_row] = dataset[new_row] + count
 
 
-def main(job_output, ping_info_csv, active_dates_csv):
+def main(job_output, info_csv, app_csv, search_csv):
     """Load map-reduce output, and write relevant subsets to CSVs.
     """
     data = mapred.parse_output_tuple(job_output)
     
-    # Split info records from the active dates records.
-    # Join info records by (deviceID,dogfood).
-    # info = {}
-    info = []
-    activity = []
+    # Split records into tables for info, app activity, and search.
+    # Also make a count of duplicate payloads for diagnostic purposes.
+    tables = {}
+    # A mapping of payload ID to occurrence counts for each type.
+    payload_counts = {}
     for r in data['records']:
         type = r.pop(0)
-        if type == 'info':
-            # r.pop(1)
-            info.append(r)
-            # Map deviceID to device info.
-            # infokey = (r[0], r[2])
-            # if infokey not in info:
-                # info[infokey] = []
-            # info[infokey].append(r[3:])
-        else:
-            # For active dates, record (deviceID, dogfood, date).
-            activity.append([r[0], r[2], r[3]])
+        
+        # Keep track of counts.
+        n = r.pop()
+        count_key = tuple(r[:(len(schema.au_ping_identifier_keys) + 1)])
+        if count_key not in payload_counts:
+            payload_counts[count_key] = {}
+        if type not in payload_counts[count_key]:
+            payload_counts[count_key][type] = {}
+        counts = payload_counts[count_key][type]
+        # Count number of unique records/table rows for this payload ID.
+        counts['rows'] = counts.get('rows', 0) + 1
+        # Count number of total records for this payload ID including
+        # duplicate payloads.
+        counts['total'] = counts.get('total', 0) + n
+        
+        # Store row.
+        if type not in tables:
+            tables[type] = []
+        tables[type].append(r)
     
-    
-    # # Accumulate subsets of data to be converted to CSV.
-    # # Dump rows will be stored as a list of row lists. 
-    # dump_rows = []
-    # # Dashboard rows will be stored as a mapping of value tuples to a count.
-    # dash_rows = {}
-    # for r in data['records']:
-        # record_date = r[field_index['submissionDate']]
-        # if record_date == '':
-            # continue
-        # if record_date > latest_date or record_date < earliest_date:
-            # continue
-        # # Add to dashboard data. 
-        # accumulate_dashboard_row(dash_rows, r)
-        # # Add to dump CSV if required. 
-        # if record_date >= earliest_for_dump:
-            # dump_rows.append(r)
-    
-    # # Write to output files.
-    # headers = schema.dashboard_csv_headers
-    # with open(dashboard_csv, 'w') as outfile:
-        # writer = csv.writer(outfile)
-        # writer.writerow(headers)
-        # for r in dash_rows:
-            # next_row = list(r)
-            # next_row.append(dash_rows[r])
-            # write_unicode_row(writer, next_row)
-    
-    # print('Wrote dashboard CSV: %s rows\n' % len(dash_rows))
-    
-    # headers = schema.dump_csv_headers
-    with open(ping_info_csv, 'w') as outfile:
+    with open(info_csv, 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_info_csv)
-        for r in info:
+        for r in tables['info']:
             util.write_unicode_row(writer, r)
-    
-    with open(active_dates_csv, 'w') as outfile:
+    with open(app_csv, 'w') as outfile:
         writer = csv.writer(outfile)
-        writer.writerow(schema.au_activity_csv)
-        for r in activity:
+        writer.writerow(schema.au_app_csv)
+        for r in tables['app']:
+            util.write_unicode_row(writer, r)
+    with open(search_csv, 'w') as outfile:
+        writer = csv.writer(outfile)
+        writer.writerow(schema.au_search_csv)
+        for r in tables['search']:
             util.write_unicode_row(writer, r)
     
     # print('Wrote dump CSV: %s rows\n' % len(dump_rows))
@@ -142,11 +124,30 @@ def main(job_output, ping_info_csv, active_dates_csv):
     util.print_counter_info(data['counters'])
     print('\nError conditions:')
     util.print_condition_info(data['conditions'])
+    # Check for duplicates and print info.
+    print('\nDuplicates:')
+    print(('\n* %s unique payload IDs (device ID, start timestamp, ' + 
+        'stop timestamp)') % len(payload_counts))
+    dupes = {'repeatedapporsearch': 0, 'differentinfo': 0, 'duplicateinfo': 0}
+    for v in payload_counts.itervalues():
+        if v['info']['rows'] > 1:
+            dupes['differentinfo'] += 1
+        elif v['info']['total'] > 1:
+            dupes['duplicateinfo'] += 1
+        elif (('app' in v and v['app']['total'] > v['app']['rows']) or 
+                ('search' in v and v['search']['total'] > v['search']['rows'])):
+            dupes['repeatedapporsearch'] += 1
+    print('\n* %s payload IDs with multiple info records' % 
+        dupes['differentinfo'])
+    print('\n* %s payload IDs with repeated info records' % 
+        dupes['duplicateinfo'])
+    print('\n* %s payload IDs with repeated app or search records' % 
+        dupes['repeatedapporsearch'])
 
 
 if __name__ == "__main__":
-    job_output = sys.argv[1]
-    ping_info_csv = sys.argv[2]
-    active_dates_csv = sys.argv[3]
-    main(job_output, ping_info_csv, active_dates_csv)
+    if len(sys.argv) < 5:
+        sys.exit(2)
+    main(*sys.argv[1:5])
+    sys.exit(0)
 
