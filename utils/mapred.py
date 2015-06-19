@@ -62,6 +62,17 @@ def dict_to_ordered_list(d, schema):
     return vals
 
 
+def prepare_datum_key(vals):
+    """Convert a list of values to a map key.
+    
+    The key will be written in the form (datum', ...). 
+    Map-reduce records written using this method can then be parsed back 
+    using parse_output_tuple().
+    """
+    datum = ['datum'] + vals
+    return tuple(datum)
+
+
 def write_datum_tuple(context, vals):
     """Write a list of values as a map key mapping to 1, in order to count
     occurrences.
@@ -70,9 +81,9 @@ def write_datum_tuple(context, vals):
     Map-reduce records written using this method can then be parsed back 
     using parse_output_tuple().
     """
-    datum = ['datum']
-    datum.extend(vals)
-    context.write(tuple(datum), 1)
+    # datum = ['datum']
+    # datum.extend(vals)
+    context.write(prepare_datum_key(vals), 1)
 
 
 def write_fieldvals_tuple(context, d, schema): 

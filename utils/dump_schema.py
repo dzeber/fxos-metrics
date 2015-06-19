@@ -107,12 +107,16 @@ au_ping_identifier_keys = [
     # 'dogfood'
 ]
 
+# Number of fields to consider part of the ping ID.
+# Include an extra field for dogfooding.
+# au_ping_id_length = len(au_ping_identifier_keys) + 1
+
 # The dates covered by a AU ping.
-au_ping_dates_keys = [
-    'submissionDate',
-    'startDate',
-    'stopDate'
-]
+# au_ping_dates_keys = [
+    # 'submissionDate',
+    # 'startDate',
+    # 'stopDate'
+# ]
 
 # The top-level device information to be recorded for AU payloads.
 # This should generally remain constant across AU pings from the same device,
@@ -120,9 +124,9 @@ au_ping_dates_keys = [
 au_device_info_keys = [
     # 'type',
     # 'deviceID',
-    # 'submissionDate',
-    # 'startDate',
-    # 'stopDate',
+    'submissionDate',
+    'startDate',
+    'stopDate',
     'os',
     'country',
     'product_model',
@@ -148,10 +152,13 @@ au_device_info_keys = [
     'software',
     'hardware',
     # 'firmware_revision',
-    'developer.menu.enabled'
+    'developer.menu.enabled',
+    'dogfood'
 ]
 
 au_app_data_keys = [
+    'appurl',
+    'date',
     'usageTime',
     'invocations',
     'installs',
@@ -160,6 +167,8 @@ au_app_data_keys = [
 ]
 
 au_search_count_keys = [
+    'provider',
+    'date',
     'count'
 ]
     

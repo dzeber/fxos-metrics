@@ -75,12 +75,6 @@ def map(key, dims, value, context):
         apps = r.pop('apps', {})
         searches = r.pop('searches', {})
         
-        # Remove telemetry-server fields.
-        # for k in ('reason', 'appName', 'appVersion', 'appUpdateChannel',
-                    # 'appBuildID'):
-            # if k in r:
-                # del r[k]
-        
         # Flatten deviceinfo subdict, stripping 'deviceinfo' prefix.
         if 'deviceinfo' in r:
             di = r.pop('deviceinfo')
@@ -218,34 +212,14 @@ def map(key, dims, value, context):
         # In particular, setting OS to '1.3T' for Tarako devices.
         r = fmt.apply_general_formatting(r)
         
-        #----
+        # Tag for payloads from dogfooding devices.
+        r['dogfood'] = is_dogfood_device(r)
         
-        # Emit payload information in tabular format.
-        
-        # Identifier values for this payload.
-        payload_id = mapred.dict_to_ordered_list(r, 
-            schema.au_ping_identifier_keys)
-        # Add flag for dogfooding devices.
-        payload_id.append(is_dogfood_device(r))        
-        
-        # Output one row per payload with top-level info.
-        # Start with the record type identifier.
-        info = ['info']
-        # Add the payload identifier.
-        info.extend(payload_id)
-        # Add the date fields for the payload.
-        info.extend(mapred.dict_to_ordered_list(r, schema.au_ping_dates_keys))
-        # Add the rest of the device info.
-        info.extend(mapred.dict_to_ordered_list(r, schema.au_device_info_keys))
-        mapred.write_datum_tuple(context, info)
-        
-        # Output one row per app per date in the payload with usage details. 
-        appinfo_header = ['app']
-        appinfo_header.extend(payload_id)
+        # Format app and search data and flatten to tabular format.
+        appdata = []
         for appurl in apps:
             for date in apps[appurl]:
                 # For each app used and date it was used:
-                
                 # Format date of app usage.
                 # Skip app data if the date is bad.
                 try:
@@ -253,33 +227,27 @@ def map(key, dims, value, context):
                                         .strftime('%Y-%m-%d'))
                 except ValueError:
                     continue
-                appdata = apps[appurl][date]
+                appstats = apps[appurl][date]
                 # Flatten list of activities.
-                if 'activities' in appdata:
-                    activities = appdata['activities']
-                    if len(activities) == 0:
+                if 'activities' in appstats:
+                    if len(appstats['activities']) == 0:
                         # If activities element is an empty dict, remove it
                         # so that it gets recorded as missing.
-                        del appdata['activities']
+                        del appstats['activities']
                     else:
-                        appdata['activities'] = ';'.join(
-                            [k + ':' + str(activities[k]) for k in activities])
-                # Header info - tag and payload_id.
-                appinfo = list(appinfo_header)
-                # App URL and usage date.
-                appinfo.extend([appurl, isodate])
-                # Usage details.
-                appinfo.extend(mapred.dict_to_ordered_list(appdata, 
-                    schema.au_app_data_keys))
-                mapred.write_datum_tuple(context, appinfo)
+                        # Stringify the activities dict.
+                        activities = ';'.join(
+                            ['%s:%s' % (k,v) for k, v in appstats['activities'].items()])
+                        appstats['activities'] = activities
+                # Add URL and date to record.
+                appstats['appurl'] = appurl
+                appstats['date'] = isodate
+                appdata.append(appstats)
         
-        # Output one row per search count in the payload. 
-        search_header = ['search']
-        search_header.extend(payload_id)
+        searchcounts = []
         for provider in searches:
             for date in searches[provider]:
                 # For each search provider and date it was used:
-                
                 # Format date of search.
                 # Skip search counts if the date is bad.
                 try:
@@ -287,21 +255,164 @@ def map(key, dims, value, context):
                                         .strftime('%Y-%m-%d'))
                 except ValueError:
                     continue
-                # Header info - tag and payload_id.
-                searchinfo = list(search_header)
-                # Search provider and date.
-                searchinfo.extend([provider, isodate])
-                # Search count.
-                searchinfo.extend(mapred.dict_to_ordered_list(
-                    searches[provider][date], schema.au_search_count_keys))
-                mapred.write_datum_tuple(context, searchinfo)
+                sc = searches[provider][date]
+                sc['provider'] = provider
+                sc['date'] = isodate
+                searchcounts.append(sc)
+        
+        #----
+        
+        # Emit payload information keyed by payload identifier.
+        
+        payload_id = mapred.dict_to_ordered_list(r, 
+            schema.au_ping_identifier_keys)
+        payload_key = mapred.prepare_datum_key(payload_id)
+        # Add flag for dogfooding devices.
+        #payload_id.append(is_dogfood_device(r))        
+        
+        # Output one row per payload with top-level info.
+        info_row = mapred.dict_to_ordered_list(r, schema.au_device_info_keys)
+        info_row.append('info')
+        context.write(payload_key, info_row)
+        # Output each app and search row separately.
+        for app_row in appdata:
+            app_row = mapred.dict_to_ordered_list(app_row, 
+                schema.au_app_data_keys)
+            app_row.append('app')
+            context.write(payload_key, app_row)
+        for search_row in searchcounts:
+            search_row = mapred.dict_to_ordered_list(search_row, 
+                schema.au_search_count_keys)
+            search_row.append('search')
+            context.write(payload_key, search_row)
+        
+        # # Start with the record type identifier.
+        # info = ['info']
+        # # Add the payload identifier.
+        # info.extend(payload_id)
+        # # Add the date fields for the payload.
+        # info.extend(mapred.dict_to_ordered_list(r, schema.au_ping_dates_keys))
+        # # Add the rest of the device info.
+        # info.extend(mapred.dict_to_ordered_list(r, schema.au_device_info_keys))
+        # mapred.write_datum_tuple(context, info)
+        
+        # Output one row per app per date in the payload with usage details. 
+        # appinfo_header = ['app']
+        # appinfo_header.extend(payload_id)
+        # for appurl in apps:
+            # for date in apps[appurl]:
+                # # For each app used and date it was used:
+                
+                # # Format date of app usage.
+                # # Skip app data if the date is bad.
+                # try:
+                    # isodate = (datetime.strptime(date, '%Y%m%d')
+                                        # .strftime('%Y-%m-%d'))
+                # except ValueError:
+                    # continue
+                # appdata = apps[appurl][date]
+                # # Flatten list of activities.
+                # if 'activities' in appdata:
+                    # activities = appdata['activities']
+                    # if len(activities) == 0:
+                        # # If activities element is an empty dict, remove it
+                        # # so that it gets recorded as missing.
+                        # del appdata['activities']
+                    # else:
+                        # appdata['activities'] = ';'.join(
+                            # [k + ':' + str(activities[k]) for k in activities])
+                # # Header info - tag and payload_id.
+                # appinfo = list(appinfo_header)
+                # # App URL and usage date.
+                # appinfo.extend([appurl, isodate])
+                # # Usage details.
+                # appinfo.extend(mapred.dict_to_ordered_list(appdata, 
+                    # schema.au_app_data_keys))
+                # mapred.write_datum_tuple(context, appinfo)
+        
+        # # Output one row per search count in the payload. 
+        # search_header = ['search']
+        # search_header.extend(payload_id)
+        # for provider in searches:
+            # for date in searches[provider]:
+                # # For each search provider and date it was used:
+                
+                # # Format date of search.
+                # # Skip search counts if the date is bad.
+                # try:
+                    # isodate = (datetime.strptime(date, '%Y%m%d')
+                                        # .strftime('%Y-%m-%d'))
+                # except ValueError:
+                    # continue
+                # # Header info - tag and payload_id.
+                # searchinfo = list(search_header)
+                # # Search provider and date.
+                # searchinfo.extend([provider, isodate])
+                # # Search count.
+                # searchinfo.extend(mapred.dict_to_ordered_list(
+                    # searches[provider][date], schema.au_search_count_keys))
+                # mapred.write_datum_tuple(context, searchinfo)
     
     except Exception as e:
         mapred.write_condition_tuple(context, type(e).__name__ + ' ' + str(e))
         return
 
 
+def reduce(key, values, context):
+    """Deduplicate data records and maintain counts.
+    
+    Data records consist of a collection of tabular rows containing payload
+    info, keyed by a payload identifier. Only a single unique info row should
+    exist for each payload ID. Count duplicates, and output unique record.
+    
+    For non-data records (eg. counters), default to the summing reducer.
+    """
+    if key[0] == 'datum':
+        # Separate info records from others.
+        rows = {'info': [], 'other': []}
+        for v in values:
+            if v[-1] == 'info':
+                rows['info'].append(tuple(v))
+            else:
+                rows['other'].append(tuple(v))
+        raw_counts = {}
+        for k in rows:
+            raw_counts[k] = len(rows[k])
+            # Deduplicate.
+            rows[k] = set(rows[k])
+        # If there are multiple unique info rows, check whether 
+        # the difference is caused by the submission date (element 0).
+        if len(rows['info']) > 1:
+            without_submission_date = []
+            for r in rows['info']:
+                without_submission_date.append(r[1:])
+            without_submission_date = set(without_submission_date)
+            if len(without_submission_date) == 1:
+                # The only difference was submission date.
+                # Retain the info record with earliest submission date.
+                rows['info'] = list(rows['info'])
+                submission_dates = [r[0] for r in rows['info']]
+                final_index = submission_dates.index(min(submission_dates))
+                rows['info'] = rows['info'][final_index]
+            else:
+                # We have multiple unique info rows.
+                # Error condition.
+        # Output unique rows.
+        context.write(key, rows['info'][0])
+        for r in rows['other']:
+            context.write(key, r)
+        
+        
+        
+        
+        
+    else:
+        # Otherwise use summing reducer.
+        mapred.summing_reducer(key, values, context)
+        
+        
+        
 # Summing reducer with combiner. 
-reduce = mapred.summing_reducer
-combine = reduce
+# reduce = mapred.summing_reducer
+# combine = reduce
 
