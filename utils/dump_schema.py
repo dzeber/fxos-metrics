@@ -156,6 +156,7 @@ au_device_info_keys = [
     'dogfood'
 ]
 
+# The app usage data rows.
 au_app_data_keys = [
     'appurl',
     'date',
@@ -166,6 +167,7 @@ au_app_data_keys = [
     'activities'
 ]
 
+# The search count rows.
 au_search_count_keys = [
     'provider',
     'date',

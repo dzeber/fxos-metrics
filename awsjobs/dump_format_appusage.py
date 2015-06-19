@@ -365,6 +365,12 @@ def reduce(key, values, context):
     info, keyed by a payload identifier. Only a single unique info row should
     exist for each payload ID. Count duplicates, and output unique record.
     
+    Outputted records follow the general format in utils.mapred.
+    A tag ('info', 'app', 'search') will be found at the end of each data
+    row outputted as a MR value.
+    The info rows will have an additional penultimate count giving the total
+    number of records for that payload.
+    
     For non-data records (eg. counters), default to the summing reducer.
     """
     if key[0] == 'datum':
@@ -380,6 +386,7 @@ def reduce(key, values, context):
             raw_counts[k] = len(rows[k])
             # Deduplicate.
             rows[k] = set(rows[k])
+        # Extract the single info row for this payload.
         # If there are multiple unique info rows, check whether 
         # the difference is caused by the submission date (element 0).
         if len(rows['info']) > 1:
@@ -390,28 +397,36 @@ def reduce(key, values, context):
             if len(without_submission_date) == 1:
                 # The only difference was submission date.
                 # Retain the info record with earliest submission date.
-                rows['info'] = list(rows['info'])
-                submission_dates = [r[0] for r in rows['info']]
+                info_rows = list(rows['info'])
+                submission_dates = [r[0] for r in info_rows]
                 final_index = submission_dates.index(min(submission_dates))
-                rows['info'] = rows['info'][final_index]
+                info_row = info_rows[final_index]
             else:
                 # We have multiple unique info rows.
                 # Error condition.
+                # Output multiple info rows with tag.
+                # Skip app/search data.
+                key = list(key)
+                key[1] = 'multiple:%s' % key[1]
+                key = tuple(key)
+                for r in rows['info']:
+                    context.write(key, r)
+                return
+        else:
+            info_row = rows['info'].pop()
+        # Append total number of records for this payload ID:
+        info_row = list(info_row)
+        info_row.insert(len(info_row) - 1, raw_counts['info'])
         # Output unique rows.
-        context.write(key, rows['info'][0])
+        context.write(key, info_row)
         for r in rows['other']:
             context.write(key, r)
-        
-        
-        
-        
-        
     else:
         # Otherwise use summing reducer.
         mapred.summing_reducer(key, values, context)
-        
-        
-        
+
+
+
 # Summing reducer with combiner. 
 # reduce = mapred.summing_reducer
 # combine = reduce
