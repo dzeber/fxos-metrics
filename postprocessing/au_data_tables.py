@@ -126,7 +126,7 @@ def main(job_output, info_csv, app_csv, search_csv):
     util.print_condition_info(data['conditions'])
     # Check for duplicates and print info.
     print('\nDuplicates:')
-    print(('\n* %s unique payload IDs (device ID, start timestamp, ' + 
+    print(('* %s unique payload IDs (device ID, start timestamp, ' + 
         'stop timestamp)') % len(payload_counts))
     dupes = {'repeatedapporsearch': 0, 'differentinfo': 0, 'duplicateinfo': 0}
     for v in payload_counts.itervalues():
@@ -137,11 +137,11 @@ def main(job_output, info_csv, app_csv, search_csv):
         elif (('app' in v and v['app']['total'] > v['app']['rows']) or 
                 ('search' in v and v['search']['total'] > v['search']['rows'])):
             dupes['repeatedapporsearch'] += 1
-    print('\n* %s payload IDs with multiple info records' % 
+    print('* %s payload IDs with multiple info records' % 
         dupes['differentinfo'])
-    print('\n* %s payload IDs with repeated info records' % 
+    print('* %s payload IDs with repeated info records' % 
         dupes['duplicateinfo'])
-    print('\n* %s payload IDs with repeated app or search records' % 
+    print('* %s payload IDs with repeated app or search records' % 
         dupes['repeatedapporsearch'])
 
 

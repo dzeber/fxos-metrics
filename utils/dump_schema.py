@@ -202,8 +202,7 @@ au_info_csv = [
     'device_pixel_ratio',
     'software',
     'hardware',
-    'developer_menu_enabled',
-    'count'
+    'developer_menu_enabled'
 ]
 
 au_app_csv = [
@@ -217,8 +216,7 @@ au_app_csv = [
     'invocations',
     'installs',
     'uninstalls',
-    'activities',
-    'count'      
+    'activities'
 ]
 
 au_search_csv = [
@@ -228,13 +226,12 @@ au_search_csv = [
     'is_dogfood',
     'provider',
     'date',
-    'searches',
-    'count'
+    'searches'
 ]
 
-au_activity_csv = [
-    'deviceID',
-    'is_dogfood',
-    'activity_date'
-]
+# au_activity_csv = [
+    # 'deviceID',
+    # 'is_dogfood',
+    # 'activity_date'
+# ]
 
