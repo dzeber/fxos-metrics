@@ -185,7 +185,6 @@ au_info_csv = [
     'deviceID',
     'start_timestamp',
     'stop_timestamp',
-    'is_dogfood',
     'submission_date',
     'start_date',
     'stop_date',
@@ -213,7 +212,8 @@ au_info_csv = [
     'device_pixel_ratio',
     'software',
     'hardware',
-    'developer_menu_enabled'
+    'developer_menu_enabled',
+    'is_dogfood'
 ]
 
 au_app_csv = [

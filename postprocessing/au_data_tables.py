@@ -11,12 +11,14 @@ The script expects the following command-line args:
 # import os.path
 import sys
 import csv
+import ast
 # from datetime import date, timedelta
 
 import utils.mapred as mapred
 # import utils.ftu_formatter as ftu
 import utils.dump_schema as schema
 import output_utils as util
+from collections import defaultdict
 
 # # Each datum will now be a tuple whose order is determined by 
 # # schema.final_keys, rather than a dict.
@@ -70,79 +72,75 @@ import output_utils as util
 
 
 def main(job_output, info_csv, app_csv, search_csv):
-    """Load map-reduce output, and write relevant subsets to CSVs.
+    """Load map-reduce output and split records into tables.
+       
+    Count duplicates and write relevant subsets to CSVs.
     """
-    data = mapred.parse_output_tuple(job_output)
+    output = mapred.parse_output_tuple(job_output)
+    data = []
+    for r in output['records']:
+        vals = ast.literal_eval(r.pop())
+        data.append(r + list(vals))
     
     # Split records into tables for info, app activity, and search.
-    # Also make a count of duplicate payloads for diagnostic purposes.
-    tables = {}
-    # A mapping of payload ID to occurrence counts for each type.
-    payload_counts = {}
-    for r in data['records']:
-        type = r.pop(0)
-        
-        # Keep track of counts.
-        n = r.pop()
-        count_key = tuple(r[:(len(schema.au_ping_identifier_keys) + 1)])
-        if count_key not in payload_counts:
-            payload_counts[count_key] = {}
-        if type not in payload_counts[count_key]:
-            payload_counts[count_key][type] = {}
-        counts = payload_counts[count_key][type]
-        # Count number of unique records/table rows for this payload ID.
-        counts['rows'] = counts.get('rows', 0) + 1
-        # Count number of total records for this payload ID including
-        # duplicate payloads.
-        counts['total'] = counts.get('total', 0) + n
-        
-        # Store row.
-        if type not in tables:
-            tables[type] = []
-        tables[type].append(r)
+    # Also keep count of duplicate records and cases with multiple records.
+    tables = defaultdict(list)
+    # Maintain separate counts for dogfooders and others.
+    duplicate_counts = defaultdict(lambda: defaultdict(int))
+    multiple_info = []
+    for d in data:
+        type = d.pop()
+        if type == 'info':
+            # First check for the multiple rows tag.
+            if d[0].startswith('multiple:'):
+                # In this case, save these records separately.
+                multiple_info.append(d)
+                continue
+            n = d.pop()
+            if n > 1:
+                # Make a note of any duplicates.
+                dupes = duplicate_counts['dogfood' if d[-1] else 'general']
+                dupes['payloads'] += 1
+                dupes['total'] += n
+        tables[type].append(d)
     
+    # Print some statistics about the job and the dataset.
+    print('Counters:')
+    util.print_counter_info(output['counters'])
+    print('\nError conditions:')
+    util.print_condition_info(output['conditions'])
+    # Duplicates.
+    if len(duplicate_counts) > 0:
+        print('\nDuplicates:')
+        for group, counts in duplicate_counts.items():
+            print(('* %s payloads had duplicate submissions in the %s group; ' +
+                '%s duplicate records were removed for these payloads.') %
+                (counts['payloads'], group, counts['total'] - counts['payloads']))
+    # Multiple records.
+    if len(multiple_info) > 0:
+        print('\nSome payloads had multiple unique info records:')
+        for r in multiple_info:
+            print(r)
+    
+    # Write output CSVs.
     with open(info_csv, 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_info_csv)
         for r in tables['info']:
             util.write_unicode_row(writer, r)
+    print('\nWrote info CSV: %s rows' % len(tables['info']))
     with open(app_csv, 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_app_csv)
         for r in tables['app']:
             util.write_unicode_row(writer, r)
+    print('\nWrote app CSV: %s rows' % len(tables['app']))
     with open(search_csv, 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_search_csv)
         for r in tables['search']:
             util.write_unicode_row(writer, r)
-    
-    # print('Wrote dump CSV: %s rows\n' % len(dump_rows))
-    
-    # Output counters and diagnostics.
-    print('Counters:')
-    util.print_counter_info(data['counters'])
-    print('\nError conditions:')
-    util.print_condition_info(data['conditions'])
-    # Check for duplicates and print info.
-    print('\nDuplicates:')
-    print(('* %s unique payload IDs (device ID, start timestamp, ' + 
-        'stop timestamp)') % len(payload_counts))
-    dupes = {'repeatedapporsearch': 0, 'differentinfo': 0, 'duplicateinfo': 0}
-    for v in payload_counts.itervalues():
-        if v['info']['rows'] > 1:
-            dupes['differentinfo'] += 1
-        elif v['info']['total'] > 1:
-            dupes['duplicateinfo'] += 1
-        elif (('app' in v and v['app']['total'] > v['app']['rows']) or 
-                ('search' in v and v['search']['total'] > v['search']['rows'])):
-            dupes['repeatedapporsearch'] += 1
-    print('* %s payload IDs with multiple info records' % 
-        dupes['differentinfo'])
-    print('* %s payload IDs with repeated info records' % 
-        dupes['duplicateinfo'])
-    print('* %s payload IDs with repeated app or search records' % 
-        dupes['repeatedapporsearch'])
+    print('\nWrote search CSV: %s rows' % len(tables['search']))
 
 
 if __name__ == "__main__":
