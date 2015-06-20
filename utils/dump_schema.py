@@ -164,14 +164,16 @@ au_app_data_keys = [
     'invocations',
     'installs',
     'uninstalls',
-    'activities'
+    'activities',
+    'dogfood'
 ]
 
 # The search count rows.
 au_search_count_keys = [
     'provider',
     'date',
-    'count'
+    'count',
+    'dogfood'
 ]
     
 
@@ -227,7 +229,8 @@ au_app_csv = [
     'invocations',
     'installs',
     'uninstalls',
-    'activities'
+    'activities',
+    'is_dogfood'
 ]
 
 au_search_csv = [
@@ -237,7 +240,8 @@ au_search_csv = [
     'is_dogfood',
     'provider',
     'date',
-    'searches'
+    'searches',
+    'is_dogfood'
 ]
 
 # au_activity_csv = [

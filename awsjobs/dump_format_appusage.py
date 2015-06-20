@@ -242,6 +242,7 @@ def map(key, dims, value, context):
                 # Add URL and date to record.
                 appstats['appurl'] = appurl
                 appstats['date'] = isodate
+                appstats['dogfood'] = r['dogfood']
                 appdata.append(appstats)
         
         searchcounts = []
@@ -258,6 +259,7 @@ def map(key, dims, value, context):
                 sc = searches[provider][date]
                 sc['provider'] = provider
                 sc['date'] = isodate
+                sc['dogfood'] = r['dogfood']
                 searchcounts.append(sc)
         
         #----
