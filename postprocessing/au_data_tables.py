@@ -73,7 +73,7 @@ from collections import defaultdict
 
 def main(job_output, info_csv, app_csv, search_csv):
     """Load map-reduce output and split records into tables.
-       
+    
     Count duplicates and write relevant subsets to CSVs.
     """
     output = mapred.parse_output_tuple(job_output)
@@ -134,13 +134,13 @@ def main(job_output, info_csv, app_csv, search_csv):
         writer.writerow(schema.au_app_csv)
         for r in tables['app']:
             util.write_unicode_row(writer, r)
-    print('\nWrote app CSV: %s rows' % len(tables['app']))
+    print('\Wrote app CSV: %s rows' % len(tables['app']))
     with open(search_csv, 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_search_csv)
         for r in tables['search']:
             util.write_unicode_row(writer, r)
-    print('\nWrote search CSV: %s rows' % len(tables['search']))
+    print('\Wrote search CSV: %s rows' % len(tables['search']))
 
 
 if __name__ == "__main__":
