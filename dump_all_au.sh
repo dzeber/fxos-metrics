@@ -78,7 +78,7 @@ echo "It is now `date`"
 echo "Packaging output..."
 
 cd "$CURRENT_DIR"
-tar cvzf "$TARBALL" "`basename $OUTPUT_DIR`"/*
+tar cvzf "$TARBALL" -C "$OUTPUT_DIR" .
 rm -f $OUTPUT_DIR/*
 mv $TARBALL $OUTPUT_DIR
 
