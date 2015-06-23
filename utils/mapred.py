@@ -171,8 +171,8 @@ def parse_output_tuple(output_file):
             continue
         
         # Otherwise we a have a data record.
-        if 'records' not in data:
-            data['records'] = []
+        # if 'records' not in data:
+            # data['records'] = []
         vals.append(record_value)
         data['records'].append(vals)
     
