@@ -139,13 +139,13 @@ def main(job_output, csv_dir):
         writer.writerow(schema.au_app_csv)
         for r in tables['app']:
             util.write_unicode_row(writer, r)
-    print('\Wrote app CSV: %s rows' % len(tables['app']))
+    print('Wrote app CSV: %s rows' % len(tables['app']))
     with open(os.path.join(csv_dir, search_csv), 'w') as outfile:
         writer = csv.writer(outfile)
         writer.writerow(schema.au_search_csv)
         for r in tables['search']:
             util.write_unicode_row(writer, r)
-    print('\Wrote search CSV: %s rows' % len(tables['search']))
+    print('Wrote search CSV: %s rows' % len(tables['search']))
     
     # Next, summarize/aggregate data and write tables.
     # First check ping submissions for overlap.
@@ -365,13 +365,13 @@ def main(job_output, csv_dir):
             for app_key, vals in app_rows.iteritems():
                 row = [device_id] + list(app_key) + vals
                 util.write_unicode_row(writer, row)
-    print('\nWrote dogfood details CSV: %s rows' % 
+    print('Wrote dogfood details CSV: %s rows' % 
         sum(map(len, dogfood_appusage.values())))
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         sys.exit(2)
-    main(*sys.argv[1:2])
+    main(*sys.argv[1:3])
     sys.exit(0)
 
