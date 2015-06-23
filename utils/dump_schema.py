@@ -248,3 +248,25 @@ au_search_csv = [
     # 'activity_date'
 # ]
 
+au_dogfood_details_csv = [
+    'deviceID',
+    'earliest_start',
+    'latest_stop',
+    'earliest_submission',
+    'latest_submission',
+    'earliest_appusage',
+    'latest_appusage',
+    'num_pings',
+    'changed_info' ] + au_info_csv
+
+au_dogfood_appusage_csv = [
+    'deviceID',
+    'app_url',
+    'date',
+    'usage_time',
+    'invocations',
+    'installs',
+    'uninstalls',
+    'activities'
+]
+        
