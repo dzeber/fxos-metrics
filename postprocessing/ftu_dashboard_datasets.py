@@ -98,6 +98,8 @@ def main(job_output, dashboard_csv, dump_csv):
     # Dashboard rows will be stored as a mapping of value tuples to a count.
     dash_rows = {}
     for r in data['records']:
+        # Make sure the count is numeric.
+        r[-1] = int(r[-1])
         record_date = r[field_index['submissionDate']]
         if record_date == '':
             continue
