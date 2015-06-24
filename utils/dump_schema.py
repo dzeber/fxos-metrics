@@ -257,7 +257,7 @@ au_dogfood_details_csv = [
     'earliest_appusage',
     'latest_appusage',
     'num_pings',
-    'changed_info' ] + au_info_csv
+    'changed_info' ] + au_info_csv[6:-1]
 
 au_dogfood_appusage_csv = [
     'deviceID',
