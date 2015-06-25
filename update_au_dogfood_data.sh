@@ -78,8 +78,8 @@ fi
 
 # Extract tarball - creates a subdir called "output" containing files. 
 # rm -f $JOB_OUTPUT/*
-# tar xvzf $TARBALL -C  $DUMP_WORK_DIR
-tar xvzf $TARBALL
+tar xvzf $TARBALL -C $DUMP_WORK_DIR
+# tar xvzf $TARBALL
 
 if [ ! -s "$OUTPUT_DATA" ]; then
     # Something went wrong - no data file downloaded.
@@ -99,8 +99,9 @@ fi
 echo "Processing data..."
 cd $SRC_DIR
 python -m $PYTHON_MODULE $OUTPUT_DATA $DATA_DIR
+cd $DATA_DIR
 
-if [ ! "ls -1 $DATA_DIR | grep -q '\.csv$'" ]; then
+if [ ! "ls -1 | grep -q '\.csv$'" ]; then
     echo "Something went wrong - no CSV files generated."
     echo "" | mail -s "FAILED: FxOS AU data - no csv files" "$ADDR@mozilla.com" 
     exit 1
@@ -120,8 +121,7 @@ fi
 # Update the last updated time.
 echo "Done. Recording data update time."
 date -r $OUTPUT_DATA +"%Y-%m-%d %H:%M:%S" > $LAST_UPDATED_PATH
-        
-        
+
 if [[ "$1" == "--nocopy" ]]; then
     echo "Data files will not be copied to web server."
     echo "Done: `date`."
@@ -130,11 +130,12 @@ fi
 
 # Copy new data to web server.
 echo "Copying data files to web server."
-tar cvfz csvs.tar.gz *.csv
+tar cvfz csvs.tar.gz *.csv last_updated
 scp csvs.tar.gz "$WWW:$(ssh $WWW ". .bash_profile; echo \$AU_CSV")"
 REMOTE_CMD=". .bash_profile; cd \$AU_CSV; tar xvfz csvs.tar.gz; rm csvs.tar.gz"
 REMOTE_CMD="$REMOTE_CMD; chmod 644 *"
 ssh $WWW "$REMOTE_CMD"
+rm csvs.tar.gz
 
 # echo "Pushing to s3."
 # aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
