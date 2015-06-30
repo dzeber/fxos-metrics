@@ -60,14 +60,13 @@ if grep -q "$SERVER_LAST_UPDATED" $LAST_UPDATED_PATH; then
 fi
 
 # Download new data, if available, process, and copy to server.
-# cd $DUMP_WORK_DIR
 rm -f $TARBALL
 echo "Downloading latest output from AWS."
 aws s3 cp "$S3_FXOS_DUMP/$DUMP_TARBALL" "$DUMP_WORK_DIR"
 
 if [ ! -e "$TARBALL" ]; then
     echo "Failed to download tarball from AWS."
-    echo "" | mail -s "FAILED: FxOS FTU data - unable to download $DUMP_TARBALL" \
+    echo "" | mailx -s "FAILED: FxOS FTU data - unable to download $DUMP_TARBALL" \
         "$ADDR@mozilla.com" 
     echo "Sent email notice. Exiting..."
     exit 1
@@ -86,7 +85,8 @@ if [ ! -s "$OUTPUT_DATA" ]; then
         echo "-- No log file --" > $OUTPUT_LOG
     fi
     # Send email notice with log file as text. 
-    mail -s "FAILED: FxOS FTU data - no data file $DUMP_FILE" "$ADDR@mozilla.com" < $OUTPUT_LOG
+    mailx -s "FAILED: FxOS FTU data - no data file $DUMP_FILE" "$ADDR@mozilla.com" \
+        < $OUTPUT_LOG
     echo "Sent email notice. Exiting..."
     exit 1
 fi
@@ -98,12 +98,14 @@ python -m $PYTHON_MODULE $OUTPUT_DATA $DASHBOARD_CSV_PATH $DUMP_CSV_PATH
     
 if [ ! -e "$DASHBOARD_CSV_PATH" ]; then
     echo "Something went wrong - no dashboard CSV file generated."
-    echo "" | mail -s "FAILED: FxOS FTU data - no csv `$CSV_FILE`" "$ADDR@mozilla.com" 
+    echo "" | mailx -s "FAILED: FxOS FTU data - no csv `$CSV_FILE`" \
+        "$ADDR@mozilla.com" 
     exit 1
 fi
 if [ ! -e "$DUMP_CSV_PATH" ]; then
     echo "Something went wrong - no dump CSV file generated."
-    echo "" | mail -s "FAILED: FxOS FTU data - no csv `$DUMP_CSV`" "$ADDR@mozilla.com" 
+    echo "" | mailx -s "FAILED: FxOS FTU data - no csv `$DUMP_CSV`" \
+        "$ADDR@mozilla.com" 
     exit 1
 fi
 

@@ -70,16 +70,14 @@ aws s3 cp "$S3_FXOS_AU/$DUMP_TARBALL" "$DUMP_WORK_DIR"
 
 if [ ! -e "$TARBALL" ]; then
     echo "Failed to download tarball from AWS."
-    echo "" | mail -s "FAILED: FxOS AU data - unable to download $DUMP_TARBALL" \
+    echo "" | mailx -s "FAILED: FxOS AU data - unable to download $DUMP_TARBALL" \
         "$ADDR@mozilla.com" 
     echo "Sent email notice. Exiting..."
     exit 1
 fi
 
 # Extract tarball - creates a subdir called "output" containing files. 
-# rm -f $JOB_OUTPUT/*
 tar xvzf $TARBALL -C $DUMP_WORK_DIR
-# tar xvzf $TARBALL
 
 if [ ! -s "$OUTPUT_DATA" ]; then
     # Something went wrong - no data file downloaded.
@@ -90,7 +88,8 @@ if [ ! -s "$OUTPUT_DATA" ]; then
         echo "-- No log file --" > $OUTPUT_LOG
     fi
     # Send email notice with log file as text. 
-    mail -s "FAILED: FxOS AU data - no data file $DUMP_FILE" "$ADDR@mozilla.com" < $OUTPUT_LOG
+    mailx -s "FAILED: FxOS AU data - no data file $DUMP_FILE" "$ADDR@mozilla.com" \
+        < $OUTPUT_LOG
     echo "Sent email notice. Exiting..."
     exit 1
 fi
@@ -103,20 +102,9 @@ cd $DATA_DIR
 
 if [ ! "ls -1 | grep -q '\.csv$'" ]; then
     echo "Something went wrong - no CSV files generated."
-    echo "" | mail -s "FAILED: FxOS AU data - no csv files" "$ADDR@mozilla.com" 
+    echo "" | mailx -s "FAILED: FxOS AU data - no csv files" "$ADDR@mozilla.com" 
     exit 1
 fi
-
-# if [ ! -e "$DASHBOARD_CSV_PATH" ]; then
-    # echo "Something went wrong - no dashboard CSV file generated."
-    # echo "" | mail -s "FAILED: FxOS FTU data - no csv `$CSV_FILE`" "$ADDR@mozilla.com" 
-    # exit 1
-# fi
-# if [ ! -e "$DUMP_CSV_PATH" ]; then
-    # echo "Something went wrong - no dump CSV file generated."
-    # echo "" | mail -s "FAILED: FxOS FTU data - no csv `$DUMP_CSV`" "$ADDR@mozilla.com" 
-    # exit 1
-# fi
 
 # Update the last updated time.
 echo "Done. Recording data update time."
@@ -136,11 +124,6 @@ REMOTE_CMD=". .bash_profile; cd \$AU_CSV; tar xvfz csvs.tar.gz; rm csvs.tar.gz"
 REMOTE_CMD="$REMOTE_CMD; chmod 644 *"
 ssh $WWW "$REMOTE_CMD"
 rm csvs.tar.gz
-
-# echo "Pushing to s3."
-# aws --profile metricsprogram s3 cp $DASHBOARD_CSV_PATH "$S3_DASHBOARD/$CSV_FILE"
-# # aws --profile metricsprogram s3 cp $DUMP_CSV_PATH "$S3_DASHBOARD/$DUMP_CSV"
-# aws --profile metricsprogram s3 cp $LAST_UPDATED_PATH "$S3_DASHBOARD/$UPDATED_TIME_FILE"
 
 echo "Done: `date`."
 exit 0
