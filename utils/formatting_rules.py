@@ -60,7 +60,7 @@ def general_formatting(datum):
     if ('product_model' in datum and 
                             datum['product_model'].startswith('Panasonic')):
         if panasonic_fw.match(str(datum['firmware_revision'])) is None:
-            datum['product_model'] = datum + ' (test)'
+            datum['product_model'] += ' (test)'
     return datum
 
 
