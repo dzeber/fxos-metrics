@@ -56,6 +56,11 @@ def general_formatting(datum):
     # OS should be 1.4 for GoFox devices. 
     if 'product_model' in datum and datum['product_model'].startswith('GoFox'):
         datum['os'] = '1.4'
+    # Tag Panasonic test devices based on firmware verison number.
+    if ('product_model' in datum and 
+                            datum['product_model'].startswith('Panasonic')):
+        if panasonic_fw.match(str(datum['firmware_revision'])) is None:
+            datum['product_model'] = datum + ' (test)'
     return datum
 
 
@@ -71,6 +76,9 @@ valid_os = re.compile('^(1\.[34]|2\.[0-9]|3\.[0-9])(T|\s\(pre-release\))?$')
 
 # Standard channels to search for in channel string.
 standard_channels = re.compile('release|beta|aurora|nightly|default')
+
+# Panasonic consumer devices have a specific format for the firmware version.
+panasonic_fw = re.compile('^[1-9][0-9]{3}$')
 
 # Strip country identifier from locale code. 
 locale_base_code = { 
