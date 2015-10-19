@@ -164,6 +164,9 @@ au_app_data_keys = [
     'invocations',
     'installs',
     'uninstalls',
+    'enables',
+    'disables',
+    'addOn',
     'activities',
     'dogfood'
 ]
