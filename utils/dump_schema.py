@@ -273,6 +273,9 @@ au_dogfood_appusage_csv = [
     'invocations',
     'installs',
     'uninstalls',
+    'enables',
+    'disables',
+    'is_addon',
     'activities'
 ]
         
