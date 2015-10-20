@@ -360,7 +360,7 @@ def main(job_output, csv_dir):
         for app_key in app_data:
             app_data_values = [str(v) for v in app_data[app_key]['counts']]
             app_data_values.append(';'.join(
-                sorted(app_data[app_key]['addon_flag'])))
+                [str(v) for v in sorted(app_data[app_key]['addon_flag'])]))
             app_data_values.append(';'.join(['%s:%s' % x
                 for x in app_data[app_key]['activities'].iteritems()]))
             app_data[app_key] = app_data_values
