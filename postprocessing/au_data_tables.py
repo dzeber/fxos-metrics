@@ -322,20 +322,48 @@ def main(job_output, csv_dir):
             # App rows are identified by app URL and usage date.
             app_key = (p[2], p[3])
             if app_key not in app_data:
-                app_data[app_key] = p[4:]
+                # Add a new record.
+                # Store values in a dict for convenient aggregation, and 
+                # convert to strings at the end.
+                app_details = {}
+                app_details['counts'] = [0 if v == '' else v for v in p[4:9]]
+                # Maintain set of unique addon flag values seen for this app
+                # and date. Should be either empty or a single value.
+                app_details['addon_flag'] = set()
+                # Maintain a mapping of activity identifiers to counts.
+                app_details['activities'] = {}
+                if p[10]:
+                    app_details['addon_flag'].add(p[10])
+                if p[11]:
+                    # Activities are recorded in the format 'a:1;b:2'.
+                    current_activities = p[11].split(';')
+                    for curr_act in current_activities:
+                        curr_act = curr_act.rsplit(':', 1)
+                        app_details['activities'][curr_act[0]] = int(curr_act[1])
+                app_data[app_key] = app_details
             else:
                 # Aggregate across values already present.
-                for i in range(4):
-                #for i in range(6):
-                    app_data[app_key][i] += p[4+i]
-                # The addon flag is a boolean and should be the same in 
-                # every payload.
-                # Report by joining together unique values.
-                # TODO
-                # Join activities counts represented as strings.
-                if p[-1]:
-                    app_data[app_key][-1] = (p[-1] if not app_data[app_key][-1]
-                        else ';'.join([app_data[app_key][-1], p[-1]]))
+                for i in range(6):
+                    # Add in new numerical values.
+                    if p[4+i]:
+                        app_data[app_key]['counts'][i] += p[4+i]
+                if p[10]:
+                    app_data[app_key]['addon_flag'].add(p[10])
+                if p[11]:
+                    # If we have more activity counts, increment.
+                    current_activities = p[11].split(';')
+                    for curr_act in current_activities:
+                        curr_act = curr_act.rsplit(':', 1)
+                        app_data[app_key]['activities'][curr_act[0]] = (
+                            int(curr_act[1]))
+        # Convert app data values to strings.
+        for app_key in app_data:
+            app_data_values = [str(v) for v in app_data[app_key]['counts']]
+            app_data_values.append(';'.join(
+                sorted(app_data[app_key]['addon_flag'])))
+            app_data_values.append(';'.join(['%s:%s' % x
+                for x in app_data[app_key]['activities'].iteritems()]))
+            app_data[app_key] = app_data_values
         dogfood_appusage[device_id] = app_data
         # Add app usage dates summary to dogfood_details.
         usage_dates = [k[1] for k in app_data]
