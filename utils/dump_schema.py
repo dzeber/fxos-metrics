@@ -231,6 +231,9 @@ au_app_csv = [
     'invocations',
     'installs',
     'uninstalls',
+    'enables',
+    'disables',
+    'is_addon',
     'activities',
     'is_dogfood'
 ]
