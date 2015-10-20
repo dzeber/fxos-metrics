@@ -325,44 +325,48 @@ def main(job_output, csv_dir):
                 # Add a new record.
                 # Store values in a dict for convenient aggregation, and 
                 # convert to strings at the end.
-                app_details = {}
-                app_details['counts'] = [0 if v == '' else v for v in p[4:10]]
+                # app_details = {}
+                app_data[app_key] = {
+                    'counts': [0, 0, 0, 0, 0, 0],
+                # app_details['counts'] = [0 if v == '' else v for v in p[4:10]]
                 # Maintain set of unique addon flag values seen for this app
                 # and date. Should be either empty or a single value.
-                app_details['addon_flag'] = set()
+                # app_details['addon_flag'] = set()
+                    'addon_flag': set(),
                 # Maintain a mapping of activity identifiers to counts.
-                app_details['activities'] = {}
-                if p[10]:
-                    app_details['addon_flag'].add(p[10])
-                if p[11]:
+                    'activities': defaultdict(lambda: 0)
+                }
+                # if p[10] != '':
+                    # app_details['addon_flag'].add(p[10])
+                # if p[11]:
                     # Activities are recorded in the format 'a:1;b:2'.
-                    current_activities = p[11].split(';')
-                    for curr_act in current_activities:
-                        curr_act = curr_act.rsplit(':', 1)
-                        app_details['activities'][curr_act[0]] = int(curr_act[1])
-                app_data[app_key] = app_details
-            else:
+                    # current_activities = p[11].split(';')
+                    # for curr_act in current_activities:
+                        # curr_act = curr_act.rsplit(':', 1)
+                        # app_details['activities'][curr_act[0]] = int(curr_act[1])
+                # app_data[app_key] = app_details
+            # else:
                 # Aggregate across values already present.
-                for i in range(6):
-                    # Add in new numerical values.
-                    if p[4+i]:
-                        app_data[app_key]['counts'][i] += p[4+i]
-                if p[10]:
-                    app_data[app_key]['addon_flag'].add(p[10])
-                if p[11]:
-                    # If we have more activity counts, increment.
-                    current_activities = p[11].split(';')
-                    for curr_act in current_activities:
-                        curr_act = curr_act.rsplit(':', 1)
-                        app_data[app_key]['activities'][curr_act[0]] = (
-                            int(curr_act[1]))
+            for i in range(6):
+                # Add in new numerical values.
+                if p[4+i]:
+                    app_data[app_key]['counts'][i] += p[4+i]
+            if p[10] != '':
+                app_data[app_key]['addon_flag'].add(p[10])
+            if p[11]:
+                # If we have activity counts, increment.
+                current_activities = p[11].split(';')
+                for curr_act in current_activities:
+                    curr_act = curr_act.rsplit(':', 1)
+                    app_data[app_key]['activities'][curr_act[0]] += (
+                        int(curr_act[1]))
         # Convert app data values to strings.
         for app_key in app_data:
             app_data_values = [str(v) for v in app_data[app_key]['counts']]
             app_data_values.append(';'.join(
                 [str(v) for v in sorted(app_data[app_key]['addon_flag'])]))
-            app_data_values.append(';'.join(['%s:%s' % x
-                for x in app_data[app_key]['activities'].iteritems()]))
+            app_data_values.append(';'.join(sorted(['%s:%s' % x
+                for x in app_data[app_key]['activities'].iteritems()])))
             app_data[app_key] = app_data_values
         dogfood_appusage[device_id] = app_data
         # Add app usage dates summary to dogfood_details.
