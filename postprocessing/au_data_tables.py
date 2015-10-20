@@ -326,7 +326,7 @@ def main(job_output, csv_dir):
                 # Store values in a dict for convenient aggregation, and 
                 # convert to strings at the end.
                 app_details = {}
-                app_details['counts'] = [0 if v == '' else v for v in p[4:9]]
+                app_details['counts'] = [0 if v == '' else v for v in p[4:10]]
                 # Maintain set of unique addon flag values seen for this app
                 # and date. Should be either empty or a single value.
                 app_details['addon_flag'] = set()
