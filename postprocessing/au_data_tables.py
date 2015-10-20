@@ -296,8 +296,8 @@ def main(job_output, csv_dir):
         # timestamp.
         deviceinfo = [(payloads[0][0], get_device_info(payloads[0]))]
         for i in range(1, len(payloads)):
-            newinfo = get_device_info(payloads[1])
-            #newinfo = get_device_info(payloads[i])
+            #newinfo = get_device_info(payloads[1])
+            newinfo = get_device_info(payloads[i])
             if newinfo != deviceinfo[-1][1]:
                 deviceinfo.append((payloads[i][0], newinfo))
         # Store full latest device info.
