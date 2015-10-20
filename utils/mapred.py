@@ -123,12 +123,18 @@ def write_condition_tuple(context, condition):
 
 def parse_output_tuple(output_file):
     """Parse back the output of a map-reduce job recorded using tuples.
-
-    Read in output file containing one output record per line. 
-    Separate records, conditions and counters.
-    Records will be returned as lists with the count appended at the end.
-    The ordering of the fields is determined by the schema that was used 
-    in writing the tuples.
+    
+    Read in output file containing one output record per line. Separate 
+    records, conditions and counters.
+    
+    Records will be returned as lists with the entire value appended at the 
+    end as a string. If the value is a count, it will need to be converted 
+    to numeric. If the value is a list, the entire list will be represented
+    as a single string (the result of calling str()) on it.
+    
+    The ordering of the fields in the key and value is determined by the 
+    schema that was used in writing the tuples.
+    
     Output is a map with keys 'records', 'counters', 'conditions'.
     """
     # Initialize storage. 
@@ -139,19 +145,18 @@ def parse_output_tuple(output_file):
     
     # Parse records line by line.
     for row in open(output_file):
+        # Split the row into key and value.
         parsed_row = row.rstrip().rsplit('\t', 1)
-        
+        # Interpret the key as a list, confusingly named 'vals'.
         vals = list(ast.literal_eval(parsed_row[0]))
         # Strip the key type identifier.
         type = vals.pop(0)
-        # n = int(parsed_row[1])
         record_value = parsed_row[1]
         
         # Proceed according to key type. 
         if type == 'condition': 
             if 'conditions' not in data:
                 data['conditions'] = {}
-            # data['conditions'][vals[0]] = n
             data['conditions'][vals[0]] = int(record_value)
             continue
         
@@ -171,8 +176,7 @@ def parse_output_tuple(output_file):
             continue
         
         # Otherwise we a have a data record.
-        # if 'records' not in data:
-            # data['records'] = []
+        # Append the value string to the end of key list.
         vals.append(record_value)
         data['records'].append(vals)
     
