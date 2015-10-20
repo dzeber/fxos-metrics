@@ -6,69 +6,17 @@ The script expects the following command-line args:
 - the dir path to contain the output CSVs.
 """
 
-# import os.path
 import sys
 import csv
 import ast
 import os.path
-# from datetime import date, timedelta
 
 import utils.mapred as mapred
-# import utils.ftu_formatter as ftu
 import utils.dump_schema as schema
 import output_utils as util
 from collections import defaultdict
 
-# # Each datum will now be a tuple whose order is determined by 
-# # schema.final_keys, rather than a dict.
-# # Create a mapping of field names to indices for clear reference. 
-# field_index = dict(
-    # zip(schema.final_keys, range(0, len(schema.final_keys) - 1)))
-
-# # The number of days before today the dashboard dataset should cover.
-# dashboard_range = 180
-# # The number of days before today the dump dataset should cover.
-# dump_range = 90
-
-# # Cutoff dates for inclusion in datasets.
-# # No later than yesterday. 
-# latest_date = (date.today() - timedelta(days = 1)).isoformat()
-# # No earlier than 180 days ago. 
-# earliest_date = (date.today() - timedelta(days = dashboard_range)).isoformat()
-# # Cutoff date for inclusion in dump csv is 3 months before today.
-# earliest_for_dump = (date.today() - timedelta(days = dump_range)).isoformat()
-
-
-# def accumulate_dashboard_row(dataset, raw_row):
-    # """Convert a raw datum to a row for the dashboard CSV, and add to dataset.
-    
-    # The relevant values for the dashboard CSV are extracted from raw_row and 
-    # summarized if necessary. The reduced data row is then added to dataset,
-    # a dict mapping rows to occurrence counts, and the count is updated if
-    # necessary.     
-    # """
-    # new_row = []
-    # # Extract relevant fields, and check them against lookup tables.
-    # # See dump_schema.py for list indices.
-    # new_row.append(raw_row[field_index['submissionDate']])
-    # new_row.append(ftu.summarize_os(raw_row[field_index['os']]))
-    # new_row.append(ftu.summarize_country(raw_row[field_index['country']]))
-    # new_row.append(ftu.summarize_device(raw_row[field_index['product_model']]))
-    # new_row.append(ftu.summarize_operator(
-        # raw_row[field_index['icc.network']], 
-        # raw_row[field_index['icc.name']], 
-        # raw_row[field_index['network.network']], 
-        # raw_row[field_index['network.name']]
-    # ))
-    # new_row = tuple(new_row)
-    # # Add occurrence count from the original data.
-    # count = raw_row[-1]
-    # # Add new row to dashboard dataset, accumulating counts if necessary.
-    # if new_row not in dataset:
-        # dataset[new_row] = count
-    # else:
-        # dataset[new_row] = dataset[new_row] + count
-
+# Output CSV naming.
 info_csv = 'info.csv'
 app_csv = 'app.csv'
 search_csv = 'search.csv'
@@ -80,11 +28,37 @@ def main(job_output, csv_dir):
     """Load map-reduce output and split records into tables.
     
     Count duplicates and write relevant subsets to CSVs.
+    
+    Data from the raw payloads are split into three groups that are each
+    recorded in a separate table: 
+    - top-level device/OS info ("info")
+    - daily app usage ("app")
+    - daily search counts ("search")
+    These are recorded per payload, which are identified using (deviceID,
+    start time, stop time).
+    
+    Next, the payloads from foxfood devices are joined by device, 
+    and aggregate top-level info and daily app usage data are reported 
+    separately.
+    
+    Some diagnostics are also reported around joining pings from the same
+    device. Ideally the start-to-stop time periods should be sequential with
+    negligible overlap, although this is not always the case.
+    
+    Currently fields in the key and value are referred to by positional index,
+    which is quick but non-transparent and non-robust. The ordering for the 
+    fields are determined by the 'au_{...}_{...}_keys' lists in 
+    ../utils/dump_schema.py.
     """
+    # Parse raw data
+    # -------------- 
+    
     output = mapred.parse_output_tuple(job_output)
     data = []
     for r in output['records']:
+        # The MR value is a list or tuple stored as its string representation.
         vals = ast.literal_eval(r.pop())
+        # Convert the MR value to a list and join it to the key, a tuple.
         data.append(r + list(vals))
     
     # Split records into tables for info, app activity, and search.
@@ -108,6 +82,9 @@ def main(job_output, csv_dir):
                 dupes['payloads'] += 1
                 dupes['total'] += n
         tables[type].append(d)
+    
+    # Dump flattened raw data and counts
+    # ----------------------------------
     
     # Print some statistics about the job and the dataset.
     print('Counters:')
@@ -147,15 +124,19 @@ def main(job_output, csv_dir):
             util.write_unicode_row(writer, r)
     print('Wrote search CSV: %s rows' % len(tables['search']))
     
-    # Next, summarize/aggregate data and write tables.
+    # Group pings by device, and report on conditions such as bad overlap.
+    # --------------------------------------------------------------------
+    
+    # Summarize/aggregate data and write tables.
     # First check ping submissions for overlap.
-    # Map device ID to its associated pings.
+    # Map device ID to its associated pings identified by (start, stop) times.
     # Also set up a reference list of which devices are dogfooding participants.
     pings_by_device = defaultdict(list)
     is_dogfood_device = {}
     inconsistent_dogfooding_flag = 0
     for row in tables['info']:
         device_id = row[0]
+        # If device has not yet been seen, record whether it is a foxfooder.
         if device_id not in is_dogfood_device:
             is_dogfood_device[device_id] = row[-1]
         else:
@@ -175,7 +156,6 @@ def main(job_output, csv_dir):
     # (a bug condition).
     # In this case, don't remove the ping, but make a note of occurrences.
     condition_counts = defaultdict(lambda: defaultdict(int))
-    # final_pings = {}
     # Tolerance for overlap: 5 seconds.
     overlap_tolerance = 5000
     for device_id in pings_by_device:
@@ -189,7 +169,6 @@ def main(job_output, csv_dir):
             # Means either a bug or system time was changed.
             if current_ping[0] > current_ping[1]:
                 should_keep = False
-                # pingstoremove[devid].append(currentping)
                 condition_counts['clockskew'][device_id] += 1
             # Otherwise check times against last good ping, if any.
             elif pings_to_keep:
@@ -199,10 +178,8 @@ def main(job_output, csv_dir):
                     if current_ping[1] <= last_stop:
                         # Current ping is contained in last ping.
                         # Remove and record occurrence.
-                        # pingstoremove[devid].append(currentping)
                         should_keep = False
                         condition_counts['nested'][device_id] += 1
-                        # continue
                     else:
                         overlap_ms = last_stop - current_ping[0]
                         if overlap_ms < overlap_tolerance:
@@ -216,8 +193,9 @@ def main(job_output, csv_dir):
             if should_keep:
                 pings_to_keep.append(current_ping)
         if pings_to_keep:
+            # Update list of pings by device with new sanitized list.
             pings_by_device[device_id] = pings_to_keep
-
+    
     # Print statistics about overlaps.
     if condition_counts:
         print('\nOverlaps:')
@@ -280,8 +258,10 @@ def main(job_output, csv_dir):
                 (sum(count_map.values()), 
                 len(count_map), 
                 addendum))
-
-    # Create a list of device info for dogfooding devices.
+    
+    # Aggregate data for foxfood devices and report.
+    # ----------------------------------------------
+    
     dogfood_info = defaultdict(list)
     dogfood_app = defaultdict(list)
     for row in tables['info']:
@@ -293,24 +273,31 @@ def main(job_output, csv_dir):
             # Instead, go through keys of pings_by_device, keeping those
             # which have dogfooding.
             # Not for app rows though - have to do this step for those.
+            # Drop deviceID from the beginning and dogfood flag from the end.
             dogfood_info[device_id].append(row[1:-1])
     for row in tables['app']:
         device_id = row[0]
         if (is_dogfood_device[device_id] and 
                     (row[1], row[2]) in pings_by_device[device_id]):
+            # Drop deviceID from the beginning and dogfood flag from the end.
             dogfood_app[device_id].append(row[1:-1])
     
     # Summparize device info and app usage for each dogfooding device.
     dogfood_details = {}
     for device_id, payloads in dogfood_info.iteritems():
         device_details = {}
+        # Sort by all fields, which sorts first by start then by stop times 
+        # (ie chronologically), and then by values of other fields.
         payloads.sort()
+        # Extract the actual device info fields, from 'os' to 
+        # 'developer.menu.enabled' in au_device_info_keys
         get_device_info = lambda r: r[5:]
-        # List of unique collections of device info fields with earliest
+        # List of unique collections of device info fields with start
         # timestamp.
         deviceinfo = [(payloads[0][0], get_device_info(payloads[0]))]
         for i in range(1, len(payloads)):
             newinfo = get_device_info(payloads[1])
+            #newinfo = get_device_info(payloads[i])
             if newinfo != deviceinfo[-1][1]:
                 deviceinfo.append((payloads[i][0], newinfo))
         # Store full latest device info.
@@ -339,12 +326,18 @@ def main(job_output, csv_dir):
             else:
                 # Aggregate across values already present.
                 for i in range(4):
+                #for i in range(6):
                     app_data[app_key][i] += p[4+i]
+                # The addon flag is a boolean and should be the same in 
+                # every payload.
+                # Report by joining together unique values.
+                # TODO
                 # Join activities counts represented as strings.
                 if p[-1]:
                     app_data[app_key][-1] = (p[-1] if not app_data[app_key][-1]
                         else ';'.join([app_data[app_key][-1], p[-1]]))
         dogfood_appusage[device_id] = app_data
+        # Add app usage dates summary to dogfood_details.
         usage_dates = [k[1] for k in app_data]
         dogfood_details[device_id]['earliest_appusage'] = min(usage_dates)
         dogfood_details[device_id]['latest_appusage'] = max(usage_dates)
