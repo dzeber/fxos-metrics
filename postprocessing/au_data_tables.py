@@ -296,7 +296,6 @@ def main(job_output, csv_dir):
         # timestamp.
         deviceinfo = [(payloads[0][0], get_device_info(payloads[0]))]
         for i in range(1, len(payloads)):
-            #newinfo = get_device_info(payloads[1])
             newinfo = get_device_info(payloads[i])
             if newinfo != deviceinfo[-1][1]:
                 deviceinfo.append((payloads[i][0], newinfo))
@@ -325,15 +324,12 @@ def main(job_output, csv_dir):
                 # Add a new record.
                 # Store values in a dict for convenient aggregation, and 
                 # convert to strings at the end.
-                # app_details = {}
                 app_data[app_key] = {
                     'counts': [0, 0, 0, 0, 0, 0],
-                # app_details['counts'] = [0 if v == '' else v for v in p[4:10]]
-                # Maintain set of unique addon flag values seen for this app
-                # and date. Should be either empty or a single value.
-                # app_details['addon_flag'] = set()
+                    # Maintain set of unique addon flag values seen for this app
+                    # and date. Should be either empty or a single value.
                     'addon_flag': set(),
-                # Maintain a mapping of activity identifiers to counts.
+                    # Maintain a mapping of activity identifiers to counts.
                     'activities': defaultdict(lambda: 0)
                 }
                 # if p[10] != '':
