@@ -332,17 +332,6 @@ def main(job_output, csv_dir):
                     # Maintain a mapping of activity identifiers to counts.
                     'activities': defaultdict(lambda: 0)
                 }
-                # if p[10] != '':
-                    # app_details['addon_flag'].add(p[10])
-                # if p[11]:
-                    # Activities are recorded in the format 'a:1;b:2'.
-                    # current_activities = p[11].split(';')
-                    # for curr_act in current_activities:
-                        # curr_act = curr_act.rsplit(':', 1)
-                        # app_details['activities'][curr_act[0]] = int(curr_act[1])
-                # app_data[app_key] = app_details
-            # else:
-                # Aggregate across values already present.
             for i in range(6):
                 # Add in new numerical values.
                 if p[4+i]:
