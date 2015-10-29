@@ -23,7 +23,8 @@ Column | Type | Raw field name | Details
 `ping_date` | sanitized | `pingTime` | The date on which the ping was sent, as recorded by the client. It is considered less reliable than `submission_date` because of client-side clock skew. The raw value is a millisecond timestamp which is converted to a standard-format date.
 `submission_date` | sanitized | | The server-side timestamp applied when the ping was received. It is the preferred way to identify "the date on which the ping was sent". The raw value is converted to a standard-format date.
 `os` | sanitized | `deviceinfo.os` | The OS version number along with a tag for prerelease builds. It is reported as "m.n". Tarako devices are identified using device model and tagged as "1.3T".
-`country` | mapped | `info.geoCountry` | The name of the country, mapped from the geoIP country code. Currently the country code itself is not retained.
+`geo` | raw | `info.geoCountry` | The geoIP country code.
+`country` | mapped | `info.geoCountry` | The name of the country, mapped from the geoIP country code. 
 `device` | sanitized | `deviceinfo.product_model` | The name of the device model, formatted as appropriate. Many devices report small variations in capitalization or spacing on the standard model name. These are formatted to a single common standard name using regexes, so that they are counted as the same device model.
 `locale` | raw | `locale` | The locale code identifying the OS language.
 `language` | mapped | | The name of the OS language, mapped from the locale code.
